@@ -2705,7 +2705,21 @@ class ScopedTopicMemoryApplication:
                         "unit": "topic-memory",
                     },
                 )
-        return result
+        return await self._without_unsupported_topics(result)
+
+    async def _without_unsupported_topics(self, result: TopicMemorySearchResult) -> TopicMemorySearchResult:
+        """Drop Topics whose supporting evidence was withdrawn."""
+
+        lifecycle = getattr(self._runtime, "lifecycle", None)
+        if lifecycle is None:
+            return result
+        hidden = await lifecycle.hidden_topics(self.scope_id)
+        if not hidden:
+            return result
+        hits = tuple(hit for hit in result.hits if hit.artifact_ref.artifact_id not in hidden)
+        if len(hits) == len(result.hits):
+            return result
+        return result.model_copy(update={"hits": hits})
 
     async def _search_with_embedding(
         self,

@@ -658,8 +658,13 @@ async def open_builtin_runtime(
         )
         # Count-triggered work is requested from inside the writer's transaction, so
         # the record service needs the supervisor's wake to make it observable now.
-        contexts.records._wake_binding = runtime.artifact_processing_supervisor.wake
+        supervisor = runtime.artifact_processing_supervisor
+        if supervisor is not None:
+            contexts.records._wake_binding = supervisor.wake
         contexts.profiles.operation_context = runtime._operation
+        from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleService
+
+        runtime.lifecycle = SourceLifecycleService(contexts.database).bind(runtime)
         if config.handoff_report.enabled:
             runtime.handoff_report = HandoffReportApplication(
                 contexts.scopes,
