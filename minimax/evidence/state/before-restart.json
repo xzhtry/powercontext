@@ -1,0 +1,65 @@
+{
+  "completed": [
+    "读取并确认适用的规格条目",
+    "定位需要修改的代码符号",
+    "实现 min_amount 筛选",
+    "补充 CLI --min-amount",
+    "运行目标功能测试",
+    "运行相关回归测试"
+  ],
+  "context_digest": "9a65343a40d5a7e867143c9ca12544a69653bec872d7e7a8980b775cd1b854b6",
+  "minimax": {
+    "base_url": null,
+    "latency_ms": null,
+    "model": null,
+    "protocol": null,
+    "usage": null
+  },
+  "patch_path": "evidence/patches/run-1e039a60cf.diff",
+  "patch_sha256": "79644459e82c3aa86e5c8b6ba4011750bbd600a28b84b3defad6ea159f9b8ee8",
+  "pending": [],
+  "run_seq": 1,
+  "schema": "sddctx.task_state.v1",
+  "scope_id": "scp_1mtgsk90wn55krgw1735zp689m",
+  "source": "powercontext",
+  "status": "verified",
+  "task_id": "TASK-101",
+  "updated_at": "2026-11-02T13:15:22+00:00",
+  "verifications": [
+    {
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_min_amount_filter.py",
+      "errors": 0,
+      "exit_code": 0,
+      "failed": 0,
+      "log": "evidence/tests/run-1e039a60cf-target.log",
+      "name": "target",
+      "passed": 7
+    },
+    {
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_list_invoices.py tests/test_pagination.py tests/test_cli.py",
+      "errors": 0,
+      "exit_code": 0,
+      "failed": 0,
+      "log": "evidence/tests/run-1e039a60cf-regression.log",
+      "name": "regression",
+      "passed": 17
+    },
+    {
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest",
+      "errors": 0,
+      "exit_code": 0,
+      "failed": 0,
+      "log": "evidence/tests/run-1e039a60cf-full.log",
+      "name": "full",
+      "passed": 24
+    }
+  ],
+  "entry": {
+    "family": "atomic-memory",
+    "artifact_id": "art_66b383e7cf9a430aba3255b436f184b3",
+    "revision": 1
+  }
+}

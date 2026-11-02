@@ -1,0 +1,6 @@
+# app=demo_app
+# code_version=src-sha256:03b7bf3a7c3fa80b
+# command=/home/xzh/sdd-venv/bin/python -m pytest 
+
+........................                                                 [100%]
+24 passed in 1.83s

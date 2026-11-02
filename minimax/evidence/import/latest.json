@@ -1,0 +1,594 @@
+{
+  "imported_at": "2026-11-02T13:17:02+00:00",
+  "count": 53,
+  "specs": 15,
+  "code": 16,
+  "tests": 22,
+  "digest": "3106fcdcb9c46f5f510b62ff3baa4e464c1bf7ffb396bc7d189e6dbb3bfe7634",
+  "db_path": "/home/xzh/sddctx-clean/runtime/seekdb",
+  "materials": [
+    {
+      "key": "spec:ADR-INV-003:ADR-INV-003.1:1",
+      "kind": "spec",
+      "path": "specs/ADR-INV-003-service-layer-filtering.md",
+      "lines": [
+        13,
+        16
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:ADR-INV-003:ADR-INV-003.2:1",
+      "kind": "spec",
+      "path": "specs/ADR-INV-003-service-layer-filtering.md",
+      "lines": [
+        18,
+        22
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:ADR-INV-003:ADR-INV-003.3:1",
+      "kind": "spec",
+      "path": "specs/ADR-INV-003-service-layer-filtering.md",
+      "lines": [
+        24,
+        26
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:API-INV-002:API-INV-002.1:1",
+      "kind": "spec",
+      "path": "specs/API-INV-002-list-invoices-contract.md",
+      "lines": [
+        13,
+        16
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:API-INV-002:API-INV-002.2:1",
+      "kind": "spec",
+      "path": "specs/API-INV-002-list-invoices-contract.md",
+      "lines": [
+        18,
+        22
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:API-INV-002:API-INV-002.3:1",
+      "kind": "spec",
+      "path": "specs/API-INV-002-list-invoices-contract.md",
+      "lines": [
+        24,
+        29
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:API-INV-002:API-INV-002.4:1",
+      "kind": "spec",
+      "path": "specs/API-INV-002-list-invoices-contract.md",
+      "lines": [
+        31,
+        33
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:NFR-INV-002:NFR-INV-002.1:1",
+      "kind": "spec",
+      "path": "specs/NFR-INV-002-decimal-and-time.md",
+      "lines": [
+        13,
+        16
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:NFR-INV-002:NFR-INV-002.2:1",
+      "kind": "spec",
+      "path": "specs/NFR-INV-002-decimal-and-time.md",
+      "lines": [
+        18,
+        20
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:REQ-INV-004:REQ-INV-004.1:1",
+      "kind": "spec",
+      "path": "specs/REQ-INV-004-invoice-list-filtering.md",
+      "lines": [
+        13,
+        16
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:REQ-INV-004:REQ-INV-004.2:1",
+      "kind": "spec",
+      "path": "specs/REQ-INV-004-invoice-list-filtering.md",
+      "lines": [
+        18,
+        24
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:REQ-INV-004:REQ-INV-004.3:1",
+      "kind": "spec",
+      "path": "specs/REQ-INV-004-invoice-list-filtering.md",
+      "lines": [
+        26,
+        29
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:REQ-INV-004:REQ-INV-004.4:1",
+      "kind": "spec",
+      "path": "specs/REQ-INV-004-invoice-list-filtering.md",
+      "lines": [
+        31,
+        36
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:REQ-INV-004:REQ-INV-004.5:1",
+      "kind": "spec",
+      "path": "specs/REQ-INV-004-invoice-list-filtering.md",
+      "lines": [
+        38,
+        40
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "spec:REQ-INV-001:REQ-INV-001.1:1",
+      "kind": "spec",
+      "path": "specs/legacy/REQ-INV-001-csv-export.md",
+      "lines": [
+        13,
+        16
+      ],
+      "version": 1,
+      "status": "superseded"
+    },
+    {
+      "key": "code:src/invoicehub/cli.py:build_parser",
+      "kind": "code",
+      "path": "src/invoicehub/cli.py",
+      "lines": [
+        14,
+        27
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/cli.py:_invoice_to_dict",
+      "kind": "code",
+      "path": "src/invoicehub/cli.py",
+      "lines": [
+        30,
+        38
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/cli.py:_run_list",
+      "kind": "code",
+      "path": "src/invoicehub/cli.py",
+      "lines": [
+        41,
+        66
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/cli.py:main",
+      "kind": "code",
+      "path": "src/invoicehub/cli.py",
+      "lines": [
+        69,
+        78
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/cli.py:entrypoint",
+      "kind": "code",
+      "path": "src/invoicehub/cli.py",
+      "lines": [
+        81,
+        82
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/models.py:InvoiceStatus",
+      "kind": "code",
+      "path": "src/invoicehub/models.py",
+      "lines": [
+        11,
+        17
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/models.py:Invoice",
+      "kind": "code",
+      "path": "src/invoicehub/models.py",
+      "lines": [
+        21,
+        33
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/models.py:InvoicePage",
+      "kind": "code",
+      "path": "src/invoicehub/models.py",
+      "lines": [
+        37,
+        53
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/repository.py:InvoiceDataError",
+      "kind": "code",
+      "path": "src/invoicehub/repository.py",
+      "lines": [
+        14,
+        15
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/repository.py:_parse_invoice",
+      "kind": "code",
+      "path": "src/invoicehub/repository.py",
+      "lines": [
+        18,
+        31
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/repository.py:load_invoices",
+      "kind": "code",
+      "path": "src/invoicehub/repository.py",
+      "lines": [
+        34,
+        40
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/service.py:_coerce_status",
+      "kind": "code",
+      "path": "src/invoicehub/service.py",
+      "lines": [
+        18,
+        23
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/service.py:_validate_pagination",
+      "kind": "code",
+      "path": "src/invoicehub/service.py",
+      "lines": [
+        26,
+        30
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/service.py:_coerce_min_amount",
+      "kind": "code",
+      "path": "src/invoicehub/service.py",
+      "lines": [
+        33,
+        43
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/service.py:_sort_key",
+      "kind": "code",
+      "path": "src/invoicehub/service.py",
+      "lines": [
+        46,
+        49
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/service.py:list_invoices",
+      "kind": "code",
+      "path": "src/invoicehub/service.py",
+      "lines": [
+        52,
+        91
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_cli.py:test_cli_lists_invoices_as_json",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "lines": [
+        27,
+        33
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_cli.py:test_cli_filters_by_status",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "lines": [
+        36,
+        40
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_cli.py:test_cli_rejects_invalid_page_size",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "lines": [
+        43,
+        46
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_list_invoices.py:test_returns_all_invoices_without_filters",
+      "kind": "test",
+      "path": "tests/test_list_invoices.py",
+      "lines": [
+        13,
+        16
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_list_invoices.py:test_filters_by_status",
+      "kind": "test",
+      "path": "tests/test_list_invoices.py",
+      "lines": [
+        19,
+        22
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_list_invoices.py:test_filters_by_customer",
+      "kind": "test",
+      "path": "tests/test_list_invoices.py",
+      "lines": [
+        25,
+        27
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_list_invoices.py:test_combines_status_and_customer",
+      "kind": "test",
+      "path": "tests/test_list_invoices.py",
+      "lines": [
+        30,
+        32
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_list_invoices.py:test_sorts_by_issued_at_desc_then_invoice_id",
+      "kind": "test",
+      "path": "tests/test_list_invoices.py",
+      "lines": [
+        35,
+        45
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_list_invoices.py:test_unknown_status_is_rejected",
+      "kind": "test",
+      "path": "tests/test_list_invoices.py",
+      "lines": [
+        48,
+        50
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_list_invoices.py:test_amounts_are_decimal",
+      "kind": "test",
+      "path": "tests/test_list_invoices.py",
+      "lines": [
+        53,
+        55
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_min_amount_filter.py:test_min_amount_keeps_invoices_at_or_above_threshold",
+      "kind": "test",
+      "path": "tests/test_min_amount_filter.py",
+      "lines": [
+        38,
+        41
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_min_amount_filter.py:test_min_amount_is_inclusive",
+      "kind": "test",
+      "path": "tests/test_min_amount_filter.py",
+      "lines": [
+        44,
+        46
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_min_amount_filter.py:test_min_amount_combines_with_status_filter",
+      "kind": "test",
+      "path": "tests/test_min_amount_filter.py",
+      "lines": [
+        49,
+        51
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_min_amount_filter.py:test_min_amount_combines_with_customer_and_pagination",
+      "kind": "test",
+      "path": "tests/test_min_amount_filter.py",
+      "lines": [
+        54,
+        57
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_min_amount_filter.py:test_min_amount_none_keeps_existing_behavior",
+      "kind": "test",
+      "path": "tests/test_min_amount_filter.py",
+      "lines": [
+        60,
+        61
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_min_amount_filter.py:test_negative_min_amount_is_rejected",
+      "kind": "test",
+      "path": "tests/test_min_amount_filter.py",
+      "lines": [
+        64,
+        66
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_min_amount_filter.py:test_cli_accepts_min_amount",
+      "kind": "test",
+      "path": "tests/test_min_amount_filter.py",
+      "lines": [
+        69,
+        73
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_pagination.py:test_page_metadata",
+      "kind": "test",
+      "path": "tests/test_pagination.py",
+      "lines": [
+        14,
+        20
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_pagination.py:test_pages_partition_the_result_set",
+      "kind": "test",
+      "path": "tests/test_pagination.py",
+      "lines": [
+        23,
+        29
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_pagination.py:test_out_of_range_page_is_empty_but_keeps_total",
+      "kind": "test",
+      "path": "tests/test_pagination.py",
+      "lines": [
+        32,
+        36
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_pagination.py:test_invalid_page_is_rejected",
+      "kind": "test",
+      "path": "tests/test_pagination.py",
+      "lines": [
+        39,
+        41
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "test:tests/test_pagination.py:test_invalid_page_size_is_rejected",
+      "kind": "test",
+      "path": "tests/test_pagination.py",
+      "lines": [
+        45,
+        47
+      ],
+      "version": 1,
+      "status": "active"
+    }
+  ]
+}

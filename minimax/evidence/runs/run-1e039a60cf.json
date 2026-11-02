@@ -1,0 +1,58 @@
+{
+  "run_id": "run-1e039a60cf",
+  "task_id": "TASK-101",
+  "success": true,
+  "patch": "evidence/patches/run-1e039a60cf.diff",
+  "patch_sha256": "79644459e82c3aa86e5c8b6ba4011750bbd600a28b84b3defad6ea159f9b8ee8",
+  "context_digest": "9a65343a40d5a7e867143c9ca12544a69653bec872d7e7a8980b775cd1b854b6",
+  "targets": [
+    "src/invoicehub/service.py",
+    "src/invoicehub/cli.py"
+  ],
+  "tests": [
+    {
+      "name": "target",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_min_amount_filter.py",
+      "exit_code": 0,
+      "log": "evidence/tests/run-1e039a60cf-target.log",
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c"
+    },
+    {
+      "name": "regression",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_list_invoices.py tests/test_pagination.py tests/test_cli.py",
+      "exit_code": 0,
+      "log": "evidence/tests/run-1e039a60cf-regression.log",
+      "passed": 17,
+      "failed": 0,
+      "errors": 0,
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c"
+    },
+    {
+      "name": "full",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest",
+      "exit_code": 0,
+      "log": "evidence/tests/run-1e039a60cf-full.log",
+      "passed": 24,
+      "failed": 0,
+      "errors": 0,
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c"
+    }
+  ],
+  "state": {
+    "run_seq": 1,
+    "status": "verified",
+    "entry": {
+      "family": "atomic-memory",
+      "artifact_id": "art_66b383e7cf9a430aba3255b436f184b3",
+      "revision": 1
+    }
+  },
+  "minimax": {
+    "source": "provided-patch",
+    "path": "changes/min-amount.diff"
+  },
+  "context": "evidence/context/run-1e039a60cf.json"
+}

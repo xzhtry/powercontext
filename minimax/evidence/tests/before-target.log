@@ -1,0 +1,87 @@
+# app=/home/xzh/.local/share/sddctx/verify/before
+# code_version=src-sha256:11d0fd2dc29ccef1
+# command=/home/xzh/sdd-venv/bin/python -m pytest tests/test_min_amount_filter.py
+
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+_____________ test_min_amount_keeps_invoices_at_or_above_threshold _____________
+
+invoices = (Invoice(invoice_id='INV-1005', customer_id='CUST-003', status=<InvoiceStatus.VOID: 'void'>, total_amount=Decimal('0.0...tetime.datetime(2026, 9, 3, 15, 30, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800))), currency='CNY'), ...)
+
+    def test_min_amount_keeps_invoices_at_or_above_threshold(invoices):
+>       page = list_invoices(invoices, min_amount=Decimal("1200.00"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: list_invoices() got an unexpected keyword argument 'min_amount'
+
+tests/test_min_amount_filter.py:39: TypeError
+_________________________ test_min_amount_is_inclusive _________________________
+
+invoices = (Invoice(invoice_id='INV-1005', customer_id='CUST-003', status=<InvoiceStatus.VOID: 'void'>, total_amount=Decimal('0.0...tetime.datetime(2026, 9, 3, 15, 30, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800))), currency='CNY'), ...)
+
+    def test_min_amount_is_inclusive(invoices):
+>       page = list_invoices(invoices, min_amount=Decimal("1500.00"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: list_invoices() got an unexpected keyword argument 'min_amount'
+
+tests/test_min_amount_filter.py:45: TypeError
+_________________ test_min_amount_combines_with_status_filter __________________
+
+invoices = (Invoice(invoice_id='INV-1005', customer_id='CUST-003', status=<InvoiceStatus.VOID: 'void'>, total_amount=Decimal('0.0...tetime.datetime(2026, 9, 3, 15, 30, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800))), currency='CNY'), ...)
+
+    def test_min_amount_combines_with_status_filter(invoices):
+>       page = list_invoices(invoices, min_amount=Decimal("1200"), status=InvoiceStatus.PAID)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: list_invoices() got an unexpected keyword argument 'min_amount'
+
+tests/test_min_amount_filter.py:50: TypeError
+____________ test_min_amount_combines_with_customer_and_pagination _____________
+
+invoices = (Invoice(invoice_id='INV-1005', customer_id='CUST-003', status=<InvoiceStatus.VOID: 'void'>, total_amount=Decimal('0.0...tetime.datetime(2026, 9, 3, 15, 30, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800))), currency='CNY'), ...)
+
+    def test_min_amount_combines_with_customer_and_pagination(invoices):
+>       page = list_invoices(invoices, min_amount="1200", customer_id="CUST-001", page=1, page_size=1)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: list_invoices() got an unexpected keyword argument 'min_amount'
+
+tests/test_min_amount_filter.py:55: TypeError
+_________________ test_min_amount_none_keeps_existing_behavior _________________
+
+invoices = (Invoice(invoice_id='INV-1005', customer_id='CUST-003', status=<InvoiceStatus.VOID: 'void'>, total_amount=Decimal('0.0...tetime.datetime(2026, 9, 3, 15, 30, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800))), currency='CNY'), ...)
+
+    def test_min_amount_none_keeps_existing_behavior(invoices):
+>       assert list_invoices(invoices, min_amount=None).total == list_invoices(invoices).total
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: list_invoices() got an unexpected keyword argument 'min_amount'
+
+tests/test_min_amount_filter.py:61: TypeError
+_____________________ test_negative_min_amount_is_rejected _____________________
+
+invoices = (Invoice(invoice_id='INV-1005', customer_id='CUST-003', status=<InvoiceStatus.VOID: 'void'>, total_amount=Decimal('0.0...tetime.datetime(2026, 9, 3, 15, 30, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800))), currency='CNY'), ...)
+
+    def test_negative_min_amount_is_rejected(invoices):
+        with pytest.raises(ValueError):
+>           list_invoices(invoices, min_amount=Decimal("-0.01"))
+E           TypeError: list_invoices() got an unexpected keyword argument 'min_amount'
+
+tests/test_min_amount_filter.py:66: TypeError
+_________________________ test_cli_accepts_min_amount __________________________
+
+    def test_cli_accepts_min_amount():
+        result = run_cli("--min-amount", "1500.00")
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: usage: invoicehub [-h] {list} ...
+E         invoicehub: error: unrecognized arguments: --min-amount 1500.00
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['/home/xzh/sdd-venv/bin/python', '-m', 'invoicehub.cli', 'list', '--data', 'data/invoices.json'...dout='', stderr='usage: invoicehub [-h] {list} ...\ninvoicehub: error: unrecognized arguments: --min-amount 1500.00\n').returncode
+
+tests/test_min_amount_filter.py:71: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_min_amount_filter.py::test_min_amount_keeps_invoices_at_or_above_threshold
+FAILED tests/test_min_amount_filter.py::test_min_amount_is_inclusive - TypeEr...
+FAILED tests/test_min_amount_filter.py::test_min_amount_combines_with_status_filter
+FAILED tests/test_min_amount_filter.py::test_min_amount_combines_with_customer_and_pagination
+FAILED tests/test_min_amount_filter.py::test_min_amount_none_keeps_existing_behavior
+FAILED tests/test_min_amount_filter.py::test_negative_min_amount_is_rejected
+FAILED tests/test_min_amount_filter.py::test_cli_accepts_min_amount - Asserti...
+7 failed in 0.20s

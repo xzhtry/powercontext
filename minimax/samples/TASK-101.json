@@ -1,0 +1,27 @@
+{
+  "task_id": "TASK-101",
+  "title": "发票列表新增金额下限筛选",
+  "description": "在 invoicehub 发票查询服务中新增 min_amount（金额下限）筛选：支持与 status、customer_id 组合，遵循含边界语义；保持既有的分页、稳定排序与空结果行为不变；并在 CLI 中新增 --min-amount 参数。",
+  "acceptance": [
+    "list_invoices 接受 min_amount，只保留 total_amount >= min_amount 的发票（含边界）",
+    "min_amount 为 None 时结果与未传一致",
+    "min_amount 为负数时抛出 ValueError",
+    "min_amount 可与 status、customer_id、分页组合使用",
+    "CLI invoicehub list 支持 --min-amount，保持既有 JSON 字段与排序",
+    "既有回归测试（状态/客户筛选、分页、排序、CLI）全部通过"
+  ],
+  "steps": [
+    "读取并确认适用的规格条目",
+    "定位需要修改的代码符号",
+    "实现 min_amount 筛选",
+    "补充 CLI --min-amount",
+    "运行目标功能测试",
+    "运行相关回归测试"
+  ],
+  "target_tests": "tests/test_min_amount_filter.py",
+  "regression_tests": [
+    "tests/test_list_invoices.py",
+    "tests/test_pagination.py",
+    "tests/test_cli.py"
+  ]
+}
