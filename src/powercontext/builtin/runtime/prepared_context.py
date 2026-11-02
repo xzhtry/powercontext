@@ -17,6 +17,8 @@
 from __future__ import annotations
 
 import json
+import re
+from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from itertools import chain
@@ -106,6 +108,17 @@ class PreparedContextBuild:
     origins: tuple[PreparedContextOrigin, ...]
     omissions: PreparedContextOmissions = PreparedContextOmissions()
     code_origins: tuple[CodeEvidenceRef, ...] = ()
+    fragments: tuple[MemoryEntryFragment, ...] = ()
+
+
+@dataclass(frozen=True)
+class MemoryEntryFragment:
+    """One exact character range selected from a Memory entry's original text."""
+
+    address: MemoryEntryAddress
+    start: int
+    end: int
+    text: str
 
 
 @dataclass(frozen=True)
@@ -235,6 +248,13 @@ class PreparedContextBuilder:
         if sum(len(candidates.hits) for candidates in experience_candidates) > self.experience_candidate_limit:
             raise PreparedContextInvariantError("experience-candidate-limit")
 
+        if request.evidence_selection and request.assembly is None:
+            return self._build_fragment_result(
+                request=request,
+                current_scope_id=current_scope_id,
+                memory_candidates=memory_candidates,
+            )
+
         content, origins, omissions = self._select_entries(
             request=request,
             current_scope_id=current_scope_id,
@@ -292,6 +312,81 @@ class PreparedContextBuilder:
             truncated_items=omissions.truncated_items,
             dropped_items=omissions.dropped_items,
             unused_bytes=max(0, request.max_bytes - content_bytes),
+        )
+
+    def _build_fragment_result(
+        self,
+        *,
+        request: PrepareContextRequest,
+        current_scope_id: str | None,
+        memory_candidates: Sequence[PreparedMemoryCandidates],
+    ) -> PreparedContextBuild:
+        """Select query-relevant literal ranges and render them inside the byte budget."""
+
+        scored: list[tuple[int, int, MemoryEntryFragment]] = []
+        order = 0
+        query_terms = _term_counts(request.query)
+        for candidates in memory_candidates:
+            scope_id = current_scope_id if candidates.scope_id == current_scope_id else candidates.scope_id
+            for hit in candidates.hits:
+                address = MemoryEntryAddress(
+                    memory=ArtifactAddress(scope_id=scope_id or current_scope_id or "", artifact=hit.memory_ref),
+                    entry_id=hit.entry_id,
+                    entry_version_id=hit.entry_version_id,
+                )
+                for start, end in _sentence_spans(hit.text):
+                    text = hit.text[start:end]
+                    score = _term_overlap(query_terms, _term_counts(text))
+                    if score <= 0:
+                        continue
+                    scored.append(
+                        (
+                            score,
+                            order,
+                            MemoryEntryFragment(address=address, start=start, end=end, text=text),
+                        )
+                    )
+                    order += 1
+
+        scored.sort(key=lambda item: (-item[0], item[1]))
+        selected: list[MemoryEntryFragment] = []
+        seen: set[tuple[str, str, int, int]] = set()
+        for _score, _order, fragment in scored:
+            if len(selected) >= self.entry_limit:
+                break
+            key = (
+                fragment.address.memory.artifact.artifact_id,
+                fragment.address.entry_id,
+                fragment.start,
+                fragment.end,
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            trial = (*selected, fragment)
+            if len(_render_fragments(trial).encode("utf-8")) > request.max_bytes:
+                continue
+            selected.append(fragment)
+
+        if not selected:
+            return PreparedContextBuild(context=self.empty(), origins=(), fragments=())
+        content = _render_fragments(tuple(selected))
+        origins = tuple(
+            MemoryCitation(
+                memory_ref=fragment.address.memory.artifact,
+                entry_id=fragment.address.entry_id,
+                entry_version_id=fragment.address.entry_version_id,
+            )
+            for fragment in selected
+        )
+        return PreparedContextBuild(
+            context=PreparedContext(
+                status="ready",
+                content=content,
+                content_bytes=len(content.encode("utf-8")),
+            ),
+            origins=origins,
+            fragments=tuple(selected),
         )
 
     def _select_entries(
@@ -718,6 +813,47 @@ def _render_entry(entry: _PreparedContextEntry) -> dict[str, object]:
     if entry.kind != "memory":
         rendered["kind"] = entry.kind
     return rendered
+
+
+_TERM = re.compile(r"[^\W_]+", re.UNICODE)
+_SENTENCE = re.compile(r"[^.!?\u3002\uff01\uff1f\n]+[.!?\u3002\uff01\uff1f]?[ \t]*")
+
+
+def _term_counts(text: str) -> Counter[str]:
+    return Counter(_TERM.findall(text.casefold()))
+
+
+def _term_overlap(query: Counter[str], text: Counter[str]) -> int:
+    return sum(min(count, text.get(term, 0)) for term, count in query.items())
+
+
+def _sentence_spans(text: str) -> tuple[tuple[int, int], ...]:
+    """Return literal character ranges, so every fragment keeps the entry's own bytes."""
+
+    return tuple(
+        (match.start(), match.end()) for match in _SENTENCE.finditer(text) if match.end() > match.start()
+    )
+
+
+def _render_fragments(fragments: Sequence[MemoryEntryFragment]) -> str:
+    envelope = {"trust": "untrusted_history", "items": [_render_fragment(item) for item in fragments]}
+    encoded = json.dumps(envelope, ensure_ascii=False, separators=(",", ":"))
+    return "\n\n".join((TRUST_POLICY, f"{_BEGIN_MARKER}\n{encoded}\n{_END_MARKER}"))
+
+
+def _render_fragment(fragment: MemoryEntryFragment) -> dict[str, object]:
+    address = fragment.address
+    return {
+        "citation": {
+            "scope_id": address.memory.scope_id,
+            "memory_ref": address.memory.artifact.model_dump(mode="json"),
+            "entry_id": address.entry_id,
+            "entry_version_id": address.entry_version_id,
+        },
+        "content": fragment.text,
+        "start": fragment.start,
+        "end": fragment.end,
+    }
 
 
 def _rendered_bytes(entries: Sequence[_PreparedContextEntry]) -> int:
