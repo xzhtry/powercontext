@@ -474,7 +474,9 @@ class ScopedSourceApplication:
         self.scope_id = validate_scope_id(scope_id)
 
     async def capture(self, value: CaptureSource, /) -> SourceReceipt:
-        return await self._capture(value)
+        receipt = await self._capture(value)
+        await self._runtime._admit_count_triggered(self.scope_id, receipt.sequence)
+        return receipt
 
     async def _capture(self, value: CaptureSource, /, *, handoff_receipt: bool = False) -> SourceReceipt:
         if self._runtime._record_service is not None:
@@ -3447,6 +3449,23 @@ class BuiltinRuntime:
         if authorizer is not None:
             service.configure_authorization(lambda ref: authorizer(scope, ref), self._review_authorization_context)
         return service
+
+    async def _admit_count_triggered(self, scope_id: str, position: int, /) -> None:
+        """Wake the processing supervisor for Families that reached their count threshold."""
+
+        records = self._records()
+        admit = getattr(records, "admit_count_triggered", None)
+        if admit is None:
+            return
+        triggered = await admit(scope_id, position)
+        supervisor = self.artifact_processing_supervisor
+        if supervisor is None:
+            return
+        for binding_name in triggered:
+            try:
+                supervisor.wake(binding_name)
+            except Exception:  # noqa: BLE001 - a failed wake must not fail the capture
+                log_safely(logger, logging.WARNING, "Count admission supervisor wake failed")
 
     def _records(self) -> RecordService:
         if self._record_service is None:

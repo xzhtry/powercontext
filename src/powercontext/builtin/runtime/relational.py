@@ -547,6 +547,7 @@ class RelationalContexts:
         model_usage_queue_capacity: int = 256,
         model_usage_write_timeout_seconds: float = 1.0,
         model_usage_flush_timeout_seconds: float = 0.5,
+        source_count_thresholds: Mapping[str, int | None] | None = None,
     ) -> None:
         self.database = database
         self.scopes = ScopeApplication(database, cursor_secret=cursor_secret)
@@ -670,6 +671,7 @@ class RelationalContexts:
                 topics=topic_memory_repository,
             ),
         )
+        self.records._source_count_thresholds = dict(source_count_thresholds or {})
         self.publications = ArtifactPublicationApplication(
             database,
             self.repositories.artifacts,

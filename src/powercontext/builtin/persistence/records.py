@@ -42,7 +42,12 @@ from powercontext.builtin.persistence.family_management import (
     PreparingFamilyManagementWriter,
 )
 from powercontext.builtin.persistence.memory import RelationalMemoryBackend
-from powercontext.builtin.persistence.processing import ArtifactProcessingPendingRepository
+from powercontext.builtin.persistence.processing import (
+    ArtifactProcessingPendingRepository,
+    SourceCursorRepository,
+)
+from powercontext.builtin.persistence.processing_intents import ArtifactProcessingIntentRepository
+from powercontext.builtin.artifacts.topic_memory import TOPIC_MEMORY_SOURCE_WINDOW_BINDING
 from powercontext.builtin.persistence.sources import SourceRepository, StoredSource
 from powercontext.builtin.persistence.tables import (
     ARTIFACT_HEADS_TABLE,
@@ -204,6 +209,7 @@ class RelationalRecordService:
         source_type: str,
         source: ContentSource,
     ) -> SourceRecord:
+        triggered: tuple[str, ...] = ()
         try:
             async with self._database.transaction() as connection:
                 stored, created = await self._sources.add_with_status(connection, scope_id, source)
@@ -215,9 +221,68 @@ class RelationalRecordService:
                             binding_name,
                             stored.journal_position,
                         )
+                if created:
+                    # Lineage-only entries reach the artifact path; this covers Sources.
+                    triggered = await self.admit_count_triggered(
+                        scope_id,
+                        stored.journal_position,
+                        connection=connection,
+                    )
         except StoredPayloadConflictError as error:
             raise BaseValueConflictError("source", (scope_id, source_type, source.name)) from error
+        self._wake_bindings(triggered)
         return _source_record(scope_id, stored)
+
+    def _wake_bindings(self, bindings: tuple[str, ...]) -> None:
+        """Wake the processing supervisor only after the writer's transaction committed."""
+
+        wake = getattr(self, "_wake_binding", None)
+        if wake is None:
+            return
+        for binding_name in bindings:
+            wake(binding_name)
+
+    async def admit_count_triggered(
+        self,
+        scope_id: str,
+        position: int,
+        /,
+        *,
+        connection: AsyncConnection | None = None,
+    ) -> tuple[str, ...]:
+        """Request one processing call for every Family that reached its threshold.
+
+        Counting uses journal identity after the Family's committed cursor, so a
+        repeated capture of the same Source identity never adds pending work.
+        Passing an open ``connection`` keeps the request inside the writer's own
+        transaction instead of contending for a second one.
+        """
+
+        thresholds = getattr(self, "_source_count_thresholds", None)
+        if not thresholds or self._processing_pending is None:
+            return ()
+        if connection is None:
+            async with self._database.transaction() as transaction:
+                return await self.admit_count_triggered(scope_id, position, connection=transaction)
+        triggered: list[str] = []
+        for binding_name, threshold in thresholds.items():
+            if threshold is None or position < threshold:
+                continue
+            cursor = await SourceCursorRepository().load(connection, scope_id, binding_name)
+            committed = 0 if cursor is None else cursor.cursor.sequence
+            if position - committed < threshold:
+                continue
+            if binding_name != TOPIC_MEMORY_SOURCE_WINDOW_BINDING:
+                await self._processing_pending.raise_source(connection, scope_id, binding_name, position)
+            # A wave already queued for this binding will consume the pending
+            # Sources, so a second request would only duplicate work.
+            intents = ArtifactProcessingIntentRepository()
+            existing = await intents.load(connection, scope_id, binding_name)
+            if existing is not None and existing.requested_generation > existing.handled_generation:
+                continue
+            await intents.request(connection, scope_id, binding_name)
+            triggered.append(binding_name)
+        return tuple(triggered)
 
     async def get_source(self, scope_id: str, source_type: str, source_id: str, /) -> SourceRecord:
         self._require_content_source(source_type)
@@ -332,12 +397,21 @@ class RelationalRecordService:
             if isinstance(writer, PreparingFamilyManagementWriter)
             else command
         )
+        triggered: tuple[str, ...] = ()
         try:
             async with self._database.transaction() as connection:
                 stored = await self._sources.add(connection, scope_id, source)
                 artifact = await writer.create(connection, scope_id, artifact_id, prepared, stored.ref)
+                # Lineage-only journal entries count toward a Family's threshold even
+                # though they never become generation evidence.
+                triggered = await self.admit_count_triggered(
+                    scope_id,
+                    stored.journal_position,
+                    connection=connection,
+                )
         except (StoredPayloadConflictError, RevisionConflictError) as error:
             raise BaseValueConflictError("artifact", (scope_id, family, artifact_id)) from error
+        self._wake_bindings(triggered)
         return _artifact_created(scope_id, artifact)
 
     async def get_artifact(self, scope_id: str, family: str, artifact_id: str, /) -> ArtifactRecord:

@@ -656,6 +656,9 @@ async def open_builtin_runtime(
         runtime.artifact_processing_supervisor = await resources.enter_async_context(
             _open_artifact_processing_supervisor(config, contexts, processing_bindings, tracing=tracing)
         )
+        # Count-triggered work is requested from inside the writer's transaction, so
+        # the record service needs the supervisor's wake to make it observable now.
+        contexts.records._wake_binding = runtime.artifact_processing_supervisor.wake
         contexts.profiles.operation_context = runtime._operation
         if config.handoff_report.enabled:
             runtime.handoff_report = HandoffReportApplication(
@@ -914,6 +917,10 @@ async def open_builtin_contexts(
                 )
             contexts = RelationalContexts(
                 database=profile.database,
+                source_count_thresholds={
+                    FAMILY_BINDINGS["memory"]: config.runtime.memory_source_count_threshold,
+                    TOPIC_MEMORY_SOURCE_WINDOW_BINDING: config.runtime.topic_memory_source_count_threshold,
+                },
                 index=index,
                 topic_memory_index=topic_index,
                 experience_index=experience_index,
@@ -991,6 +998,10 @@ async def open_builtin_contexts(
             )
         contexts = RelationalContexts(
             database=profile.database,
+            source_count_thresholds={
+                FAMILY_BINDINGS["memory"]: config.runtime.memory_source_count_threshold,
+                TOPIC_MEMORY_SOURCE_WINDOW_BINDING: config.runtime.topic_memory_source_count_threshold,
+            },
             index=index,
             topic_memory_index=topic_index,
             experience_index=experience_index,
