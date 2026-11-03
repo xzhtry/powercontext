@@ -212,16 +212,19 @@ class ScopedSourceLifecycle:
             if event.sequence == node.sequence:
                 if event.available != node.available:
                     raise SourceLifecycleError("event sequence was reused with a different state")
-                return _active_ids(nodes)
-
-            await _store_node(
-                connection,
-                self.scope_id,
-                replace(node, sequence=event.sequence, available=event.available),
-            )
-            nodes[event.node_id] = replace(node, sequence=event.sequence, available=event.available)
-            await self._propagate(connection, nodes)
-            active = _active_ids(nodes)
+                # A replay is idempotent for the graph, but native state may still be
+                # behind if an earlier attempt failed after the graph committed, so the
+                # reconciliation below still has to run.
+                active = _active_ids(nodes)
+            else:
+                await _store_node(
+                    connection,
+                    self.scope_id,
+                    replace(node, sequence=event.sequence, available=event.available),
+                )
+                nodes[event.node_id] = replace(node, sequence=event.sequence, available=event.available)
+                await self._propagate(connection, nodes)
+                active = _active_ids(nodes)
         # Native writes open their own transaction, so they must run after the graph commits.
         await self._sync_native(nodes)
         self._service._remember_hidden(self.scope_id, nodes)
