@@ -104,6 +104,7 @@ python -m sddctx.cli report
 | `run` | `--task`、`--patch`（可选，离线）、`--response`（网页版响应）、`--apply-demo` | MiniMax 补丁、测试结果、状态写入、证据文件 |
 | `prompt` | `--task`、`--out` | 可粘贴到 MiniMax 的完整 Prompt 与对应上下文 |
 | `report` | — | `docs/minimax-dev-record.md` |
+| `stats` | — | seekdb 资料数量、索引与最近检索次数 |
 
 `context` 的 JSON 关键字段：
 

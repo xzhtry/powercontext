@@ -260,6 +260,37 @@ def list_context_runs(connection: Any, task_id: str | None = None) -> list[dict[
     ]
 
 
+def stats(connection: Any) -> dict[str, Any]:
+    """给评审用的资料库快照：表、行数、索引与最近检索记录。"""
+
+    cursor = connection.cursor()
+    cursor.execute("SELECT kind, COUNT(*) FROM materials GROUP BY kind")
+    counts = {kind: int(count) for kind, count in cursor.fetchall()}
+    cursor.execute("SELECT COUNT(*) FROM context_runs")
+    run_count = int(cursor.fetchall()[0][0])
+    cursor.execute(
+        "SELECT material_id, section_id, path, line_start, line_end FROM materials "
+        "WHERE kind = 'spec' ORDER BY material_id LIMIT 3"
+    )
+    samples = [
+        {"material_id": row[0], "section_id": row[1], "path": row[2], "lines": [row[3], row[4]]}
+        for row in cursor.fetchall()
+    ]
+    cursor.execute("SHOW INDEX FROM materials")
+    indexes = sorted({row[2] for row in cursor.fetchall()})
+    cursor.execute("SHOW VARIABLES LIKE 'version'")
+    version = cursor.fetchall()
+    return {
+        "engine": "seekdb (OceanBase embedded)",
+        "version": version[0][1] if version else "unknown",
+        "materials": counts,
+        "materials_total": sum(counts.values()),
+        "indexes": indexes,
+        "context_runs": run_count,
+        "spec_samples": samples,
+    }
+
+
 def hash_text(text: str) -> str:
     return content_hash(text)
 

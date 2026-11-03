@@ -65,6 +65,7 @@ bash scripts/demo_spec_update.sh
 ## 4. 数据库实际参与
 
 - 工程资料全部存入 seekdb：`$SDDCTX_RUNTIME/seekdb`，表 `materials`，ngram 全文索引。
+- 快速核对：`python -m sddctx.cli stats` → 15 条规格 / 16 条代码 / 22 条测试，索引包含 `ft_materials`。
 - 每次 `context` 的检索 SQL 记录在 JSON 的 `db.query_trace`，示例：
   `SELECT ... MATCH(title, body, keywords) AGAINST ('...') ...`。
 - 导入清单：`evidence/import/latest.json`；检索结果中的 `material_id` 可回查该清单/数据库。

@@ -108,6 +108,16 @@ def _cmd_prompt(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_stats(args: argparse.Namespace) -> int:
+    from sddctx import db
+
+    settings = _settings()
+    with db.open_db(settings.db_path) as connection:
+        summary = db.stats(connection)
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+    return 0
+
+
 def _cmd_report(args: argparse.Namespace) -> int:
     from sddctx.report import ReportError, write_report
 
@@ -173,6 +183,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     report = sub.add_parser("report", help="从运行证据生成 MiniMax 开发记录")
     report.set_defaults(func=_cmd_report)
+
+    stats = sub.add_parser("stats", help="查看 seekdb 资料库统计与索引")
+    stats.set_defaults(func=_cmd_stats)
 
     prompt = sub.add_parser("prompt", help="导出 MiniMax Prompt（网页版手工调用）")
     prompt.add_argument("--task", default=str(SAMPLES / "TASK-101.json"))
