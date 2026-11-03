@@ -16,6 +16,7 @@ if ! grep -Eq '^MINIMAX_API_KEY=.+' .env || grep -q '^MINIMAX_API_KEY=replace-me
 fi
 
 bash scripts/start_powercontext.sh > /dev/null
+"$PYTHON" -m sddctx.cli init --demo-app snapshots/before > /dev/null
 "$PYTHON" -m sddctx.cli run --apply-demo
 "$PYTHON" -m sddctx.cli import > /dev/null
 "$PYTHON" -m sddctx.cli context --json evidence/context/TASK-101-final.json > /dev/null

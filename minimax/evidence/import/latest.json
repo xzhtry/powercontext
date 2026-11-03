@@ -1,11 +1,11 @@
 {
-  "imported_at": "2026-11-02T13:17:02+00:00",
+  "imported_at": "2026-11-03T11:53:12+00:00",
   "count": 53,
   "specs": 15,
   "code": 16,
   "tests": 22,
   "digest": "3106fcdcb9c46f5f510b62ff3baa4e464c1bf7ffb396bc7d189e6dbb3bfe7634",
-  "db_path": "/home/xzh/sddctx-clean/runtime/seekdb",
+  "db_path": "/home/xzh/.local/share/sddctx/seekdb",
   "materials": [
     {
       "key": "spec:ADR-INV-003:ADR-INV-003.1:1",
