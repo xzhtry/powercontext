@@ -352,9 +352,29 @@ class PreparedContextBuilder:
         # equal scores the wider window: evidence statements usually span more
         # than one sentence, and a wider window is what "complete coverage" needs.
         scored.sort(key=lambda item: (-item[0], -item[1], item[2]))
+        # One window per entry before any entry gets a second one: a verbose
+        # document must not crowd the other candidates out of the budget, because
+        # the evidence statement can live in any of them.
+        grouped: dict[tuple[str, str], list[tuple[int, int, int, MemoryEntryFragment]]] = {}
+        for item in scored:
+            fragment = item[3]
+            identity = (fragment.address.memory.artifact.artifact_id, fragment.address.entry_id)
+            grouped.setdefault(identity, []).append(item)
+        ordered: list[tuple[int, int, int, MemoryEntryFragment]] = []
+        round_index = 0
+        while True:
+            added = False
+            for items in grouped.values():
+                if round_index < len(items):
+                    ordered.append(items[round_index])
+                    added = True
+            if not added:
+                break
+            round_index += 1
+
         selected: list[MemoryEntryFragment] = []
         seen: set[tuple[str, str, int, int]] = set()
-        for _score, _width, _order, fragment in scored:
+        for _score, _width, _order, fragment in ordered:
             if len(selected) >= self.entry_limit:
                 break
             key = (
