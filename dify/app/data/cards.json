@@ -1,0 +1,462 @@
+[
+  {
+    "card_id": "prop-teapot",
+    "kind": "prop",
+    "title": "会唱歌的茶壶",
+    "body": "一只缺了口的锡茶壶。每到子时，它会用漏风的嗓子哼半段《十八摸》。柳三娘说前主人是个说书人，死在去京城的路上。",
+    "tags": "茶壶;怪声;子时;柳三娘;整蛊;夜",
+    "keywords": "茶壶 唱歌 半夜 怪声 子时",
+    "effect": {"chaos": 2, "tag": "夜半歌声"},
+    "weight": 5
+  },
+  {
+    "card_id": "prop-shoes",
+    "kind": "prop",
+    "title": "阿福的破鞋",
+    "body": "鞋底磨得能看见脚后跟，左脚大脚趾的位置有个洞。阿福每天睡前都要把它摆在门槛边，说是“镇耗子”。",
+    "tags": "鞋;阿福;藏;整蛊;房梁",
+    "keywords": "鞋 阿福 藏 房梁 耗子",
+    "effect": {"chaos": 1, "npc_grudge": {"阿福": 2}, "tag": "光脚跑堂"},
+    "weight": 5
+  },
+  {
+    "card_id": "prop-ledger",
+    "kind": "prop",
+    "title": "柳三娘的油账本",
+    "body": "封皮上沾着洗不掉的油星。里面记的不只是酒菜钱，还有“某年某月，某侠客欠人情一次”之类看不懂的条目。",
+    "tags": "账本;柳三娘;秘密;偷看;情报",
+    "keywords": "账本 柳三娘 秘密 偷看 欠账",
+    "effect": {"reputation": 1, "tag": "账本疑云"},
+    "weight": 4
+  },
+  {
+    "card_id": "prop-wine",
+    "kind": "prop",
+    "title": "十八年女儿红",
+    "body": "坛子上贴着“十八年女儿红”，启封后却酸得能熏倒一头驴。阿福坚称这是“江湖人的口味”，柳三娘每次听见都翻白眼。",
+    "tags": "酒;女儿红;酸;阿福;整蛊;请客",
+    "keywords": "酒 女儿红 酸 阿福 请客",
+    "effect": {"chaos": 2, "tag": "酸倒牙"},
+    "weight": 3
+  },
+  {
+    "card_id": "prop-cat",
+    "kind": "npc",
+    "title": "黑猫乌云",
+    "body": "一只尾巴尖上有一撮白毛的黑猫。它从不抓老鼠，只负责在客人膝盖上睡觉，以及把后厨的鱼干叼到屋顶。",
+    "tags": "猫;乌云;鱼干;屋顶;好感",
+    "keywords": "猫 乌云 鱼干 屋顶 黑猫",
+    "effect": {"favor": 1, "tag": "猫主子"},
+    "weight": 4
+  },
+  {
+    "card_id": "prop-myna",
+    "kind": "prop",
+    "title": "会喊“客官里边请”的八哥",
+    "body": "八哥被阿福教了三个月，只会三句话：“客官里边请”“记账上”“阿福偷吃”。第三句尤其字正腔圆。",
+    "tags": "八哥;学舌;阿福;整蛊;门口",
+    "keywords": "八哥 学舌 阿福 偷吃 门口",
+    "effect": {"chaos": 2, "npc_grudge": {"阿福": 2}, "tag": "鸟证如山"},
+    "weight": 4
+  },
+  {
+    "card_id": "prop-mirror",
+    "kind": "prop",
+    "title": "缺角的铜镜",
+    "body": "铜镜缺了一角，照人总像隔着一层雾。据说月圆之夜，镜里会多出一个不属于这间客栈的人影。",
+    "tags": "铜镜;月圆;怪谈;柳三娘;情报",
+    "keywords": "铜镜 月圆 人影 怪谈",
+    "effect": {"chaos": 1, "tag": "镜中人"},
+    "weight": 3
+  },
+  {
+    "card_id": "prop-chili",
+    "kind": "prop",
+    "title": "后厨的朝天椒",
+    "body": "红得发亮，阿福说只放半颗就能让客人“记住这家店一辈子”。柳三娘把它锁在最高的柜子里，钥匙挂在腰上。",
+    "tags": "辣椒;后厨;阿福;整蛊;辣",
+    "keywords": "辣椒 朝天椒 后厨 阿福 辣",
+    "effect": {"chaos": 3, "npc_grudge": {"阿福": 3}, "tag": "火烧喉咙"},
+    "weight": 4
+  },
+  {
+    "card_id": "prop-laxative",
+    "kind": "prop",
+    "title": "一包来路不明的“清火散”",
+    "body": "纸包上写着“清火”，闻起来像巴豆。阿福说是给吃坏肚子的客人备的，可他自己从来不敢碰。",
+    "tags": "泻药;巴豆;危险;阿福;整蛊",
+    "keywords": "泻药 巴豆 清火 危险 肚子",
+    "effect": {"chaos": 4, "npc_grudge": {"阿福": 4}, "tag": "茅房危机"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-fan",
+    "kind": "prop",
+    "title": "说书人的折扇",
+    "body": "扇骨上刻着细小的地图，展开后像半幅山水。老周每次讲到“前朝宝藏”都会把它摇得哗哗响。",
+    "tags": "折扇;老周;说书;藏宝图;情报",
+    "keywords": "折扇 老周 说书 藏宝图 地图",
+    "effect": {"reputation": 1, "tag": "扇底山河"},
+    "weight": 3
+  },
+  {
+    "card_id": "prop-badge",
+    "kind": "prop",
+    "title": "巡街捕快的腰牌",
+    "body": "铜制腰牌，正面刻“巡街”，背面刻“莫惹”。捕快老陈每次来都把它拍在桌上，然后赊一碗阳春面。",
+    "tags": "腰牌;捕快;老陈;危险;官府",
+    "keywords": "腰牌 捕快 老陈 官府 查房",
+    "effect": {"chaos": 2, "reputation": -1, "tag": "官差上门"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-treasure",
+    "kind": "prop",
+    "title": "半张藏宝图",
+    "body": "从老周的扇子里掉出来的半张图，边角被茶水浸黄。上面画着客栈后山，以及一个被朱笔圈了三遍的“井”字。",
+    "tags": "藏宝图;后山;井;老周;传闻",
+    "keywords": "藏宝图 后山 井 老周 宝藏",
+    "effect": {"reputation": 2, "tag": "后山有宝"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-hairpin",
+    "kind": "prop",
+    "title": "柳三娘的银簪",
+    "body": "簪头是一朵小小的曼陀罗。柳三娘说这是她娘留下的，可老周喝醉后说过，这簪子当年插在一位女飞贼的发髻上。",
+    "tags": "银簪;柳三娘;女飞贼;秘密;偷",
+    "keywords": "银簪 柳三娘 女飞贼 秘密 偷",
+    "effect": {"reputation": 2, "npc_grudge": {"柳三娘": 4}, "tag": "簪中旧事"},
+    "weight": 1
+  },
+  {
+    "card_id": "prop-cleaver",
+    "kind": "prop",
+    "title": "阿福的菜刀",
+    "body": "刀刃上有一道缺口，阿福说是剁排骨崩的。可客栈三个月没卖过排骨，后院的柴垛倒是矮了不少。",
+    "tags": "菜刀;阿福;后厨;打架;危险",
+    "keywords": "菜刀 阿福 后厨 打架 危险",
+    "effect": {"chaos": 3, "npc_grudge": {"阿福": 3}, "tag": "刀光一闪"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-lion",
+    "kind": "prop",
+    "title": "门口的石狮子",
+    "body": "左边那只石狮子嘴里含着一颗会转的石球，右边那只没有。阿福说右边那只的球是被他小时候掏走的。",
+    "tags": "石狮子;门口;阿福;整蛊;重物",
+    "keywords": "石狮子 门口 石球 阿福",
+    "effect": {"chaos": 3, "tag": "狮子开口"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-swallow",
+    "kind": "prop",
+    "title": "房梁上的燕子窝",
+    "body": "一对燕子在房梁上安了家。柳三娘不许任何人动，说“燕子挑地方，比人准”。",
+    "tags": "燕子;房梁;柳三娘;帮忙;吉兆",
+    "keywords": "燕子 房梁 柳三娘 帮忙 吉兆",
+    "effect": {"favor": 2, "npc_favor": {"柳三娘": 2}, "tag": "燕归梁"},
+    "weight": 3
+  },
+  {
+    "card_id": "prop-roof",
+    "kind": "prop",
+    "title": "漏雨的西厢房",
+    "body": "西厢房的屋顶有三片瓦是活动的。每逢下雨，客人就得把脸盆、茶碗、夜壶排成一排接水。",
+    "tags": "屋顶;漏雨;西厢房;帮忙;修理",
+    "keywords": "屋顶 漏雨 西厢房 帮忙 修理 瓦",
+    "effect": {"favor": 2, "tag": "屋漏偏逢"},
+    "weight": 3
+  },
+  {
+    "card_id": "prop-soup",
+    "kind": "remedy",
+    "title": "阿福的醒酒汤",
+    "body": "黑乎乎一碗，材料随缘，味道像被雨淋过的草席。但每个宿醉的客人第二天都说“还真管用”。",
+    "tags": "醒酒汤;阿福;帮忙;照顾;和解",
+    "keywords": "醒酒汤 阿福 帮忙 照顾 和解",
+    "effect": {"favor": 2, "npc_favor": {"阿福": 2}, "tag": "一碗回魂"},
+    "weight": 3
+  },
+  {
+    "card_id": "prop-horse",
+    "kind": "prop",
+    "title": "客人的枣红马",
+    "body": "拴在门口的老槐树下，脾气比主人还大。马鞍袋里露出半截官印的绸布，阿福假装没看见。",
+    "tags": "马;客人;官印;偷;危险",
+    "keywords": "马 枣红马 客人 官印 偷",
+    "effect": {"silver": 4, "chaos": 2, "reputation": -1, "tag": "马失前蹄"},
+    "weight": 1
+  },
+  {
+    "card_id": "prop-stove",
+    "kind": "prop",
+    "title": "灶王爷的画像",
+    "body": "画像被油烟熏得只剩半张脸，每年腊月二十三柳三娘才想起来给他上糖。阿福说灶王爷早被熏走了。",
+    "tags": "灶王爷;后厨;画像;整蛊;供奉",
+    "keywords": "灶王爷 后厨 画像 糖 供奉",
+    "effect": {"chaos": 2, "favor": 1, "tag": "灶王显灵"},
+    "weight": 2
+  },
+  {
+    "card_id": "npc-liu",
+    "kind": "npc",
+    "title": "柳三娘",
+    "body": "客栈老板娘，三十来岁，算账比刀快，骂人比茶烫。她口口声声“开门做生意以和为贵”，后厨却挂着一把没开刃的柳叶刀。",
+    "tags": "柳三娘;老板娘;核心角色;记仇;算账",
+    "keywords": "柳三娘 老板娘 客栈 算账 柳叶刀",
+    "effect": {"tag": "三娘注视"},
+    "weight": 5
+  },
+  {
+    "card_id": "npc-afu",
+    "kind": "npc",
+    "title": "阿福",
+    "body": "跑堂小二，十七八岁，笑起来一口白牙。他记性差到能把自己的姓忘掉，却对谁欠他一个铜板记得清清楚楚。",
+    "tags": "阿福;跑堂;小二;核心角色;记仇",
+    "keywords": "阿福 跑堂 小二 铜板 记性",
+    "effect": {"tag": "阿福记账"},
+    "weight": 5
+  },
+  {
+    "card_id": "npc-zhou",
+    "kind": "npc",
+    "title": "说书人老周",
+    "body": "每天酉时准时开讲，讲来讲去都是“前朝宝藏”和“女飞贼”。没人知道他从哪来，只知道他从不付茶钱。",
+    "tags": "老周;说书人;情报;传闻;核心角色",
+    "keywords": "老周 说书人 情报 传闻 宝藏",
+    "effect": {"reputation": 1, "tag": "老周开讲"},
+    "weight": 4
+  },
+  {
+    "card_id": "npc-cat",
+    "kind": "npc",
+    "title": "乌云（猫）",
+    "body": "客栈的真正主人。它睡在账本上，吃在灶台边，偶尔把死老鼠放在柳三娘门口，当作房租。",
+    "tags": "乌云;猫;核心角色;好感;鱼干",
+    "keywords": "乌云 猫 账本 灶台 鱼干 老鼠",
+    "effect": {"favor": 1, "tag": "乌云尾巴"},
+    "weight": 4
+  },
+  {
+    "card_id": "npc-chen",
+    "kind": "npc",
+    "title": "巡街捕快老陈",
+    "body": "每旬来一次，点一碗阳春面，加两份浇头，然后记在衙门账上。他看谁都像贼，唯独看柳三娘像欠他钱。",
+    "tags": "老陈;捕快;官府;查房;危险",
+    "keywords": "老陈 捕快 官府 查房 阳春面",
+    "effect": {"reputation": -1, "tag": "老陈查房"},
+    "weight": 3
+  },
+  {
+    "card_id": "rumor-treasure",
+    "kind": "rumor",
+    "title": "后山有前朝宝藏",
+    "body": "老周说，前朝末代王爷把半库金银埋在后山，入口就在一口“会唱歌的井”下面。阿福说那口井早被填了。",
+    "tags": "传闻;后山;宝藏;井;老周",
+    "keywords": "传闻 后山 宝藏 井 老周 前朝",
+    "effect": {"reputation": 1, "tag": "宝藏传闻"},
+    "weight": 3
+  },
+  {
+    "card_id": "rumor-thief",
+    "kind": "rumor",
+    "title": "柳三娘是江湖第一女飞贼",
+    "body": "传闻她当年一夜之间搬空了贪官的银库，只留下一朵曼陀罗。老周每次讲到这段，柳三娘就恰好来收茶钱。",
+    "tags": "传闻;柳三娘;女飞贼;曼陀罗;秘密",
+    "keywords": "传闻 柳三娘 女飞贼 曼陀罗 银库",
+    "effect": {"reputation": 1, "tag": "飞贼旧闻"},
+    "weight": 2
+  },
+  {
+    "card_id": "rumor-tunnel",
+    "kind": "rumor",
+    "title": "客栈底下有条密道",
+    "body": "有人说地窖第三块青砖是空的。阿福说他搬酒时听见过下面有风声，柳三娘当场罚他洗了一个月的碗。",
+    "tags": "传闻;密道;地窖;青砖;阿福",
+    "keywords": "传闻 密道 地窖 青砖 阿福 风声",
+    "effect": {"reputation": 1, "tag": "地下风声"},
+    "weight": 2
+  },
+  {
+    "card_id": "rumor-younglord",
+    "kind": "rumor",
+    "title": "阿福是失踪的少镖头",
+    "body": "老周说，十年前威远镖局丢了一位小少爷，后颈有块月牙形胎记。阿福听完，默默把后领往上提了提。",
+    "tags": "传闻;阿福;少镖头;胎记;秘密",
+    "keywords": "传闻 阿福 少镖头 胎记 镖局",
+    "effect": {"reputation": 1, "tag": "阿福身世"},
+    "weight": 2
+  },
+  {
+    "card_id": "rumor-ghost",
+    "kind": "rumor",
+    "title": "每月十五闹鬼",
+    "body": "每月十五，西厢房会有女人哭声。柳三娘说是风穿过瓦缝，阿福说是猫，乌云每次都在这个时候失踪。",
+    "tags": "传闻;闹鬼;十五;西厢房;怪谈",
+    "keywords": "传闻 闹鬼 十五 西厢房 哭声 乌云",
+    "effect": {"chaos": 2, "tag": "十五夜哭"},
+    "weight": 2
+  },
+  {
+    "card_id": "event-storm",
+    "kind": "event",
+    "title": "暴雨夜，客栈满房",
+    "body": "一场暴雨把半个江湖的人都赶进了客栈。柴房、马厩、甚至柜台底下都躺着人。柳三娘把房价翻了三倍，还是有人抢着住。",
+    "tags": "事件;暴雨;满房;混乱;柳三娘",
+    "keywords": "事件 暴雨 满房 客栈 柴房 马厩",
+    "effect": {"chaos": 2, "silver": 2, "tag": "暴雨满房"},
+    "weight": 2
+  },
+  {
+    "card_id": "event-gathering",
+    "kind": "event",
+    "title": "江湖大会包场",
+    "body": "十几个门派包下大堂，说是“以武会友”，实际是比谁嗓门大。柳三娘在门口支了个“兵器寄存，遗失不赔”的摊子。",
+    "tags": "事件;江湖大会;包场;混乱;门派",
+    "keywords": "事件 江湖大会 包场 门派 兵器",
+    "effect": {"chaos": 3, "silver": 3, "tag": "群雄聚首"},
+    "weight": 2
+  },
+  {
+    "card_id": "event-inspection",
+    "kind": "event",
+    "title": "捕快查房",
+    "body": "老陈带着两个差役挨间查房，说是抓一个“偷马贼”。查到西厢房时，柳三娘端来三碗面，老陈就忘了自己要查哪间。",
+    "tags": "事件;查房;捕快;老陈;危险",
+    "keywords": "事件 查房 捕快 老陈 偷马贼",
+    "effect": {"reputation": -1, "chaos": 1, "tag": "官差查房"},
+    "weight": 2
+  },
+  {
+    "card_id": "event-freeloader",
+    "kind": "event",
+    "title": "客人吃霸王餐",
+    "body": "一个背刀的汉子吃了三碗面、半只鸡，抹嘴就说“记在江湖同道账上”。阿福拦在门口，腿肚子在抖，人没退。",
+    "tags": "事件;霸王餐;客人;阿福;冲突",
+    "keywords": "事件 霸王餐 客人 阿福 面 鸡",
+    "effect": {"chaos": 2, "npc_favor": {"阿福": 2}, "tag": "阿福拦门"},
+    "weight": 2
+  },
+  {
+    "card_id": "event-rival",
+    "kind": "event",
+    "title": "对门酒楼来砸场",
+    "body": "对门“醉仙楼”的掌柜带着两个厨子来踢馆，说柳三娘的招牌菜“像刷锅水”。柳三娘笑着端出一碗汤，两个厨子喝完就走了。",
+    "tags": "事件;砸场;竞争;柳三娘;冲突",
+    "keywords": "事件 砸场 醉仙楼 竞争 柳三娘 招牌菜",
+    "effect": {"chaos": 3, "npc_favor": {"柳三娘": 1}, "tag": "醉仙楼踢馆"},
+    "weight": 2
+  },
+  {
+    "card_id": "remedy-cake",
+    "kind": "remedy",
+    "title": "柳三娘的桂花糕",
+    "body": "只在心情好的时候做，糕上撒的桂花是后山摘的。阿福说，吃到的人最好识相点，别在当天惹事。",
+    "tags": "桂花糕;柳三娘;和解;好感;甜",
+    "keywords": "桂花糕 柳三娘 和解 好感 桂花",
+    "effect": {"favor": 3, "npc_favor": {"柳三娘": 3}, "tag": "一块桂花糕"},
+    "weight": 3
+  },
+  {
+    "card_id": "remedy-wine",
+    "kind": "remedy",
+    "title": "阿福的跌打酒",
+    "body": "用烧酒泡了七种认不出的药材，擦哪哪烫。阿福说这方子是他“家传”的，至于是哪个家，他也说不清。",
+    "tags": "跌打酒;阿福;疗伤;和解;帮忙",
+    "keywords": "跌打酒 阿福 疗伤 药材 帮忙",
+    "effect": {"favor": 2, "npc_favor": {"阿福": 3}, "tag": "药到命除"},
+    "weight": 3
+  },
+  {
+    "card_id": "remedy-candy",
+    "kind": "remedy",
+    "title": "灶王爷的供糖",
+    "body": "黏牙的麦芽糖，本来是腊月二十三用来糊灶王爷嘴的。柳三娘说，拿来哄人比哄神管用。",
+    "tags": "供糖;灶王爷;和解;甜;柳三娘",
+    "keywords": "供糖 麦芽糖 灶王爷 和解 甜",
+    "effect": {"favor": 2, "npc_grudge": {"柳三娘": -2}, "tag": "糖衣炮弹"},
+    "weight": 2
+  },
+  {
+    "card_id": "remedy-letter",
+    "kind": "remedy",
+    "title": "一封没送出的道歉信",
+    "body": "信纸是从账本上撕下来的，背面还印着“欠”字。内容写了三行，涂了两行，最后只剩一句“我不是故意的”。",
+    "tags": "道歉信;和解;阿福;柳三娘;诚意",
+    "keywords": "道歉信 和解 阿福 柳三娘 诚意 对不起",
+    "effect": {"favor": 2, "npc_grudge": {"柳三娘": -2}, "tag": "纸短情长"},
+    "weight": 2
+  },
+  {
+    "card_id": "remedy-work",
+    "kind": "remedy",
+    "title": "帮工一天",
+    "body": "劈柴、挑水、擦桌子、给乌云梳毛。柳三娘不说谢，只在晚饭时多添一个荷包蛋。阿福说这是“最高礼遇”。",
+    "tags": "帮工;和解;柳三娘;阿福;诚意",
+    "keywords": "帮工 劈柴 挑水 擦桌子 荷包蛋 和解",
+    "effect": {"favor": 3, "silver": 1, "tag": "荷包蛋外交"},
+    "weight": 3
+  },
+  {
+    "card_id": "remedy-fish",
+    "kind": "remedy",
+    "title": "给乌云的鱼干",
+    "body": "后厨梁上挂着一串小鱼干，本来是阿福的夜宵。乌云盯了它三天，阿福盯了乌云三天。",
+    "tags": "鱼干;乌云;猫;好感;和解",
+    "keywords": "鱼干 乌云 猫 好感 和解 夜宵",
+    "effect": {"favor": 2, "tag": "猫的认可"},
+    "weight": 2
+  },
+  {
+    "card_id": "remedy-wood",
+    "kind": "remedy",
+    "title": "说书人的醒木",
+    "body": "一块被摸得发亮的木头。老周说，醒木一拍，假的也能说成真的；再一拍，真的也能说成假的。",
+    "tags": "醒木;老周;说书;情报;传闻",
+    "keywords": "醒木 老周 说书 情报 传闻 木头",
+    "effect": {"reputation": 2, "tag": "一拍惊堂"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-chicken",
+    "kind": "prop",
+    "title": "后院那只不下蛋的芦花鸡",
+    "body": "柳三娘养了两年，一个蛋没下，却天天第一个打鸣。阿福说它不是鸡，是“卧底”。",
+    "tags": "鸡;芦花鸡;后院;整蛊;阿福",
+    "keywords": "鸡 芦花鸡 后院 打鸣 阿福 卧底",
+    "effect": {"chaos": 2, "tag": "鸡飞狗跳"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-umbrella",
+    "kind": "prop",
+    "title": "门口那把破油纸伞",
+    "body": "伞面补了七块补丁，伞柄上刻着“借伞人，还伞魂”。柳三娘说这伞不能借，借了就会有人冒雨回来还。",
+    "tags": "油纸伞;门口;怪谈;雨;柳三娘",
+    "keywords": "油纸伞 破伞 雨 怪谈 柳三娘 还伞",
+    "effect": {"chaos": 1, "tag": "借伞人"},
+    "weight": 2
+  },
+  {
+    "card_id": "prop-abacus",
+    "kind": "prop",
+    "title": "柜台上的旧算盘",
+    "body": "算珠被磨得发亮，缺了一颗。柳三娘心算比算盘快，留着它只是因为“听个响”。有人说，那颗缺的算珠在后山。",
+    "tags": "算盘;柳三娘;账;缺珠;传闻",
+    "keywords": "算盘 算珠 柳三娘 账 后山 缺",
+    "effect": {"silver": 1, "tag": "算珠落盘"},
+    "weight": 2
+  },
+  {
+    "card_id": "event-fire",
+    "kind": "event",
+    "title": "后厨走水",
+    "body": "阿福炸花生米时油锅起火，半间后厨黑成锅底。柳三娘拎起一桶洗菜水泼过去，火灭了，阿福也湿透了。",
+    "tags": "事件;走水;后厨;阿福;混乱",
+    "keywords": "事件 走水 着火 后厨 阿福 油锅",
+    "effect": {"chaos": 4, "npc_grudge": {"阿福": 2}, "tag": "后厨走水"},
+    "weight": 1
+  }
+]

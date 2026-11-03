@@ -1,0 +1,8 @@
+# 客栈后端运行依赖（Linux / WSL2；pylibseekdb 不支持 Windows 原生）
+pylibseekdb==1.4.0.post2
+powercontext[cli,server]==1.4.1
+aiosqlite>=0.20
+PyYAML>=6.0
+
+# 测试
+pytest>=8.0

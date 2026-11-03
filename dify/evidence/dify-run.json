@@ -1,0 +1,396 @@
+{
+  "generated_at": "2026-11-03T13:06:59+00:00",
+  "dify": "http://127.0.0.1:5001",
+  "app_id": "1e15bc28-1be2-4d1b-a229-38229e8e3af0",
+  "player_id": "dify-review",
+  "turns": [
+    {
+      "query": "我把阿福的鞋藏到房梁上",
+      "answer": "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你把阿福的鞋藏到房梁上，手还没收回来，阿福就站在你身后。阿福挠了挠后脑勺，把茶碗往你面前推了推：“先喝口热的，别让三娘看见。”角落里那只阿福的破鞋，此刻看起来格外碍眼。楼上的房门无风自开，露出一线昏黄的光。\n\n---\n**第 1 回合 · 大堂** ｜ 称号：初入江湖\n\n`好感 18` `记仇 18` `混乱 3` `银子 30 两` `名声 9`\n\n> 阿福：客官，打尖还是住店？\n\n> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-d211129a0b064bbc`）",
+      "conversation_id": "ece5c5e5-1067-48a0-b893-a1bb25a4ff84",
+      "message_id": "40a98ce0-c6d2-43a5-ae92-dc9de36f1637"
+    },
+    {
+      "query": "给柳三娘送一碟桂花糕，顺便夸她年轻",
+      "answer": "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你给柳三娘送一碟桂花糕，顺便夸她年轻，柳三娘嘴角动了动，账本上的算珠却拨得慢了一拍。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。柜台底下，有什么东西用指甲刮了刮木板。\n\n---\n**第 2 回合 · 大堂** ｜ 称号：初入江湖\n\n`好感 26` `记仇 18` `混乱 3` `银子 30 两` `名声 10`\n\n> 柳三娘：住店还是打尖？\n\n> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 2 回合，流水 `ledger-2204124aac5e45bb`）",
+      "conversation_id": "ece5c5e5-1067-48a0-b893-a1bb25a4ff84",
+      "message_id": "b66b429d-d560-4825-b238-d452dd383629"
+    },
+    {
+      "query": "我道歉，对不起，我不该整阿福",
+      "answer": "窗外雨丝斜斜地打进来，堂里只剩茶碗碰桌的轻响。你道歉，对不起，我不该整阿福，阿福盯了你半天，把茶碗重重放下，没接话。阿福一边擦桌子一边偷瞄你，嘴角憋着笑。他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只一封没送出的道歉信，此刻看起来格外碍眼。柳三娘忽然把账本合上，说：“今晚，别住西厢。”\n\n---\n**第 3 回合 · 大堂** ｜ 称号：初入江湖\n\n`好感 30` `记仇 11` `混乱 3` `银子 30 两` `名声 11`\n\n> 阿福：客官，打尖还是住店？\n\n> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 3 回合，流水 `ledger-a5587f893ced47e7`）",
+      "conversation_id": "ece5c5e5-1067-48a0-b893-a1bb25a4ff84",
+      "message_id": "ee035884-3e2b-4210-9c9c-7345144b6dd6"
+    }
+  ],
+  "cross_session_same_player": {
+    "query": "我回来了，柳三娘还记不记得我",
+    "answer": "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。柳三娘忽然把账本合上，说：“今晚，别住西厢。”\n\n---\n**第 4 回合 · 大堂** ｜ 称号：初入江湖\n\n`好感 39` `记仇 11` `混乱 3` `银子 30 两` `名声 12`\n\n> 柳三娘：住店还是打尖？\n\n> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 4 回合，流水 `ledger-b924bb5d338b4bde`）",
+    "conversation_id": "f3240e37-9f61-403e-86cb-3bd2e84397a0",
+    "message_id": "7e315309-40fe-449f-9983-4a9e0c2885a1"
+  },
+  "cross_session_new_player": {
+    "query": "我回来了，柳三娘还记不记得我",
+    "answer": "油灯把大堂照得半明半暗，柜台上的算盘声忽然停了。你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。后厨的灯“噗”地灭了，黑暗里传来一声很轻的笑。\n\n---\n**第 1 回合 · 大堂** ｜ 称号：初入江湖\n\n`好感 29` `记仇 10` `混乱 0` `银子 30 两` `名声 11`\n\n> 柳三娘：住店还是打尖？\n\n> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-29c39b1e2d024af6`）",
+    "conversation_id": "e32861f1-7208-4d12-8fdf-5c5220fd39bd",
+    "message_id": "166e9b62-6824-4a44-8390-532c2528c538"
+  },
+  "powercontext_state": {
+    "ok": true,
+    "player_id": "dify-review",
+    "state": {
+      "ending": null,
+      "flags": [
+        "光脚跑堂",
+        "鸡飞狗跳",
+        "刀光一闪",
+        "一块桂花糕",
+        "荷包蛋外交",
+        "借伞人",
+        "纸短情长",
+        "药到命除",
+        "一碗回魂",
+        "醉仙楼踢馆"
+      ],
+      "generation": 4,
+      "last_scene": "你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。（柳三娘的桂花糕也掺和了一脚）",
+      "npcs": {
+        "乌云": {
+          "favor": 30,
+          "grudge": 0
+        },
+        "柳三娘": {
+          "favor": 21,
+          "grudge": 0
+        },
+        "老周": {
+          "favor": 0,
+          "grudge": 0
+        },
+        "老陈": {
+          "favor": 0,
+          "grudge": 0
+        },
+        "阿福": {
+          "favor": 20,
+          "grudge": 2
+        }
+      },
+      "reset_from": 3,
+      "schema": "grudge-inn.state.v1",
+      "scope_id": "scp_361dytmfg5pe8e2m9weg6x3zhw",
+      "source": "powercontext",
+      "stats": {
+        "chaos": 3,
+        "favor": 39,
+        "grudge": 11,
+        "reputation": 12,
+        "silver": 30
+      },
+      "title": "初入江湖",
+      "turn": 4,
+      "updated_at": "2026-11-03T13:06:58+00:00"
+    },
+    "episodes": [
+      {
+        "action": "我把阿福的鞋藏到房梁上",
+        "card_ids": [
+          "prop-shoes",
+          "prop-chicken",
+          "prop-cleaver"
+        ],
+        "created_at": "2026-11-03T13:06:57+00:00",
+        "deltas": {
+          "chaos": 3,
+          "favor": -2,
+          "grudge": 8,
+          "reputation": -1,
+          "silver": 0
+        },
+        "generation": 4,
+        "intent": "prank",
+        "outcome": "你把阿福的鞋藏到房梁上，手还没收回来，阿福就站在你身后。（阿福的破鞋也掺和了一脚）",
+        "target": "阿福",
+        "turn": 1
+      },
+      {
+        "action": "给柳三娘送一碟桂花糕，顺便夸她年轻",
+        "card_ids": [
+          "remedy-cake",
+          "remedy-work",
+          "prop-umbrella"
+        ],
+        "created_at": "2026-11-03T13:06:57+00:00",
+        "deltas": {
+          "chaos": 0,
+          "favor": 8,
+          "grudge": 0,
+          "reputation": 1,
+          "silver": 0
+        },
+        "generation": 4,
+        "intent": "compliment",
+        "outcome": "你给柳三娘送一碟桂花糕，顺便夸她年轻，柳三娘嘴角动了动，账本上的算珠却拨得慢了一拍。（柳三娘的桂花糕也掺和了一脚）",
+        "target": "柳三娘",
+        "turn": 2
+      },
+      {
+        "action": "我道歉，对不起，我不该整阿福",
+        "card_ids": [
+          "remedy-letter",
+          "remedy-wine",
+          "prop-soup"
+        ],
+        "created_at": "2026-11-03T13:06:58+00:00",
+        "deltas": {
+          "chaos": 0,
+          "favor": 4,
+          "grudge": -7,
+          "reputation": 1,
+          "silver": 0
+        },
+        "generation": 4,
+        "intent": "apologize",
+        "outcome": "你道歉，对不起，我不该整阿福，阿福盯了你半天，把茶碗重重放下，没接话。（一封没送出的道歉信也掺和了一脚）",
+        "target": "阿福",
+        "turn": 3
+      },
+      {
+        "action": "我回来了，柳三娘还记不记得我",
+        "card_ids": [
+          "remedy-cake",
+          "prop-umbrella",
+          "event-rival"
+        ],
+        "created_at": "2026-11-03T13:06:58+00:00",
+        "deltas": {
+          "chaos": 0,
+          "favor": 9,
+          "grudge": 0,
+          "reputation": 1,
+          "silver": 0
+        },
+        "generation": 4,
+        "intent": "help",
+        "outcome": "你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。（柳三娘的桂花糕也掺和了一脚）",
+        "target": "柳三娘",
+        "turn": 4
+      }
+    ],
+    "scope_id": "scp_361dytmfg5pe8e2m9weg6x3zhw",
+    "powercontext": {
+      "entries": 30,
+      "state_entries": 15,
+      "episode_entries": 15
+    }
+  },
+  "seekdb_stats": {
+    "ok": true,
+    "seekdb": {
+      "engine": "seekdb (OceanBase embedded)",
+      "version": "5.7.25-OceanBase seekdb-v1.4.0.0",
+      "cards": 46,
+      "card_kinds": {
+        "event": 6,
+        "npc": 6,
+        "prop": 21,
+        "remedy": 8,
+        "rumor": 5
+      },
+      "plans": 27,
+      "ledger": 23,
+      "latest_ledger": [
+        {
+          "ledger_id": "ledger-29c39b1e2d024af6",
+          "player_id": "dify-fresh",
+          "generation": 4,
+          "turn": 1,
+          "action": "我回来了，柳三娘还记不记得我",
+          "intent": "help",
+          "target": "柳三娘",
+          "card_ids": [
+            "remedy-cake",
+            "prop-umbrella",
+            "event-rival"
+          ],
+          "narrative": "油灯把大堂照得半明半暗，柜台上的算盘声忽然停了。你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。后厨的灯“噗”地灭了，黑暗里传来一声很轻的笑。",
+          "created_at": "2026-11-03T13:06:59+00:00",
+          "deltas": {
+            "chaos": 0,
+            "favor": 9,
+            "grudge": 0,
+            "reputation": 1,
+            "silver": 0
+          }
+        },
+        {
+          "ledger_id": "ledger-b924bb5d338b4bde",
+          "player_id": "dify-review",
+          "generation": 4,
+          "turn": 4,
+          "action": "我回来了，柳三娘还记不记得我",
+          "intent": "help",
+          "target": "柳三娘",
+          "card_ids": [
+            "remedy-cake",
+            "prop-umbrella",
+            "event-rival"
+          ],
+          "narrative": "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。柳三娘忽然把账本合上，说：“今晚，别住西厢。”",
+          "created_at": "2026-11-03T13:06:58+00:00",
+          "deltas": {
+            "chaos": 0,
+            "favor": 9,
+            "grudge": 0,
+            "reputation": 1,
+            "silver": 0
+          }
+        },
+        {
+          "ledger_id": "ledger-a5587f893ced47e7",
+          "player_id": "dify-review",
+          "generation": 4,
+          "turn": 3,
+          "action": "我道歉，对不起，我不该整阿福",
+          "intent": "apologize",
+          "target": "阿福",
+          "card_ids": [
+            "remedy-letter",
+            "remedy-wine",
+            "prop-soup"
+          ],
+          "narrative": "窗外雨丝斜斜地打进来，堂里只剩茶碗碰桌的轻响。你道歉，对不起，我不该整阿福，阿福盯了你半天，把茶碗重重放下，没接话。阿福一边擦桌子一边偷瞄你，嘴角憋着笑。他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只一封没送出的道歉信，此刻看起来格外碍眼。柳三娘忽然把账本合上，说：“今晚，别住西厢。”",
+          "created_at": "2026-11-03T13:06:58+00:00",
+          "deltas": {
+            "chaos": 0,
+            "favor": 4,
+            "grudge": -7,
+            "reputation": 1,
+            "silver": 0
+          }
+        }
+      ]
+    },
+    "powercontext": {
+      "url": "http://127.0.0.1:8766",
+      "ready": true
+    },
+    "recent_ledger": [
+      {
+        "ledger_id": "ledger-29c39b1e2d024af6",
+        "player_id": "dify-fresh",
+        "generation": 4,
+        "turn": 1,
+        "action": "我回来了，柳三娘还记不记得我",
+        "intent": "help",
+        "target": "柳三娘",
+        "card_ids": [
+          "remedy-cake",
+          "prop-umbrella",
+          "event-rival"
+        ],
+        "narrative": "油灯把大堂照得半明半暗，柜台上的算盘声忽然停了。你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。后厨的灯“噗”地灭了，黑暗里传来一声很轻的笑。",
+        "created_at": "2026-11-03T13:06:59+00:00",
+        "deltas": {
+          "chaos": 0,
+          "favor": 9,
+          "grudge": 0,
+          "reputation": 1,
+          "silver": 0
+        }
+      },
+      {
+        "ledger_id": "ledger-a5587f893ced47e7",
+        "player_id": "dify-review",
+        "generation": 4,
+        "turn": 3,
+        "action": "我道歉，对不起，我不该整阿福",
+        "intent": "apologize",
+        "target": "阿福",
+        "card_ids": [
+          "remedy-letter",
+          "remedy-wine",
+          "prop-soup"
+        ],
+        "narrative": "窗外雨丝斜斜地打进来，堂里只剩茶碗碰桌的轻响。你道歉，对不起，我不该整阿福，阿福盯了你半天，把茶碗重重放下，没接话。阿福一边擦桌子一边偷瞄你，嘴角憋着笑。他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只一封没送出的道歉信，此刻看起来格外碍眼。柳三娘忽然把账本合上，说：“今晚，别住西厢。”",
+        "created_at": "2026-11-03T13:06:58+00:00",
+        "deltas": {
+          "chaos": 0,
+          "favor": 4,
+          "grudge": -7,
+          "reputation": 1,
+          "silver": 0
+        }
+      },
+      {
+        "ledger_id": "ledger-b924bb5d338b4bde",
+        "player_id": "dify-review",
+        "generation": 4,
+        "turn": 4,
+        "action": "我回来了，柳三娘还记不记得我",
+        "intent": "help",
+        "target": "柳三娘",
+        "card_ids": [
+          "remedy-cake",
+          "prop-umbrella",
+          "event-rival"
+        ],
+        "narrative": "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你回来了，柳三娘还记不记得我，柳三娘嘴上不说，手里的活却轻了半分。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。柳三娘忽然把账本合上，说：“今晚，别住西厢。”",
+        "created_at": "2026-11-03T13:06:58+00:00",
+        "deltas": {
+          "chaos": 0,
+          "favor": 9,
+          "grudge": 0,
+          "reputation": 1,
+          "silver": 0
+        }
+      },
+      {
+        "ledger_id": "ledger-d211129a0b064bbc",
+        "player_id": "dify-review",
+        "generation": 4,
+        "turn": 1,
+        "action": "我把阿福的鞋藏到房梁上",
+        "intent": "prank",
+        "target": "阿福",
+        "card_ids": [
+          "prop-shoes",
+          "prop-chicken",
+          "prop-cleaver"
+        ],
+        "narrative": "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你把阿福的鞋藏到房梁上，手还没收回来，阿福就站在你身后。阿福挠了挠后脑勺，把茶碗往你面前推了推：“先喝口热的，别让三娘看见。”角落里那只阿福的破鞋，此刻看起来格外碍眼。楼上的房门无风自开，露出一线昏黄的光。",
+        "created_at": "2026-11-03T13:06:57+00:00",
+        "deltas": {
+          "chaos": 3,
+          "favor": -2,
+          "grudge": 8,
+          "reputation": -1,
+          "silver": 0
+        }
+      },
+      {
+        "ledger_id": "ledger-2204124aac5e45bb",
+        "player_id": "dify-review",
+        "generation": 4,
+        "turn": 2,
+        "action": "给柳三娘送一碟桂花糕，顺便夸她年轻",
+        "intent": "compliment",
+        "target": "柳三娘",
+        "card_ids": [
+          "remedy-cake",
+          "remedy-work",
+          "prop-umbrella"
+        ],
+        "narrative": "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你给柳三娘送一碟桂花糕，顺便夸她年轻，柳三娘嘴角动了动，账本上的算珠却拨得慢了一拍。柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”他还记得，第1回合你把阿福的鞋藏到房梁上。角落里那只柳三娘的桂花糕，此刻看起来格外碍眼。柜台底下，有什么东西用指甲刮了刮木板。",
+        "created_at": "2026-11-03T13:06:57+00:00",
+        "deltas": {
+          "chaos": 0,
+          "favor": 8,
+          "grudge": 0,
+          "reputation": 1,
+          "silver": 0
+        }
+      }
+    ]
+  }
+}

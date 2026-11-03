@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>记仇客栈 · Grudge Inn</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="app">
+    <aside class="side">
+      <div class="brand">
+        <div class="lantern">🏮</div>
+        <div>
+          <h1>记仇客栈</h1>
+          <p class="sub">Grudge Inn</p>
+        </div>
+      </div>
+      <p class="tagline">你负责捣蛋，<br />AI 负责记仇。</p>
+
+      <label class="field">
+        <span>你的江湖名号</span>
+        <input id="player" maxlength="64" value="demo-player" autocomplete="off" />
+      </label>
+      <p class="hint">同一个名号，跨会话也会被记住。</p>
+
+      <div class="panel">
+        <div class="panel-head">
+          <span>柳三娘的账本</span>
+          <span id="turn" class="turn">第 0 回合</span>
+        </div>
+        <div id="title" class="title">初入江湖</div>
+        <div class="stats" id="stats">
+          <div><b id="favor">-</b><span>好感</span></div>
+          <div><b id="grudge">-</b><span>记仇</span></div>
+          <div><b id="chaos">-</b><span>混乱</span></div>
+          <div><b id="silver">-</b><span>银子</span></div>
+          <div><b id="reputation">-</b><span>名声</span></div>
+        </div>
+        <div id="memory" class="memory">正在翻账本…</div>
+      </div>
+
+      <div class="actions">
+        <button id="newSession" class="ghost" type="button">新会话</button>
+        <button id="reset" class="ghost danger" type="button">重开此人</button>
+      </div>
+      <p class="foot">Dify × seekdb × PowerContext</p>
+    </aside>
+
+    <main class="main">
+      <header class="scene">
+        <div>
+          <span class="eyebrow">酉时 · 大堂</span>
+          <h2>推门进去，说点什么。</h2>
+        </div>
+        <span class="status-dot" id="statusDot">连接中</span>
+      </header>
+
+      <div id="log" class="log">
+        <article class="bubble narrator opening">
+          <div class="who">说书人</div>
+          <p>油灯把客栈大堂照得半明半暗。柜台后，柳三娘拨着算盘；跑堂的阿福正把一只破鞋往门槛边摆；黑猫乌云趴在账本上，尾巴尖有一撮白毛。</p>
+          <p>你刚迈进门槛，柳三娘头也不抬：“客官，住店还是打尖？”</p>
+          <p class="small">输入你的恶作剧、帮忙、道歉，或者“看看状态”。同一个名号，下次回来她还记得。</p>
+        </article>
+      </div>
+
+      <div id="chips" class="chips">
+        <button type="button" data-q="我把阿福的鞋藏到房梁上">把阿福的鞋藏到房梁上</button>
+        <button type="button" data-q="给柳三娘送一碟桂花糕，顺便夸她年轻">送桂花糕，夸她年轻</button>
+        <button type="button" data-q="偷偷翻开柜台的账本">偷看账本</button>
+        <button type="button" data-q="我回来了，柳三娘还记不记得我">我回来了</button>
+      </div>
+
+      <form id="form" class="composer">
+        <textarea id="input" rows="2" maxlength="500" placeholder="比如：我把阿福的鞋藏到房梁上…"></textarea>
+        <button id="send" type="submit">推门</button>
+      </form>
+      <p class="tiny">Enter 发送 · Shift+Enter 换行 · 同一个名号 = 同一本账</p>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

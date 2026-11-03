@@ -1,0 +1,5 @@
+Pager usage is off.
+     provider_name     |   model_name    |   model_type    | is_valid
+-----------------------+-----------------+-----------------+----------
+ openai_api_compatible | grudge-narrator | text-generation | t
+(1 row)
