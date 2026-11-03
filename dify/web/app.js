@@ -12,8 +12,10 @@
   let busy = false;
   const openingHTML = log.innerHTML;
 
+  const params = new URLSearchParams(location.search);
   const stored = localStorage.getItem("grudge-inn-player");
   if (stored) playerInput.value = stored;
+  if (params.get("player")) playerInput.value = params.get("player");
 
   function player() {
     return (playerInput.value || "demo-player").trim().slice(0, 64) || "demo-player";
@@ -152,4 +154,8 @@
   });
 
   refreshState();
+
+  if (params.has("demo")) {
+    setTimeout(() => say("我把阿福的鞋藏到房梁上"), 500);
+  }
 })();

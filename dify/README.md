@@ -4,6 +4,8 @@
 >
 > 一个用 Dify Chatflow 编排的互动客栈：你在客栈里藏鞋、偷账本、往茶里加盐，NPC 会当场反应；更麻烦的是，她会**跨会话记住**你干过什么，并在下一次见面时连本带利地还回来。
 
+![记仇客栈界面](evidence/play-ui.png)
+
 本作品是 `powercontext` 仓库 `2026-competition-ecosystem` 分支下 `dify/` 目录的参赛提交。
 
 ---
