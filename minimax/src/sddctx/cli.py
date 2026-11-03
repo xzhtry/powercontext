@@ -86,7 +86,7 @@ def _cmd_state(args: argparse.Namespace) -> int:
 
 
 def _cmd_prompt(args: argparse.Namespace) -> int:
-    from sddctx.runner import SYSTEM_PROMPT, _build_prompt
+    from sddctx.runner import SYSTEM_PROMPT, _build_prompt, _steps
 
     settings = _settings()
     task = load_task(args.task)
@@ -96,6 +96,8 @@ def _cmd_prompt(args: argparse.Namespace) -> int:
     except PowerContextError as error:
         print(f"错误：{error}", file=sys.stderr)
         return 3
+    if state.get("status") == "empty":
+        state = {**state, "pending": _steps(task)}
     context = build_context(task, db_path=settings.db_path, pc_state=state)
     text = f"{SYSTEM_PROMPT}\n\n{_build_prompt(task, context)}\n"
     target = Path(args.out)

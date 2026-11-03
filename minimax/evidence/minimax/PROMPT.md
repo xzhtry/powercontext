@@ -191,12 +191,9 @@ def list_invoices(
 - [regression] tests/test_pagination.py::test_invalid_page_size_is_rejected covers=REQ-INV-004.4,API-INV-002.2
 
 ## 任务状态（来自 PowerContext）
-- 状态：verified（第 1 次运行）
-- 已完成：读取并确认适用的规格条目; 定位需要修改的代码符号; 实现 min_amount 筛选; 补充 CLI --min-amount; 运行目标功能测试; 运行相关回归测试
-- 待办：无
-- 已有验证：target exit=0
-- 已有验证：regression exit=0
-- 已有验证：full exit=0
+- 状态：empty（第 0 次运行）
+- 已完成：无
+- 待办：读取并确认适用的规格条目; 定位需要修改的代码符号; 实现 min_amount 筛选; 补充 CLI --min-amount; 运行目标功能测试; 运行相关回归测试
 
 输出格式（必须严格遵守）：
 ```diff
