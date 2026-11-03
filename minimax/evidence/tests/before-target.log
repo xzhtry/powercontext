@@ -84,4 +84,4 @@ FAILED tests/test_min_amount_filter.py::test_min_amount_combines_with_customer_a
 FAILED tests/test_min_amount_filter.py::test_min_amount_none_keeps_existing_behavior
 FAILED tests/test_min_amount_filter.py::test_negative_min_amount_is_rejected
 FAILED tests/test_min_amount_filter.py::test_cli_accepts_min_amount - Asserti...
-7 failed in 0.20s
+7 failed in 0.13s

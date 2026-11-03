@@ -1,7 +1,7 @@
 {
   "schema": "sddctx.context.v1",
-  "run_id": "ctx-9b4ffbb09675",
-  "generated_at": "2026-11-02T13:16:01+00:00",
+  "run_id": "ctx-40bef41bc97f",
+  "generated_at": "2026-11-03T12:14:01+00:00",
   "task": {
     "task_id": "TASK-101",
     "title": "发票列表新增金额下限筛选",
@@ -829,16 +829,16 @@
       "protocol": null,
       "usage": null
     },
-    "patch_path": "evidence/patches/run-1e039a60cf.diff",
+    "patch_path": "evidence/patches/run-bf985313a7.diff",
     "patch_sha256": "79644459e82c3aa86e5c8b6ba4011750bbd600a28b84b3defad6ea159f9b8ee8",
     "pending": [],
     "run_seq": 1,
     "schema": "sddctx.task_state.v1",
-    "scope_id": "scp_1mtgsk90wn55krgw1735zp689m",
+    "scope_id": "scp_17k27essbtxg4tyewm2t9aht74",
     "source": "powercontext",
     "status": "verified",
     "task_id": "TASK-101",
-    "updated_at": "2026-11-02T13:15:22+00:00",
+    "updated_at": "2026-11-03T12:13:35+00:00",
     "verifications": [
       {
         "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c",
@@ -846,7 +846,7 @@
         "errors": 0,
         "exit_code": 0,
         "failed": 0,
-        "log": "evidence/tests/run-1e039a60cf-target.log",
+        "log": "evidence/tests/run-bf985313a7-target.log",
         "name": "target",
         "passed": 7
       },
@@ -856,7 +856,7 @@
         "errors": 0,
         "exit_code": 0,
         "failed": 0,
-        "log": "evidence/tests/run-1e039a60cf-regression.log",
+        "log": "evidence/tests/run-bf985313a7-regression.log",
         "name": "regression",
         "passed": 17
       },
@@ -866,14 +866,14 @@
         "errors": 0,
         "exit_code": 0,
         "failed": 0,
-        "log": "evidence/tests/run-1e039a60cf-full.log",
+        "log": "evidence/tests/run-bf985313a7-full.log",
         "name": "full",
         "passed": 24
       }
     ],
     "entry": {
       "family": "atomic-memory",
-      "artifact_id": "art_66b383e7cf9a430aba3255b436f184b3",
+      "artifact_id": "art_bd66a1795c7448958f0abd9d8f8fcad0",
       "revision": 1
     }
   },
@@ -1299,7 +1299,7 @@
         "purpose": "tag-lookup:code"
       },
       {
-        "sql": "SELECT material_id, material_key, doc_id, section_id, kind, path, symbol, version, status, title, body, keywords, tags, line_start, line_end, content_hash FROM materials WHERE kind = 'test' AND status = 'active' AND (tags LIKE '%covers=API-INV-002.4%' OR tags LIKE '%covers=REQ-INV-004.3%' OR tags LIKE '%covers=REQ-INV-004.2%' OR tags LIKE '%covers=REQ-INV-004.1%' OR tags LIKE '%covers=ADR-INV-003.2%' OR tags LIKE '%covers=REQ-INV-004.4%' OR tags LIKE '%covers=ADR-INV-003.1%' OR tags LIKE '%covers=REQ-INV-004.5%' OR tags LIKE '%covers=ADR-INV-003.3%' OR tags LIKE '%covers=API-INV-002.3%') ORDER BY material_id LIMIT 200",
+        "sql": "SELECT material_id, material_key, doc_id, section_id, kind, path, symbol, version, status, title, body, keywords, tags, line_start, line_end, content_hash FROM materials WHERE kind = 'test' AND status = 'active' AND (tags LIKE '%covers=API-INV-002.4%' OR tags LIKE '%covers=ADR-INV-003.2%' OR tags LIKE '%covers=REQ-INV-004.4%' OR tags LIKE '%covers=ADR-INV-003.3%' OR tags LIKE '%covers=REQ-INV-004.5%' OR tags LIKE '%covers=REQ-INV-004.1%' OR tags LIKE '%covers=REQ-INV-004.2%' OR tags LIKE '%covers=API-INV-002.3%' OR tags LIKE '%covers=ADR-INV-003.1%' OR tags LIKE '%covers=REQ-INV-004.3%') ORDER BY material_id LIMIT 200",
         "rows": 12,
         "purpose": "tag-lookup:test"
       }

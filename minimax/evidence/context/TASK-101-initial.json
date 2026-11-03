@@ -1,7 +1,7 @@
 {
   "schema": "sddctx.context.v1",
-  "run_id": "ctx-3646ea24eeb5",
-  "generated_at": "2026-11-02T13:15:12+00:00",
+  "run_id": "ctx-284e9a628b77",
+  "generated_at": "2026-11-03T12:13:27+00:00",
   "task": {
     "task_id": "TASK-101",
     "title": "发票列表新增金额下限筛选",
@@ -820,7 +820,7 @@
     "pending": [],
     "verifications": [],
     "source": "powercontext",
-    "scope_id": "scp_1mtgsk90wn55krgw1735zp689m",
+    "scope_id": "scp_17k27essbtxg4tyewm2t9aht74",
     "updated_at": null
   },
   "sources": [
@@ -1247,7 +1247,7 @@
         "purpose": "tag-lookup:code"
       },
       {
-        "sql": "SELECT material_id, material_key, doc_id, section_id, kind, path, symbol, version, status, title, body, keywords, tags, line_start, line_end, content_hash FROM materials WHERE kind = 'test' AND status = 'active' AND (tags LIKE '%covers=REQ-INV-004.5%' OR tags LIKE '%covers=ADR-INV-003.2%' OR tags LIKE '%covers=API-INV-002.3%' OR tags LIKE '%covers=ADR-INV-003.3%' OR tags LIKE '%covers=ADR-INV-003.1%' OR tags LIKE '%covers=REQ-INV-004.2%' OR tags LIKE '%covers=REQ-INV-004.1%' OR tags LIKE '%covers=API-INV-002.4%' OR tags LIKE '%covers=REQ-INV-004.3%' OR tags LIKE '%covers=REQ-INV-004.4%') ORDER BY material_id LIMIT 200",
+        "sql": "SELECT material_id, material_key, doc_id, section_id, kind, path, symbol, version, status, title, body, keywords, tags, line_start, line_end, content_hash FROM materials WHERE kind = 'test' AND status = 'active' AND (tags LIKE '%covers=ADR-INV-003.1%' OR tags LIKE '%covers=ADR-INV-003.3%' OR tags LIKE '%covers=REQ-INV-004.4%' OR tags LIKE '%covers=REQ-INV-004.2%' OR tags LIKE '%covers=API-INV-002.3%' OR tags LIKE '%covers=ADR-INV-003.2%' OR tags LIKE '%covers=API-INV-002.4%' OR tags LIKE '%covers=REQ-INV-004.3%' OR tags LIKE '%covers=REQ-INV-004.5%' OR tags LIKE '%covers=REQ-INV-004.1%') ORDER BY material_id LIMIT 200",
         "rows": 12,
         "purpose": "tag-lookup:test"
       }
