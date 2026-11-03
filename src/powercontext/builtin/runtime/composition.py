@@ -661,6 +661,10 @@ async def open_builtin_runtime(
         supervisor = runtime.artifact_processing_supervisor
         if supervisor is not None:
             contexts.records._wake_binding = supervisor.wake
+            supervisor._source_count_thresholds = {
+                FAMILY_BINDINGS["memory"]: config.runtime.memory_source_count_threshold,
+                TOPIC_MEMORY_SOURCE_WINDOW_BINDING: config.runtime.topic_memory_source_count_threshold,
+            }
         contexts.profiles.operation_context = runtime._operation
         from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleService
 

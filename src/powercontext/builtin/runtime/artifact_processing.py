@@ -49,6 +49,7 @@ else:
 from powercontext._logging import log_safely
 from powercontext.builtin.persistence.database import AsyncDatabase
 from powercontext.builtin.persistence.errors import ArtifactProcessingLeadershipLostError
+from powercontext.builtin.persistence.processing import SourceCursorRepository
 from powercontext.builtin.persistence.processing_intents import ArtifactProcessingIntentRepository
 from powercontext.builtin.persistence.supervision import (
     ArtifactProcessingBindingStateRepository,
@@ -57,7 +58,11 @@ from powercontext.builtin.persistence.supervision import (
     ArtifactProcessingLeaseRepository,
     database_utc_now,
 )
-from powercontext.builtin.persistence.tables import ARTIFACT_PROCESSING_INTENTS_TABLE, ARTIFACT_PROCESSING_LEASES_TABLE
+from powercontext.builtin.persistence.tables import (
+    ARTIFACT_PROCESSING_INTENTS_TABLE,
+    ARTIFACT_PROCESSING_LEASES_TABLE,
+    SOURCE_JOURNAL_HEADS_TABLE,
+)
 from powercontext.builtin.runtime.processing_contracts import (
     ArtifactProcessingWorkAssignment,
     ArtifactProcessingWorkerCompletion,
@@ -508,6 +513,31 @@ class ArtifactProcessingSupervisor:
         if self._task is None:
             self._task = asyncio.create_task(self._run(), name=f"artifact-supervisor-{self._supervisor_group}")
             await self._started.wait()
+
+    async def _recheck_source_count(self, scope: str, binding_name: str, /) -> None:
+        """Re-judge the count threshold from the new cursor after a successful call.
+
+        A window smaller than the backlog leaves Sources pending; the contract asks
+        for another acceptance decision then, instead of waiting for a schedule tick
+        or a new capture.
+        """
+
+        thresholds = getattr(self, "_source_count_thresholds", None) or {}
+        threshold = thresholds.get(binding_name)
+        if threshold is None:
+            return
+        async with self._database.transaction() as connection:
+            head = await connection.scalar(
+                select(SOURCE_JOURNAL_HEADS_TABLE.c.position).where(SOURCE_JOURNAL_HEADS_TABLE.c.scope_id == scope)
+            )
+            if head is None:
+                return
+            cursor = await SourceCursorRepository().load(connection, scope, binding_name)
+            committed = 0 if cursor is None else cursor.cursor.sequence
+            if int(head) - committed < threshold:
+                return
+            await ArtifactProcessingIntentRepository().request(connection, scope, binding_name)
+        self.wake(binding_name)
 
     def wake(self, binding_name: str | None = None) -> None:
         self._notifications += 1
@@ -994,6 +1024,7 @@ class ArtifactProcessingSupervisor:
                     )
                 state.retries.pop(scope, None)
                 state.completed += 1
+                await self._recheck_source_count(scope, state.binding.binding_name)
                 if row.requested_generation > row.handled_generation:
                     self.wake(state.binding.binding_name)
             except (ArtifactProcessingLeadershipLostError, _WorkerTerminationError):
