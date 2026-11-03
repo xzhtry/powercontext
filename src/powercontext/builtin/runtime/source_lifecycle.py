@@ -117,13 +117,20 @@ class SourceLifecycleService:
                 await service.forget(head, entries=(result.entry,), reason="source lifecycle")
 
     async def hidden_topics(self, scope_id: str, /) -> set[str]:
-        """Return artifact ids of Topic nodes that lost their support."""
+        """Return artifact ids of Topic nodes that lost their support.
+
+        Search runs on the hot path, so a contended database degrades to "no
+        filtered Topics" instead of failing the caller's search.
+        """
 
         cached = self._hidden_cache.get(scope_id)
         if cached is not None:
             return cached
-        async with self._database.transaction() as connection:
-            nodes = await _load_nodes(connection, scope_id)
+        try:
+            async with self._database.transaction() as connection:
+                nodes = await _load_nodes(connection, scope_id)
+        except Exception:  # noqa: BLE001 - a locked reader must not break search
+            return set()
         return self._remember_hidden(scope_id, nodes)
 
     def _remember_hidden(self, scope_id: str, nodes: dict[str, _Node]) -> set[str]:
