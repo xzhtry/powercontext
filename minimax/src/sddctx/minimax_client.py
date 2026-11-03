@@ -46,7 +46,8 @@ class MiniMaxConfig:
     base_url: str
     model: str
     api_key: str = field(repr=False)
-    timeout: float = 300.0
+    timeout: float = 600.0
+    effort: str = "low"
 
     @classmethod
     def from_env(cls) -> "MiniMaxConfig":
@@ -58,6 +59,7 @@ class MiniMaxConfig:
             base_url=os.environ.get("MINIMAX_BASE_URL", default_base).rstrip("/"),
             model=os.environ.get("MINIMAX_MODEL", "MiniMax-M3.1-Flash"),
             api_key=os.environ.get("MINIMAX_API_KEY", "").strip(),
+            effort=os.environ.get("MINIMAX_EFFORT", "low").strip().lower(),
         )
 
     def require_key(self) -> None:
@@ -105,21 +107,30 @@ def complete(system: str, user: str, config: MiniMaxConfig | None = None) -> dic
         url = f"{resolved.base_url}/v1/messages"
         payload = {
             "model": resolved.model,
-            "max_tokens": 4096,
-            "temperature": 0.0,
+            "max_tokens": 8192,
             "system": system,
-            "messages": [{"role": "user", "content": user}],
+            "messages": [{"role": "user", "content": [{"type": "text", "text": user}]}],
+            "output_config": {"effort": resolved.effort},
         }
-        headers = {"x-api-key": resolved.api_key, "anthropic-version": "2023-06-01"}
+        headers = {
+            "x-api-key": resolved.api_key,
+            "Authorization": f"Bearer {resolved.api_key}",
+            "anthropic-version": "2023-06-01",
+        }
         raw = _post_json(url, payload, headers, resolved.timeout)
         text = "".join(block.get("text", "") for block in raw.get("content", []) if block.get("type") == "text")
         usage = raw.get("usage", {})
+        if not text:
+            raise MiniMaxError(
+                "MiniMax 返回了空文本（思考 token 可能占满 max_tokens）。"
+                f"stop_reason={raw.get('stop_reason')} usage={usage}"
+            )
     elif resolved.protocol == "openai":
         url = f"{resolved.base_url}/chat/completions"
         payload = {
             "model": resolved.model,
-            "temperature": 0.0,
-            "max_tokens": 4096,
+            "max_tokens": 8192,
+            "reasoning_effort": resolved.effort,
             "messages": [
                 {"role": "system", "content": system},
                 {"role": "user", "content": user},
@@ -130,6 +141,8 @@ def complete(system: str, user: str, config: MiniMaxConfig | None = None) -> dic
         choices = raw.get("choices") or []
         text = choices[0].get("message", {}).get("content", "") if choices else ""
         usage = raw.get("usage", {})
+        if not text:
+            raise MiniMaxError(f"MiniMax 返回了空文本。finish_reason={choices[0].get('finish_reason') if choices else None} usage={usage}")
     else:
         raise MiniMaxError(f"未知的 MINIMAX_PROTOCOL：{resolved.protocol}")
 
