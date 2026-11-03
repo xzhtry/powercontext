@@ -238,7 +238,7 @@ def find_target(action: str, intent: str) -> str:
     for name, hints in TARGET_HINTS:
         if any(hint in action for hint in hints):
             return name
-    if intent in {"prank", "theft", "fight", "apologize", "compliment"}:
+    if intent in {"prank", "theft", "fight", "apologize", "compliment", "chat"}:
         return "柳三娘"
     if intent == "probe":
         return "老周"
@@ -275,42 +275,202 @@ def scene_name(state: dict[str, Any]) -> str:
         return "鸡飞狗跳"
     if stats.get("favor", 0) >= 65:
         return "宾至如归"
+    if stats.get("grudge", 0) >= 25:
+        return "暗流涌动"
     if int(state.get("turn", 0)) % 5 == 0 and state.get("turn", 0) > 0:
         return "风雨欲来"
     return "大堂"
 
 
+def _pick_line(lines: list[str], state: dict[str, Any], target: str) -> str:
+    """按回合/数值轮换台词，避免每回合都重复同一句。"""
+
+    if not lines:
+        return ""
+    stats = state.get("stats", {})
+    turn = int(state.get("turn", 0))
+    index = (turn + int(stats.get("grudge", 0)) + int(stats.get("favor", 0)) + len(target)) % len(lines)
+    return lines[index]
+
+
 def npc_line(target: str, state: dict[str, Any]) -> str:
+    if target in {"客栈", ""}:
+        target = "柳三娘"
     npc = state.get("npcs", {}).get(target, {})
     grudge = int(npc.get("grudge", state["stats"].get("grudge", 0)))
     favor = int(npc.get("favor", state["stats"].get("favor", 0)))
+    turn = int(state.get("turn", 0))
+
     if target == "阿福":
         if grudge >= 60:
-            return "阿福：您的茶。放心，这次我只加了半勺盐。"
-        if favor >= 60:
-            return "阿福：灶上给您留了碗面，趁热，别让三娘看见。"
-        return "阿福：客官，打尖还是住店？"
+            return _pick_line(
+                [
+                    "阿福：您的茶。放心，这次我只加了半勺盐。",
+                    "阿福：客官，后厨的刀我收起来了，您别找了。",
+                    "阿福：您那鞋，我供在房梁上了，要取自己搬梯子。",
+                ],
+                state,
+                target,
+            )
+        if favor >= 55:
+            return _pick_line(
+                [
+                    "阿福：灶上给您留了碗面，趁热，别让三娘看见。",
+                    "阿福：您的茶我兑了温水，知道您怕烫。",
+                    "阿福：待会儿打烊，我给您留盏灯。",
+                ],
+                state,
+                target,
+            )
+        if grudge >= 25:
+            return _pick_line(
+                [
+                    "阿福：客官，您的鞋……算了，我自己找。",
+                    "阿福：茶在桌上，盐在您手边，您自己看着办。",
+                    "阿福：我这人记性不好，就记仇记得清。",
+                ],
+                state,
+                target,
+            )
+        return _pick_line(
+            [
+                "阿福：客官，茶刚沏的，先坐？",
+                "阿福：今儿的酱牛肉不错，给您切一盘？",
+                "阿福：您先坐，茶马上来。",
+            ],
+            state,
+            target,
+        )
+
     if target == "老周":
-        if grudge >= 60:
-            return "老周：下一段书，就说《某客官夜宿记》，您猜主角是谁？"
-        return "老周：客官来得巧，正讲到后山那口井。"
+        if grudge >= 50:
+            return _pick_line(
+                [
+                    "老周：下一段书，就说《某客官夜宿记》，您猜主角是谁？",
+                    "老周：醒木一拍，假的也能说成真的——您那点事，我可都记着。",
+                ],
+                state,
+                target,
+            )
+        return _pick_line(
+            [
+                "老周：客官来得巧，正讲到后山那口井。",
+                "老周：您听说没有？柳三娘当年那支银簪……",
+                "老周：要听真事还是听热闹？真事得加钱。",
+            ],
+            state,
+            target,
+        )
+
     if target == "乌云":
-        if favor >= 60:
-            return "乌云：尾巴一甩，在你脚边卧下了。"
-        return "乌云：看了你一眼，继续睡在账本上。"
+        if favor >= 55:
+            return _pick_line(
+                [
+                    "乌云：尾巴一甩，在你脚边卧下了。",
+                    "乌云：叼来半条鱼干，放在你鞋边，像在还债。",
+                ],
+                state,
+                target,
+            )
+        return _pick_line(
+            [
+                "乌云：看了你一眼，继续睡在账本上。",
+                "乌云：从房梁上跳下来，绕着你走了半圈。",
+            ],
+            state,
+            target,
+        )
+
     if target == "老陈":
-        if grudge >= 60:
-            return "老陈：最近客栈不太平啊，我会常来。"
-        return "老陈：一碗阳春面，记衙门账上。"
+        if grudge >= 50:
+            return _pick_line(
+                [
+                    "老陈：最近客栈不太平啊，我会常来。",
+                    "老陈：腰牌拍在桌上，面汤溅出来两滴。",
+                ],
+                state,
+                target,
+            )
+        return _pick_line(
+            [
+                "老陈：一碗阳春面，记衙门账上。",
+                "老陈：查房。都把门开开。",
+            ],
+            state,
+            target,
+        )
+
     if target == "客人":
         return "客人：这客栈……怎么比江湖还险？"
-    if grudge >= 70:
-        return "柳三娘：客官，您的茶——我特意多加了三勺盐。"
-    if favor >= 65:
-        return "柳三娘：灶上给你留了碗面，趁热。"
-    if grudge >= 40:
-        return "柳三娘：账我记着，人也记着。"
-    return "柳三娘：住店还是打尖？"
+
+    if grudge >= 75:
+        return _pick_line(
+            [
+                "柳三娘：客官，您的茶——我特意多加了三勺盐。",
+                "柳三娘：今晚西厢房给您留着，房梁上那根绳也留着。",
+                "柳三娘：账本上您的名字，我已经描了三遍。",
+            ],
+            state,
+            target,
+        )
+    if grudge >= 45:
+        return _pick_line(
+            [
+                "柳三娘：账我记着，人也记着。",
+                "柳三娘：客官，您的茶凉了，我给您换一碗——放心，没加东西。",
+                "柳三娘：您今儿要是再手痒，后院的柴够您劈到天亮。",
+            ],
+            state,
+            target,
+        )
+    if grudge >= 25:
+        return _pick_line(
+            [
+                "柳三娘：房梁上那只鞋，您打算什么时候取下来？",
+                "柳三娘：您这名字，我记在账本第三页。",
+                "柳三娘：客官，茶钱先结一下？连上回的。",
+            ],
+            state,
+            target,
+        )
+    if favor >= 60:
+        return _pick_line(
+            [
+                "柳三娘：灶上给你留了碗面，趁热。",
+                "柳三娘：今儿不收你茶钱，别声张。",
+                "柳三娘：西厢房给你留着，窗纸刚糊过。",
+            ],
+            state,
+            target,
+        )
+    if favor >= 30:
+        return _pick_line(
+            [
+                "柳三娘：客官，今儿想吃什么？",
+                "柳三娘：您来得勤，阿福都记住您口味了。",
+                "柳三娘：茶刚沏的，坐吧。",
+            ],
+            state,
+            target,
+        )
+    if turn >= 2:
+        return _pick_line(
+            [
+                "柳三娘：客官，又来了？",
+                "柳三娘：这回别再把鞋弄房梁上。茶钱先结一下？",
+                "柳三娘：您这脸，我好像在哪本账上见过。",
+            ],
+            state,
+            target,
+        )
+    return _pick_line(
+        [
+            "柳三娘：客官，今儿想吃点什么？",
+            "柳三娘：先坐，茶马上来。",
+        ],
+        state,
+        target,
+    )
 
 
 class GameEngine:
@@ -624,6 +784,10 @@ class GameEngine:
             return f"你{phrase}，{target}嘴角动了动，账本上的算珠却拨得慢了一拍。{card_hint}"
         if intent == "probe":
             return f"你{phrase}，{target}压低了声音，只说了半句，就被门外一声马嘶打断。{card_hint}"
+        if intent == "chat":
+            if any(word in action for word in ("为什么", "怎么", "吗", "？", "?", "什么")):
+                return f"你把问题丢给{target}。{target}停下手里的活，看了你一眼，没有立刻回答。{card_hint}"
+            return f"你随口和{target}搭了句话，{target}“嗯”了一声，把抹布往肩上一搭。{card_hint}"
         return f"你{phrase}，{target}“嗯”了一声，把抹布往肩上一搭。{card_hint}"
 
     def _deltas(
@@ -782,8 +946,16 @@ class GameEngine:
             return None, "头号祸害"
         if favor >= 60:
             return None, "客栈熟人"
+        if grudge >= 25:
+            return None, "麻烦人物"
         if chaos >= 50:
             return None, "混乱制造者"
+        if favor >= 30:
+            return None, "熟客"
+        if chaos >= 25:
+            return None, "不安分"
+        if int(state.get("turn", 0)) >= 3:
+            return None, "老面孔"
         return None, "初入江湖"
 
     def _pick_cards(self, action: str, intent: str, target: str) -> list[dict[str, Any]]:
@@ -885,6 +1057,8 @@ class GameEngine:
                     if value:
                         changes.append(f"{npc}{labels.get(key, key)}{value:+d}")
             lines.append("【数值】" + ("；".join(changes) if changes else "无变化"))
+            if plan["intent"] == "chat":
+                lines.append("【对话】玩家是在问话/闲聊，不是动手；用 NPC 的反应回应他，可以回扣前情，不要虚构新的数值或道具。")
         if plan.get("retaliation"):
             lines.append(f"【报复】{plan['retaliation']} 必须在正文中写出。")
         if plan.get("ending"):

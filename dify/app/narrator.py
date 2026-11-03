@@ -61,6 +61,8 @@ def _parse_brief(prompt: str) -> dict[str, Any]:
     turn = int(turn_match.group(1)) if turn_match else 1
     grudge_match = re.search(r"记仇\s*(\d+)", status)
     grudge = int(grudge_match.group(1)) if grudge_match else 0
+    favor_match = re.search(r"好感\s*(\d+)", status)
+    favor = int(favor_match.group(1)) if favor_match else 0
     return {
         "action": action,
         "intent": intent,
@@ -73,17 +75,26 @@ def _parse_brief(prompt: str) -> dict[str, Any]:
         "status": status,
         "turn": turn,
         "grudge": grudge,
+        "favor": favor,
         "brief": brief,
     }
 
 
-def _npc_beat(target: str, grudge: int, seed: str) -> str:
+def _npc_beat(target: str, grudge: int, favor: int, seed: str) -> str:
     if target == "阿福":
         if grudge >= 40:
             return _pick(
                 [
                     "阿福把抹布往肩上一甩，笑得比哭还难看：“客官，您的鞋，自己上房梁取？”",
                     "阿福低头看了看自己光着的脚，又看了看你，默默把菜刀挪到了身后。",
+                ],
+                seed,
+            )
+        if grudge >= 20:
+            return _pick(
+                [
+                    "阿福把茶碗放下，又往远处推了半寸：“客官，鞋的事……我自己找。”",
+                    "阿福一边擦桌子一边偷瞄房梁，嘴角抽了抽。",
                 ],
                 seed,
             )
@@ -123,13 +134,40 @@ def _npc_beat(target: str, grudge: int, seed: str) -> str:
             [
                 "柳三娘从柜台后抬起眼，茶碗重重一放：“客官，您的茶——我特意多加了三勺盐。”",
                 "柳三娘没说话，只把算盘拨得噼啪响，最后一颗珠子停在你名字上。",
+                "柳三娘把后厨的门推开一条缝，又关上：“今晚西厢房，您可别住。”",
+            ],
+            seed,
+        )
+    if grudge >= 30:
+        return _pick(
+            [
+                "柳三娘把算盘往你这边推了推：“房梁上那只鞋，您打算什么时候取？”",
+                "柳三娘头也不抬：“您这名字，我记在账本第三页，墨还没干。”",
+                "柳三娘端来一碗茶，走到半路又折回去，换了一碗：“这碗没加东西。”",
+            ],
+            seed,
+        )
+    if grudge >= 15:
+        return _pick(
+            [
+                "柳三娘把抹布往柜台上一搭：“客官，茶钱先结一下？连上回的。”",
+                "柳三娘看了你一眼，把账本翻到新的一页，笔尖停了停。",
+            ],
+            seed,
+        )
+    if favor >= 55:
+        return _pick(
+            [
+                "柳三娘把一碟桂花糕推过来：“尝尝，刚蒸的。”",
+                "柳三娘嘴上说“别挡道”，却把靠窗的位置给你空着。",
             ],
             seed,
         )
     return _pick(
         [
-            "柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，住店还是打尖？”",
+            "柳三娘把抹布往柜台上一搭，嘴角似笑非笑：“客官，今儿想吃点什么？”",
             "柳三娘头也不抬，算盘珠子却慢了一拍：“账，我记着呢。”",
+            "柳三娘拿抹布擦了擦你面前的桌角：“先坐，茶马上来。”",
         ],
         seed,
     )
@@ -181,10 +219,16 @@ def narrate_from_prompt(prompt: str) -> str:
             "窗外雨丝斜斜地打进来，堂里只剩茶碗碰桌的轻响。",
             "客栈里正热闹，划拳声、锅铲声和猫叫混成一团。",
             "一阵穿堂风把门吹开，灯芯“噼啪”炸了个小火花。",
+            "灶上的水刚开，白汽把柜台熏得发潮。",
+            "门外有马蹄声经过，又慢慢远了。",
+            "楼上的客人翻了个身，楼板吱呀一响。",
+            "阿福刚擦过的桌子，又落了一层灰。",
+            "柜台的油灯爆了个灯花，火苗晃了晃。",
+            "后厨传来锅铲碰铁锅的声响，油香跟着飘出来。",
         ],
         seed,
     )
-    beat = _npc_beat(target, data["grudge"], seed)
+    beat = _npc_beat(target, data["grudge"], data["favor"], seed)
     callback = ""
     if data["memory"] and "第一次" not in data["memory"]:
         first = next((line for line in data["memory"].splitlines() if line.startswith("- 第")), "")

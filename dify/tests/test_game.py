@@ -39,6 +39,13 @@ def test_chinese_player_id(engine: GameEngine) -> None:
     assert engine.memory.load("王志浩")["state"]["turn"] == 1
 
 
+def test_question_is_treated_as_dialogue(engine: GameEngine) -> None:
+    prepared = engine.prepare("tester", "为什么")
+    assert prepared["intent"] == "chat"
+    assert prepared["target"] == "柳三娘"
+    assert "你把问题丢给柳三娘" in prepared["scene_brief"]
+
+
 def test_seekdb_has_cards(engine: GameEngine) -> None:
     assert engine.store.card_count() >= 40
     cards = engine.store.search_cards("会唱歌的茶壶", tags=["茶壶"], limit=3)
