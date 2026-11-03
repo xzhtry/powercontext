@@ -214,7 +214,11 @@ class ScopedSourceLifecycle:
                     raise SourceLifecycleError("event sequence was reused with a different state")
                 return _active_ids(nodes)
 
-            await _store_node(connection, self.scope_id, replace(node, sequence=event.sequence, available=event.available))
+            await _store_node(
+                connection,
+                self.scope_id,
+                replace(node, sequence=event.sequence, available=event.available),
+            )
             nodes[event.node_id] = replace(node, sequence=event.sequence, available=event.available)
             await self._propagate(connection, nodes)
             active = _active_ids(nodes)
