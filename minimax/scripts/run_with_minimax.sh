@@ -15,6 +15,7 @@ if ! grep -Eq '^MINIMAX_API_KEY=.+' .env || grep -q '^MINIMAX_API_KEY=replace-me
   exit 1
 fi
 
+bash scripts/reset.sh > /dev/null
 bash scripts/start_powercontext.sh > /dev/null
 "$PYTHON" -m sddctx.cli init --demo-app snapshots/before > /dev/null
 "$PYTHON" -m sddctx.cli run --apply-demo

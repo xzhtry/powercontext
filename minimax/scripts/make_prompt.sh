@@ -3,6 +3,7 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
 cd "$ROOT"
+bash scripts/reset.sh > /dev/null
 bash scripts/start_powercontext.sh > /dev/null
 "$PYTHON" -m sddctx.cli init --demo-app snapshots/before > /dev/null
 "$PYTHON" -m sddctx.cli prompt --out evidence/minimax/PROMPT.md

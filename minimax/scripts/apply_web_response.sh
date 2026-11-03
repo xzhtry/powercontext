@@ -12,6 +12,7 @@ if [ ! -f "$RESPONSE" ]; then
   exit 1
 fi
 
+bash scripts/reset.sh > /dev/null
 bash scripts/start_powercontext.sh > /dev/null
 "$PYTHON" -m sddctx.cli init --demo-app snapshots/before > /dev/null
 "$PYTHON" -m sddctx.cli run --response "$RESPONSE" --model-name "$MODEL" --apply-demo
