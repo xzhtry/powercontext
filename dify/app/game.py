@@ -456,6 +456,7 @@ class GameEngine:
     def reset(self, raw_player: str | None) -> dict[str, Any]:
         player_id = clean_player_id(raw_player)
         with self.lock:
+            self.store.ensure_alive()
             result = self.memory.reset(player_id)
             self.store.drop_open_plans(player_id)
             return {"ok": True, "player_id": player_id, **result}
@@ -940,11 +941,8 @@ class GameEngine:
         panel = self._status_panel(state, plan)
         ending = plan.get("ending")
         ending_line = f"\n\n🎴 **阶段结局：{ending}**" if ending else ""
-        return (
-            f"{story}{ending_line}\n\n---\n{panel}\n\n"
-            f"> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` "
-            f"（第 {state['turn']} 回合，流水 `{ledger_id}`）"
-        )
+        # 存储实现和流水号只留在日志/证据里，不放进玩家看到的正文。
+        return f"{story}{ending_line}\n\n---\n{panel}"
 
     @staticmethod
     def _sanitize_narrative(raw: str | None) -> str:

@@ -68,7 +68,8 @@ def main() -> int:
         assert "【判定】" in brief, brief
         assert "【可用素材】" in brief, brief
         _, reply = post("/v1/turn/commit", narrative, PLAYER)
-        assert "PowerContext" in reply, reply
+        assert "好感" in reply and "记仇" in reply, reply
+        assert "PowerContext" not in reply and "ledger-" not in reply, reply
         turn_results.append({"action": action, "brief_head": brief.splitlines()[:8], "reply": reply})
     checks.append({"name": "three_turns", "ok": len(turn_results) == 3, "detail": turn_results})
 

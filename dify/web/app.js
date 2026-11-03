@@ -6,7 +6,7 @@
   const form = $("form");
   const send = $("send");
   const statusDot = $("statusDot");
-  const memory = $("memory");
+  const chips = $("chips");
 
   let conversationId = "";
   let busy = false;
@@ -60,6 +60,32 @@
     input.disabled = value;
   }
 
+  function renderChips(state) {
+    const stats = state.stats || {};
+    const turn = Number(state.turn || 0);
+    const grudge = Number(stats.grudge || 0);
+    const favor = Number(stats.favor || 0);
+    let items;
+    if (grudge >= 60) {
+      items = ["我道歉，对不起", "给柳三娘送一碟桂花糕，赔个不是", "帮阿福干一天活", "看看状态"];
+    } else if (favor >= 60) {
+      items = ["请柳三娘喝一杯", "帮阿福跑堂", "打听后山的宝藏", "看看状态"];
+    } else if (turn >= 4) {
+      items = ["给阿福赔个不是", "请柳三娘喝一杯", "打听后山的宝藏", "看看状态"];
+    } else {
+      items = ["把阿福的鞋藏到房梁上", "送桂花糕，夸她年轻", "偷看账本", "看看状态"];
+    }
+    chips.replaceChildren(
+      ...items.map((text) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.q = text;
+        button.textContent = text;
+        return button;
+      })
+    );
+  }
+
   async function refreshState() {
     const current = player();
     localStorage.setItem("grudge-inn-player", current);
@@ -76,13 +102,11 @@
       $("reputation").textContent = stats.reputation ?? "-";
       $("turn").textContent = `第 ${state.turn ?? 0} 回合`;
       $("title").textContent = state.title || "初入江湖";
-      memory.textContent = data.powercontext
-        ? `PowerContext：${data.powercontext.state_entries} 页状态 · ${data.powercontext.episode_entries} 段回忆`
-        : "账本还是空的。";
+      renderChips(state);
       statusDot.textContent = "已连上账本";
     } catch (error) {
       statusDot.textContent = "账本没翻开";
-      memory.textContent = String(error.message || error);
+      // 出错时保留静态快捷项，不要显示技术错误打扰玩家
     }
   }
 

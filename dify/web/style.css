@@ -140,16 +140,6 @@ body {
 .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center; }
 .stats b { display: block; font-size: 16px; color: var(--red); font-family: "Consolas", monospace; }
 .stats span { display: block; font-size: 10px; color: var(--ink-soft); }
-.memory {
-  margin-top: 10px;
-  padding-top: 9px;
-  border-top: 1px dashed var(--line);
-  font-size: 11px;
-  line-height: 1.6;
-  color: var(--ink-soft);
-  min-height: 34px;
-}
-
 .actions { display: flex; gap: 8px; margin-top: 14px; }
 button {
   border: 0;

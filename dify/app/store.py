@@ -307,10 +307,18 @@ class Store:
             self.connection.commit()
 
     def drop_open_plans(self, player_id: str) -> None:
-        with self.lock:
-            cursor = self._cursor()
-            cursor.execute(f"DELETE FROM inn_plans WHERE player_id={q(player_id)} AND committed=0")
-            self.connection.commit()
+        for attempt in (0, 1):
+            try:
+                with self.lock:
+                    cursor = self._cursor()
+                    cursor.execute(f"DELETE FROM inn_plans WHERE player_id={q(player_id)} AND committed=0")
+                    self.connection.commit()
+                return
+            except Exception:
+                if attempt == 0:
+                    self._reconnect()
+                    continue
+                raise
 
     # ------------------------------------------------------------------
     # 流水

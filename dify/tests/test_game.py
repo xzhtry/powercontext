@@ -55,7 +55,8 @@ def test_prepare_commit_and_memory(engine: GameEngine) -> None:
 
     reply = engine.commit("tester", "阿福光着一只脚站在梯子下，柳三娘把算盘往柜台上一拍。")
     assert "第 1 回合" in reply
-    assert "PowerContext" in reply
+    assert "好感" in reply and "记仇" in reply
+    assert "PowerContext" not in reply and "ledger-" not in reply
     assert "阿福的破鞋" in reply or "阿福" in reply
 
     loaded = engine.memory.load("tester")
