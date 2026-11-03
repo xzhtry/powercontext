@@ -381,7 +381,7 @@ class GameEngine:
 
             if plan["intent"] == "status":
                 state = self.memory.load(player_id)["state"]
-                reply = f"{story}\n\n---\n{self._status_panel(state, plan)}\n\n> 🧠 状态读取自 PowerContext；本回合不写入新记忆。"
+                reply = f"{story}\n\n---\n{self._status_panel(state, plan)}"
                 self.store.mark_plan_committed(plan["plan_id"], reply)
                 return reply
 

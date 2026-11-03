@@ -78,9 +78,10 @@ def test_status_does_not_advance_state(engine: GameEngine) -> None:
     engine.commit("tester", "阿福光着一只脚站在梯子下。")
     before = engine.memory.load("tester")["state"]["turn"]
     engine.prepare("tester", "看看状态")
-    engine.commit("tester", "你摊开账本，墨迹还没干。")
+    reply = engine.commit("tester", "你摊开账本，墨迹还没干。")
     after = engine.memory.load("tester")["state"]["turn"]
     assert before == after == 1
+    assert "PowerContext" not in reply and "新记忆" not in reply
 
 
 def test_reset_creates_new_generation(engine: GameEngine) -> None:

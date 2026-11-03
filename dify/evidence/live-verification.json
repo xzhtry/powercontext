@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "checked_at": "2026-11-03T15:09:52+00:00",
+  "checked_at": "2026-11-03T15:14:37+00:00",
   "backend": "http://127.0.0.1:8787",
   "player_id": "review-demo",
   "checks": [
@@ -33,7 +33,7 @@
       "name": "reset",
       "ok": true,
       "detail": {
-        "generation": 9
+        "generation": 10
       }
     },
     {
@@ -113,7 +113,7 @@
           "remedy": 8,
           "rumor": 5
         },
-        "ledger": 83
+        "ledger": 91
       }
     }
   ]

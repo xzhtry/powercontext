@@ -248,6 +248,7 @@ button:active { transform: translateY(1px); }
 }
 
 .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0 8px; }
+.chips[hidden] { display: none; }
 .chips button {
   font-size: 11px;
   padding: 6px 10px;

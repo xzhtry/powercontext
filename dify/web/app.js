@@ -114,6 +114,8 @@
     const text = String(query || "").trim();
     if (!text || busy) return;
     setBusy(true);
+    // 第一次行动后收起快捷选项，避免旧建议一直占着地方
+    chips.hidden = true;
     bubble("player", `<p>${escapeHTML(text)}</p>`);
     const loading = bubble("narrator", `<p class="loading">柳三娘翻着账本，阿福伸长了脖子……</p>`);
     try {
@@ -140,6 +142,7 @@
   function newSession() {
     conversationId = "";
     log.innerHTML = openingHTML;
+    chips.hidden = false;
     refreshState();
     input.focus();
   }
