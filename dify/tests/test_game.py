@@ -39,6 +39,26 @@ def test_chinese_player_id(engine: GameEngine) -> None:
     assert engine.memory.load("王志浩")["state"]["turn"] == 1
 
 
+def test_silver_can_buy_a_gift(engine: GameEngine) -> None:
+    prepared = engine.prepare("tester", "买一碟桂花糕送给柳三娘")
+    assert prepared["intent"] == "buy"
+    assert prepared["target"] == "柳三娘"
+    engine.commit("tester", "你把桂花糕递过去，柳三娘接下了。")
+    state = engine.memory.load("tester")["state"]
+    assert state["stats"]["silver"] == 25
+    assert state["stats"]["favor"] > 20
+
+
+def test_cannot_buy_without_silver(engine: GameEngine) -> None:
+    loaded = engine.memory.load("poor")
+    loaded["state"]["stats"]["silver"] = 1
+    engine.memory.data["poor"] = {"state": loaded["state"], "episodes": []}
+    prepared = engine.prepare("poor", "买一碟桂花糕")
+    assert "买不起" in prepared["scene_brief"]
+    engine.commit("poor", "你摸遍钱袋，什么也没买成。")
+    assert engine.memory.load("poor")["state"]["stats"]["silver"] == 1
+
+
 def test_question_is_treated_as_dialogue(engine: GameEngine) -> None:
     prepared = engine.prepare("tester", "为什么")
     assert prepared["intent"] == "chat"

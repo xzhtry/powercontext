@@ -66,6 +66,7 @@ def main() -> int:
     http_json(f"{INN}/v1/reset", {"player_id": player})
     http_json(f"{INN}/v1/reset", {"player_id": fresh})
     http_json(f"{INN}/v1/reset", {"player_id": "王志浩"})
+    http_json(f"{INN}/v1/reset", {"player_id": "silver-review"})
 
     turns = []
     conversation_id = ""
@@ -85,6 +86,8 @@ def main() -> int:
     fresh_session = chat(api_key, fresh, "我回来了，柳三娘还记不记得我")
     # 中文玩家名：Dify 的 HTTP 节点不能把中文放进 header，必须走 query/body
     chinese_session = chat(api_key, "王志浩", "我把阿福的鞋藏到房梁上")
+    # 银子用途：买礼物会扣银子、涨好感、降记仇
+    silver_session = chat(api_key, "silver-review", "买一碟桂花糕送给柳三娘")
 
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -95,6 +98,7 @@ def main() -> int:
         "cross_session_same_player": memory_session,
         "cross_session_new_player": fresh_session,
         "chinese_player": chinese_session,
+        "silver_buy": silver_session,
         "powercontext_state": state(player),
         "seekdb_stats": stats(),
     }
@@ -136,6 +140,14 @@ def main() -> int:
             f"**输入**：{chinese_session['query']}",
             "",
             chinese_session["answer"],
+            "",
+            "## 银子：买桂花糕",
+            "",
+            "**玩家**：`silver-review`",
+            "",
+            f"**输入**：{silver_session['query']}",
+            "",
+            silver_session["answer"],
             "",
             "## PowerContext 状态",
             "",

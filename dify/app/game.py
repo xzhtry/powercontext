@@ -39,6 +39,7 @@ INTENT_LABELS = {
     "apologize": "道歉",
     "compliment": "说好话",
     "probe": "打听",
+    "buy": "柜台消费",
     "chat": "闲聊",
     "status": "看状态",
     "reset": "重开",
@@ -48,6 +49,20 @@ INTENT_LABELS = {
 INTENT_KEYWORDS: dict[str, list[tuple[str, int]]] = {
     "reset": [("/reset", 20), ("重置", 20), ("重开", 20), ("重新开始", 20), ("从头再来", 18)],
     "status": [("状态", 14), ("面板", 14), ("战绩", 14), ("记仇值", 14), ("好感", 8), ("结算", 12)],
+    "buy": [
+        ("买", 12),
+        ("来一", 8),
+        ("请客", 14),
+        ("请柳三娘喝", 14),
+        ("请阿福", 12),
+        ("赏", 10),
+        ("打赏", 12),
+        ("付账", 10),
+        ("买单", 12),
+        ("结账", 8),
+        ("住店", 8),
+        ("开一间", 8),
+    ],
     "apologize": [
         ("道歉", 16),
         ("赔罪", 16),
@@ -180,6 +195,7 @@ TARGET_HINTS: list[tuple[str, list[str]]] = [
 ]
 
 BASE_SEVERITY = {
+    "buy": 1,
     "prank": 2,
     "theft": 3,
     "fight": 4,
@@ -224,7 +240,7 @@ def classify(action: str) -> tuple[str, int]:
     best = max(scores.values())
     if best <= 0:
         return "chat", 0
-    priority = ["reset", "status", "apologize", "theft", "fight", "prank", "help", "compliment", "probe"]
+    priority = ["reset", "status", "apologize", "theft", "fight", "prank", "buy", "help", "compliment", "probe"]
     for intent in priority:
         if scores[intent] == best:
             return intent, best
@@ -238,7 +254,7 @@ def find_target(action: str, intent: str) -> str:
     for name, hints in TARGET_HINTS:
         if any(hint in action for hint in hints):
             return name
-    if intent in {"prank", "theft", "fight", "apologize", "compliment", "chat"}:
+    if intent in {"prank", "theft", "fight", "apologize", "compliment", "chat", "buy"}:
         return "柳三娘"
     if intent == "probe":
         return "老周"
@@ -682,9 +698,11 @@ class GameEngine:
         generation = int(state.get("generation", 1))
         turn = int(state.get("turn", 0)) + 1
         success, caught, roll = self._roll(player_id, generation, turn, action, intent, severity)
+        if intent == "buy" and not self._purchase(action, target, state)["affordable"]:
+            success, caught = False, False
         card = cards[0] if cards else None
-        outcome = self._outcome(action, intent, target, severity, success, caught, card)
-        deltas, npc_deltas = self._deltas(action, intent, target, severity, success, caught, card)
+        outcome = self._outcome(action, intent, target, severity, success, caught, card, state)
+        deltas, npc_deltas = self._deltas(action, intent, target, severity, success, caught, card, state)
         retaliation = self._retaliation(state, target, intent, severity, turn)
         if retaliation:
             deltas["chaos"] = int(deltas.get("chaos", 0)) + 2
@@ -732,6 +750,7 @@ class GameEngine:
             "theft": 0.58,
             "fight": 0.62,
             "help": 0.92,
+            "buy": 1.0,
             "apologize": 0.96,
             "compliment": 1.0,
             "probe": 1.0,
@@ -750,6 +769,36 @@ class GameEngine:
             caught = True
         return success, caught, roll
 
+    def _purchase(self, action: str, target: str, state: dict[str, Any]) -> dict[str, Any]:
+        silver = int(state.get("stats", {}).get("silver", 0))
+        if "桂花糕" in action or "糕" in action:
+            item, cost, favor, grudge = "一碟桂花糕", 5, 6, -3
+            target = "柳三娘" if target == "客栈" else target
+        elif "鱼干" in action:
+            item, cost, favor, grudge = "一包鱼干", 3, 4, -1
+            target = "乌云"
+        elif "跌打" in action or "药" in action:
+            item, cost, favor, grudge = "一瓶跌打酒", 6, 4, -3
+            target = "阿福" if target == "客栈" else target
+        elif "酒" in action or "喝一杯" in action:
+            item, cost, favor, grudge = "一壶酒", 8, 5, -4
+        elif "住店" in action or "开一间" in action:
+            item, cost, favor, grudge = "一晚客房", 3, 1, 0
+            target = "客栈"
+        elif "赏" in action or "打赏" in action:
+            item, cost, favor, grudge = "一份赏钱", 5, 4, -2
+        else:
+            item, cost, favor, grudge = "一壶热茶", 3, 2, -1
+        return {
+            "item": item,
+            "cost": cost,
+            "favor": favor,
+            "grudge": grudge,
+            "target": target,
+            "silver": silver,
+            "affordable": silver >= cost,
+        }
+
     def _outcome(
         self,
         action: str,
@@ -759,6 +808,7 @@ class GameEngine:
         success: bool,
         caught: bool,
         card: dict[str, Any] | None,
+        state: dict[str, Any] | None = None,
     ) -> str:
         phrase = clean_action_phrase(action)
         card_hint = f"（{card['title']}也掺和了一脚）" if card else ""
@@ -784,6 +834,18 @@ class GameEngine:
             return f"你{phrase}，{target}嘴角动了动，账本上的算珠却拨得慢了一拍。{card_hint}"
         if intent == "probe":
             return f"你{phrase}，{target}压低了声音，只说了半句，就被门外一声马嘶打断。{card_hint}"
+        if intent == "buy":
+            purchase = self._purchase(action, target, state or {})
+            ptarget = purchase["target"]
+            if not purchase["affordable"]:
+                return (
+                    f"你把钱袋翻了个底朝天，只倒出 {purchase['silver']} 两银子，"
+                    f"买不起{purchase['item']}。{ptarget}把伸出的手又收了回去。{card_hint}"
+                )
+            return (
+                f"你数出 {purchase['cost']} 两银子，从柜台接过{purchase['item']}，"
+                f"递到{ptarget}面前。{ptarget}愣了一下，还是收下了。{card_hint}"
+            )
         if intent == "chat":
             if any(word in action for word in ("为什么", "怎么", "吗", "？", "?", "什么")):
                 return f"你把问题丢给{target}。{target}停下手里的活，看了你一眼，没有立刻回答。{card_hint}"
@@ -799,6 +861,7 @@ class GameEngine:
         success: bool,
         caught: bool,
         card: dict[str, Any] | None,
+        state: dict[str, Any] | None = None,
     ) -> tuple[dict[str, int], dict[str, dict[str, int]]]:
         delta = {"favor": 0, "grudge": 0, "chaos": 0, "silver": 0, "reputation": 0}
         npc_delta: dict[str, dict[str, int]] = {}
@@ -812,7 +875,24 @@ class GameEngine:
             npc_delta.setdefault(target, {})
             npc_delta[target][key] = int(npc_delta[target].get(key, 0)) + int(value)
 
-        if intent == "prank":
+        if intent == "buy":
+            purchase = self._purchase(action, target, state or {})
+            if purchase["affordable"]:
+                add("silver", -purchase["cost"])
+                add("favor", purchase["favor"])
+                add("grudge", purchase["grudge"])
+                add("reputation", 1)
+                if purchase["target"] != "客栈":
+                    npc_delta.setdefault(purchase["target"], {})
+                    npc_delta[purchase["target"]]["favor"] = (
+                        int(npc_delta[purchase["target"]].get("favor", 0)) + purchase["favor"]
+                    )
+                    npc_delta[purchase["target"]]["grudge"] = (
+                        int(npc_delta[purchase["target"]].get("grudge", 0)) + purchase["grudge"]
+                    )
+            else:
+                add("reputation", -1)
+        elif intent == "prank":
             if success and caught:
                 add("grudge", severity * 2 + 2)
                 add("chaos", severity)

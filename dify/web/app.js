@@ -65,15 +65,18 @@
     const turn = Number(state.turn || 0);
     const grudge = Number(stats.grudge || 0);
     const favor = Number(stats.favor || 0);
+    const silver = Number(stats.silver || 0);
     let items;
-    if (grudge >= 60) {
-      items = ["我道歉，对不起", "给柳三娘送一碟桂花糕，赔个不是", "帮阿福干一天活", "看看状态"];
+    if (silver < 5) {
+      items = ["帮阿福干一天活", "去后厨帮工", "看看状态", "我道歉，对不起"];
+    } else if (grudge >= 60) {
+      items = ["买一碟桂花糕赔罪", "给阿福赏点银子", "帮阿福干一天活", "看看状态"];
     } else if (favor >= 60) {
-      items = ["请柳三娘喝一杯", "帮阿福跑堂", "打听后山的宝藏", "看看状态"];
+      items = ["请柳三娘喝一杯", "买包鱼干喂乌云", "打听后山的宝藏", "看看状态"];
     } else if (turn >= 4) {
-      items = ["给阿福赔个不是", "请柳三娘喝一杯", "打听后山的宝藏", "看看状态"];
+      items = ["买一碟桂花糕送柳三娘", "给阿福赏点银子", "打听后山的宝藏", "看看状态"];
     } else {
-      items = ["把阿福的鞋藏到房梁上", "送桂花糕，夸她年轻", "偷看账本", "看看状态"];
+      items = ["把阿福的鞋藏到房梁上", "买一碟桂花糕送柳三娘", "偷看账本", "看看状态"];
     }
     chips.replaceChildren(
       ...items.map((text) => {
