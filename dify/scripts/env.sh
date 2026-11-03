@@ -11,8 +11,12 @@ export GRUDGE_INN_PLAY_PORT="${GRUDGE_INN_PLAY_PORT:-8790}"
 export GRUDGE_INN_POWERCONTEXT_URL="${GRUDGE_INN_POWERCONTEXT_URL:-http://127.0.0.1:8766}"
 export GRUDGE_INN_POWERCONTEXT_PORT="${GRUDGE_INN_POWERCONTEXT_PORT:-8766}"
 
+mkdir -p "$GRUDGE_INN_RUNTIME" "$GRUDGE_INN_SEEKDB"
+
 if [ -n "${GRUDGE_INN_PYTHON:-}" ]; then
   PYTHON="$GRUDGE_INN_PYTHON"
+elif [ -x "$GRUDGE_INN_RUNTIME/venv/bin/python" ]; then
+  PYTHON="$GRUDGE_INN_RUNTIME/venv/bin/python"
 elif [ -x "$ROOT/.venv/bin/python" ]; then
   PYTHON="$ROOT/.venv/bin/python"
 elif [ -x "$HOME/.venvs/dify-inn/bin/python" ]; then
@@ -22,5 +26,3 @@ else
 fi
 export PYTHON
 export PC_BIN="${PC_BIN:-$(dirname "$PYTHON")/powercontext}"
-
-mkdir -p "$GRUDGE_INN_RUNTIME" "$GRUDGE_INN_SEEKDB"

@@ -103,7 +103,7 @@ dify/
 | Dify 模型 | 默认 `openai_api_compatible` / `grudge-narrator`；可换 Ollama `qwen2.5:3b` 或任意 OpenAI-compatible |
 | 外部 Key | 默认不需要 |
 
-> **路径注意**：WSL 下不要把 `GRUDGE_INN_RUNTIME` 指到 `/mnt/d/...`（drvfs）。嵌入式 seekdb 无法在该文件系统打开数据库；脚本默认使用 `~/.local/share/grudge-inn`（ext4）。
+> **路径注意**：WSL 下不要把 `GRUDGE_INN_RUNTIME` 指到 `/mnt/d/...`（drvfs）。嵌入式 seekdb 无法在该文件系统打开数据库；脚本默认使用 `~/.local/share/grudge-inn`（ext4）。`scripts/setup.sh` 也会把 Python venv 建在这个 ext4 目录下，避免 9p 文件系统拖慢安装。
 
 ---
 

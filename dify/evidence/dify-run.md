@@ -1,6 +1,6 @@
 # Dify 端验收记录
 
-- 生成时间：2026-11-03T13:06:59+00:00
+- 生成时间：2026-11-03T13:51:44+00:00
 - Dify：`http://127.0.0.1:5001`
 - app_id：`1e15bc28-1be2-4d1b-a229-38229e8e3af0`
 - 玩家：`dify-review`
@@ -11,16 +11,16 @@
 
 **输入**：我把阿福的鞋藏到房梁上
 
-客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你把阿福的鞋藏到房梁上，手还没收回来，阿福就站在你身后。阿福挠了挠后脑勺，把茶碗往你面前推了推：“先喝口热的，别让三娘看见。”角落里那只阿福的破鞋，此刻看起来格外碍眼。楼上的房门无风自开，露出一线昏黄的光。
+客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你把阿福的鞋藏到房梁上——居然真成了。阿福暂时没发现，但客栈里多了一桩怪事。阿福挠了挠后脑勺，把茶碗往你面前推了推：“先喝口热的，别让三娘看见。”角落里那只阿福的破鞋，此刻看起来格外碍眼。楼上的房门无风自开，露出一线昏黄的光。
 
 ---
 **第 1 回合 · 大堂** ｜ 称号：初入江湖
 
-`好感 18` `记仇 18` `混乱 3` `银子 30 两` `名声 9`
+`好感 19` `记仇 13` `混乱 3` `银子 30 两` `名声 11`
 
 > 阿福：客官，打尖还是住店？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-d211129a0b064bbc`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-6eadc463c477431c`）
 
 ### 第 2 回合
 
@@ -31,11 +31,11 @@
 ---
 **第 2 回合 · 大堂** ｜ 称号：初入江湖
 
-`好感 26` `记仇 18` `混乱 3` `银子 30 两` `名声 10`
+`好感 27` `记仇 13` `混乱 3` `银子 30 两` `名声 12`
 
 > 柳三娘：住店还是打尖？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 2 回合，流水 `ledger-2204124aac5e45bb`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 2 回合，流水 `ledger-7ce052ed214c41a8`）
 
 ### 第 3 回合
 
@@ -46,11 +46,11 @@
 ---
 **第 3 回合 · 大堂** ｜ 称号：初入江湖
 
-`好感 30` `记仇 11` `混乱 3` `银子 30 两` `名声 11`
+`好感 31` `记仇 6` `混乱 3` `银子 30 两` `名声 13`
 
 > 阿福：客官，打尖还是住店？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 3 回合，流水 `ledger-a5587f893ced47e7`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 3 回合，流水 `ledger-f920c7f0885f4918`）
 
 ## 跨会话：同一玩家
 
@@ -61,11 +61,11 @@
 ---
 **第 4 回合 · 大堂** ｜ 称号：初入江湖
 
-`好感 39` `记仇 11` `混乱 3` `银子 30 两` `名声 12`
+`好感 40` `记仇 6` `混乱 3` `银子 30 两` `名声 14`
 
 > 柳三娘：住店还是打尖？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 4 回合，流水 `ledger-b924bb5d338b4bde`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 4 回合，流水 `ledger-280b8d259f8f471a`）
 
 ## 跨会话：新玩家
 
@@ -80,18 +80,18 @@
 
 > 柳三娘：住店还是打尖？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-29c39b1e2d024af6`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-a7fa604bb4fb44db`）
 
 ## PowerContext 状态
 
 - scope_id：`scp_361dytmfg5pe8e2m9weg6x3zhw`
 - turn：4
 - episodes：4
-- stats：`{"chaos": 3, "favor": 39, "grudge": 11, "reputation": 12, "silver": 30}`
+- stats：`{"chaos": 3, "favor": 40, "grudge": 6, "reputation": 14, "silver": 30}`
 
 ## seekdb
 
 - version：`5.7.25-OceanBase seekdb-v1.4.0.0`
 - cards：46
-- plans：27
-- ledger：23
+- plans：44
+- ledger：40
