@@ -6,7 +6,7 @@
 | --- | --- |
 | 仓库 | `https://github.com/xzhtry/powercontext`（私有/公开以实际提交为准） |
 | 分支 | `2026-competition-ecosystem` |
-| Commit | `69dab1e5`（完整 hash 以 `git rev-parse HEAD` 为准） |
+| Commit | 以提交时 `git rev-parse HEAD` 的输出为准（本目录当前在 `2026-competition-ecosystem` 分支） |
 | 作品目录 | `dify/` |
 | Dify 版本 | 0.15.3 |
 | DSL | `dify/dsl/grudge-inn.chatflow.yml`（Docker 用 `.docker.yml`） |
