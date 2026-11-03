@@ -18,7 +18,12 @@
   if (params.get("player")) playerInput.value = params.get("player");
 
   function player() {
-    return (playerInput.value || "demo-player").trim().slice(0, 64) || "demo-player";
+    return (
+      (playerInput.value || "demo-player")
+        .trim()
+        .replace(/[^\w\u4e00-\u9fff-]/g, "-")
+        .slice(0, 64) || "demo-player"
+    );
   }
 
   function escapeHTML(text) {
@@ -149,6 +154,7 @@
   });
 
   playerInput.addEventListener("change", () => {
+    playerInput.value = player();
     localStorage.setItem("grudge-inn-player", player());
     newSession();
   });

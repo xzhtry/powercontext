@@ -14,7 +14,7 @@ import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
@@ -86,11 +86,8 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, {"ok": True, "dify": DIFY, "backend": BACKEND, "app_ready": APP_FILE.is_file()})
             return
         if path == "/api/state":
-            query = urlparse(self.path).query
-            player = "demo-player"
-            for item in query.split("&"):
-                if item.startswith("player_id="):
-                    player = item.split("=", 1)[1]
+            query = parse_qs(urlparse(self.path).query)
+            player = (query.get("player_id") or ["demo-player"])[0]
             try:
                 request = urllib.request.Request(
                     f"{BACKEND}/v1/state",

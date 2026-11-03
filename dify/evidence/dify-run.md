@@ -1,6 +1,6 @@
 # Dify 端验收记录
 
-- 生成时间：2026-11-03T13:51:44+00:00
+- 生成时间：2026-11-03T14:02:00+00:00
 - Dify：`http://127.0.0.1:5001`
 - app_id：`1e15bc28-1be2-4d1b-a229-38229e8e3af0`
 - 玩家：`dify-review`
@@ -20,7 +20,7 @@
 
 > 阿福：客官，打尖还是住店？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-6eadc463c477431c`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-d9fd0add8c5d4a3f`）
 
 ### 第 2 回合
 
@@ -35,7 +35,7 @@
 
 > 柳三娘：住店还是打尖？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 2 回合，流水 `ledger-7ce052ed214c41a8`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 2 回合，流水 `ledger-03089895ce8d47ab`）
 
 ### 第 3 回合
 
@@ -50,7 +50,7 @@
 
 > 阿福：客官，打尖还是住店？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 3 回合，流水 `ledger-f920c7f0885f4918`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 3 回合，流水 `ledger-7a5f1a8166b5474a`）
 
 ## 跨会话：同一玩家
 
@@ -65,7 +65,7 @@
 
 > 柳三娘：住店还是打尖？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 4 回合，流水 `ledger-280b8d259f8f471a`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 4 回合，流水 `ledger-f39edb2405574da1`）
 
 ## 跨会话：新玩家
 
@@ -80,7 +80,24 @@
 
 > 柳三娘：住店还是打尖？
 
-> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-a7fa604bb4fb44db`）
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-4e7d6f0bc3cc40a2`）
+
+## 中文玩家名
+
+**玩家**：`王志浩`
+
+**输入**：我把阿福的鞋藏到房梁上
+
+客栈里正热闹，划拳声、锅铲声和猫叫混成一团。你把阿福的鞋藏到房梁上，手还没收回来，阿福就站在你身后。阿福挠了挠后脑勺，把茶碗往你面前推了推：“先喝口热的，别让三娘看见。”角落里那只阿福的破鞋，此刻看起来格外碍眼。楼上的房门无风自开，露出一线昏黄的光。
+
+---
+**第 1 回合 · 大堂** ｜ 称号：初入江湖
+
+`好感 18` `记仇 18` `混乱 3` `银子 30 两` `名声 9`
+
+> 阿福：客官，打尖还是住店？
+
+> 🧠 本回合已写入 PowerContext：`inn-state` + `inn-episode` （第 1 回合，流水 `ledger-0ebae71d1ce4469d`）
 
 ## PowerContext 状态
 
@@ -93,5 +110,5 @@
 
 - version：`5.7.25-OceanBase seekdb-v1.4.0.0`
 - cards：46
-- plans：44
-- ledger：40
+- plans：60
+- ledger：56

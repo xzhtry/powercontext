@@ -65,6 +65,7 @@ def main() -> int:
     # 清掉上一轮演示，保证从“初入江湖”开始
     http_json(f"{INN}/v1/reset", {"player_id": player})
     http_json(f"{INN}/v1/reset", {"player_id": fresh})
+    http_json(f"{INN}/v1/reset", {"player_id": "王志浩"})
 
     turns = []
     conversation_id = ""
@@ -82,6 +83,8 @@ def main() -> int:
     memory_session = chat(api_key, player, "我回来了，柳三娘还记不记得我")
     # 新会话，新玩家：不应该知道旧事
     fresh_session = chat(api_key, fresh, "我回来了，柳三娘还记不记得我")
+    # 中文玩家名：Dify 的 HTTP 节点不能把中文放进 header，必须走 query/body
+    chinese_session = chat(api_key, "王志浩", "我把阿福的鞋藏到房梁上")
 
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -91,6 +94,7 @@ def main() -> int:
         "turns": turns,
         "cross_session_same_player": memory_session,
         "cross_session_new_player": fresh_session,
+        "chinese_player": chinese_session,
         "powercontext_state": state(player),
         "seekdb_stats": stats(),
     }
@@ -124,6 +128,14 @@ def main() -> int:
             f"**输入**：{fresh_session['query']}",
             "",
             fresh_session["answer"],
+            "",
+            "## 中文玩家名",
+            "",
+            "**玩家**：`王志浩`",
+            "",
+            f"**输入**：{chinese_session['query']}",
+            "",
+            chinese_session["answer"],
             "",
             "## PowerContext 状态",
             "",

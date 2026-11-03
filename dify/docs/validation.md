@@ -70,6 +70,16 @@ bash scripts/init.sh
 
 这组对照说明：记忆不是 Dify 单次会话的上下文，而是按 `player_id` 存在 PowerContext 里。
 
+### 2.3 中文玩家名
+
+`player_id = 王志浩`，输入 `我把阿福的鞋藏到房梁上`。
+
+预期：能正常创建/读取 Scope，返回第 1 回合面板。
+
+实际：见 [`../evidence/dify-run.md`](../evidence/dify-run.md) 的“中文玩家名”。
+
+> 实现注意：Dify 的 HTTP 节点不能把中文放进 HTTP header（httpx 会用 ASCII 编码 header，抛 `UnicodeEncodeError`）。本作品把 `player_id` 放在 URL query 中，后端用 `parse_qs` 解码；自定义 DSL 时请沿用这个方式。
+
 ---
 
 ## 3. 技术作用核对

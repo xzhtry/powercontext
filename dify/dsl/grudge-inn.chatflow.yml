@@ -35,7 +35,7 @@ workflow:
           required: false
           max_length: 64
           default: demo-player
-          hint: 同一个名号 = 同一个会被记仇的江湖人
+          hint: 同一个名号 = 同一个会被记仇的江湖人；支持中文、字母、数字、_、-
     - id: prepare
       type: custom
       position:
@@ -55,13 +55,11 @@ workflow:
         desc: ''
         selected: false
         method: post
-        url: http://127.0.0.1:8787/v1/turn/prepare?format=text
+        url: http://127.0.0.1:8787/v1/turn/prepare?format=text&player_id={{#start.player_id#}}
         authorization:
           type: no-auth
           config: null
-        headers: 'Content-Type: text/plain; charset=utf-8
-
-          X-Player-Id: {{#start.player_id#}}'
+        headers: 'Content-Type: text/plain; charset=utf-8'
         params: ''
         body:
           type: raw-text
@@ -163,13 +161,11 @@ workflow:
         desc: ''
         selected: false
         method: post
-        url: http://127.0.0.1:8787/v1/turn/commit
+        url: http://127.0.0.1:8787/v1/turn/commit?player_id={{#start.player_id#}}
         authorization:
           type: no-auth
           config: null
-        headers: 'Content-Type: text/plain; charset=utf-8
-
-          X-Player-Id: {{#start.player_id#}}'
+        headers: 'Content-Type: text/plain; charset=utf-8'
         params: ''
         body:
           type: raw-text

@@ -31,6 +31,14 @@ def test_classification_intent_and_target() -> None:
     assert severity_of("把账本烧了", "fight", "柳三娘") >= 4
 
 
+def test_chinese_player_id(engine: GameEngine) -> None:
+    prepared = engine.prepare("王志浩", "我把阿福的鞋藏到房梁上")
+    assert prepared["player_id"] == "王志浩"
+    assert "【玩家】王志浩" in prepared["scene_brief"]
+    engine.commit("王志浩", "阿福光着一只脚站在梯子下。")
+    assert engine.memory.load("王志浩")["state"]["turn"] == 1
+
+
 def test_seekdb_has_cards(engine: GameEngine) -> None:
     assert engine.store.card_count() >= 40
     cards = engine.store.search_cards("会唱歌的茶壶", tags=["茶壶"], limit=3)

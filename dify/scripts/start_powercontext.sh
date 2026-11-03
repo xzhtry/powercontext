@@ -18,8 +18,12 @@ POWERCONTEXT_SERVER_DASHBOARD_ENABLED=false
 EOF
 
 if curl -sf -m 2 "$GRUDGE_INN_POWERCONTEXT_URL/health/ready" > /dev/null 2>&1; then
-  echo "PowerContext 已在运行：$GRUDGE_INN_POWERCONTEXT_URL"
-  exit 0
+  # 二次确认，避免刚好撞到 stop.sh 正在退出的旧进程
+  sleep 0.5
+  if curl -sf -m 2 "$GRUDGE_INN_POWERCONTEXT_URL/health/ready" > /dev/null 2>&1; then
+    echo "PowerContext 已在运行：$GRUDGE_INN_POWERCONTEXT_URL"
+    exit 0
+  fi
 fi
 
 if ! "$PYTHON" -c "import powercontext" > /dev/null 2>&1; then

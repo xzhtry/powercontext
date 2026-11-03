@@ -82,6 +82,11 @@ class Handler(BaseHTTPRequestHandler):
             return {}
 
     def _player(self, payload: dict[str, Any] | None = None) -> str:
+        # 优先 query：Dify 的 HTTP 节点会把中文玩家名放在 URL 里，httpx 会做
+        # percent-encoding；放在 HTTP header 里则会触发 httpx 的 ASCII 限制。
+        query = parse_qs(urlparse(self.path).query)
+        if query.get("player_id"):
+            return clean_player_id(query["player_id"][0])
         header = self.headers.get("X-Player-Id")
         if header:
             return clean_player_id(header)

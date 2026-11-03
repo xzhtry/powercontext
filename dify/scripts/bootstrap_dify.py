@@ -53,6 +53,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--name", default=os.getenv("DIFY_NAME", "Grudge Inn Demo"))
     parser.add_argument("--dsl", default=str(DEFAULT_DSL))
     parser.add_argument("--backend-url", default=os.getenv("GRUDGE_INN_BACKEND_URL", "http://127.0.0.1:8787"))
+    parser.add_argument("--app-id", default=os.getenv("DIFY_APP_ID", ""))
     parser.add_argument("--skip-model", action="store_true")
     args = parser.parse_args(argv)
 
@@ -106,7 +107,7 @@ def main(argv: list[str] | None = None) -> int:
         "POST",
         "/console/api/apps/imports",
         token=token,
-        payload={"mode": "yaml-content", "yaml_content": dsl},
+        payload={"mode": "yaml-content", "yaml_content": dsl, **({"app_id": args.app_id} if args.app_id else {})},
         timeout=120,
     )
     if imported.get("status") != "completed":
