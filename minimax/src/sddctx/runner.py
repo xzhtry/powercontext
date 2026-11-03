@@ -96,6 +96,31 @@ def _build_prompt(task: dict[str, Any], context: dict[str, Any]) -> str:
 DIFF_BLOCK_RE = re.compile(r"```(?:diff|patch)?\s*\n(.*?)```", re.DOTALL)
 
 
+def _normalize_header(line: str, marker: str, prefix: str) -> str:
+    path = line[len(marker) :].strip().split("\t")[0].strip().replace("\\", "/")
+    if path == "/dev/null":
+        return f"{marker} /dev/null"
+    for existing in ("a/", "b/"):
+        if path.startswith(existing):
+            path = path[len(existing) :]
+    return f"{marker} {prefix}/{path}"
+
+
+def normalize_diff(diff: str) -> str:
+    """把模型常见的路径写法统一成 a/、b/ 前缀，便于 patch -p1 应用。"""
+
+    lines = diff.replace("\r\n", "\n").splitlines()
+    normalized: list[str] = []
+    for line in lines:
+        if line.startswith("--- "):
+            normalized.append(_normalize_header(line, "---", "a"))
+        elif line.startswith("+++ "):
+            normalized.append(_normalize_header(line, "+++", "b"))
+        else:
+            normalized.append(line)
+    return "\n".join(normalized).strip() + "\n"
+
+
 def extract_diff(text: str) -> str:
     match = DIFF_BLOCK_RE.search(text)
     candidate = match.group(1) if match else text
@@ -103,7 +128,7 @@ def extract_diff(text: str) -> str:
     if start < 0:
         raise ValueError("MiniMax 输出中没有找到 unified diff")
     diff = candidate[start:].replace("\r\n", "\n").strip() + "\n"
-    return diff
+    return normalize_diff(diff)
 
 
 def validate_diff(diff: str) -> list[str]:

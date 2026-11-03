@@ -1,10 +1,10 @@
 {
-  "imported_at": "2026-11-03T11:53:12+00:00",
-  "count": 53,
+  "imported_at": "2026-11-03T12:00:05+00:00",
+  "count": 52,
   "specs": 15,
-  "code": 16,
+  "code": 15,
   "tests": 22,
-  "digest": "3106fcdcb9c46f5f510b62ff3baa4e464c1bf7ffb396bc7d189e6dbb3bfe7634",
+  "digest": "e14c2d221f87a9ad44cef686ecc336b0cd50f7e8da1b96941f892cb3fe54628e",
   "db_path": "/home/xzh/.local/share/sddctx/seekdb",
   "materials": [
     {
@@ -178,7 +178,7 @@
       "path": "src/invoicehub/cli.py",
       "lines": [
         14,
-        27
+        26
       ],
       "version": 1,
       "status": "active"
@@ -188,8 +188,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        30,
-        38
+        29,
+        37
       ],
       "version": 1,
       "status": "active"
@@ -199,8 +199,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        41,
-        66
+        40,
+        63
       ],
       "version": 1,
       "status": "active"
@@ -210,8 +210,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        69,
-        78
+        66,
+        75
       ],
       "version": 1,
       "status": "active"
@@ -221,8 +221,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        81,
-        82
+        78,
+        79
       ],
       "version": 1,
       "status": "active"
@@ -316,23 +316,12 @@
       "status": "active"
     },
     {
-      "key": "code:src/invoicehub/service.py:_coerce_min_amount",
-      "kind": "code",
-      "path": "src/invoicehub/service.py",
-      "lines": [
-        33,
-        43
-      ],
-      "version": 1,
-      "status": "active"
-    },
-    {
       "key": "code:src/invoicehub/service.py:_sort_key",
       "kind": "code",
       "path": "src/invoicehub/service.py",
       "lines": [
-        46,
-        49
+        33,
+        36
       ],
       "version": 1,
       "status": "active"
@@ -342,8 +331,8 @@
       "kind": "code",
       "path": "src/invoicehub/service.py",
       "lines": [
-        52,
-        91
+        39,
+        74
       ],
       "version": 1,
       "status": "active"

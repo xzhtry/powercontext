@@ -32,6 +32,21 @@ def test_accepts_only_src_targets():
     assert validate_diff(PATCH) == ["src/invoicehub/service.py"]
 
 
+def test_normalizes_missing_path_prefixes():
+    diff = "--- src/invoicehub/service.py\n+++ src/invoicehub/service.py\n@@ -1 +1 @@\n-a\n+b\n"
+    normalized = extract_diff(diff)
+    assert "--- a/src/invoicehub/service.py" in normalized
+    assert "+++ b/src/invoicehub/service.py" in normalized
+    assert validate_diff(normalized) == ["src/invoicehub/service.py"]
+
+
+def test_normalizes_windows_separators():
+    diff = "--- a/src\\invoicehub\\service.py\n+++ b/src\\invoicehub\\service.py\n@@ -1 +1 @@\n-a\n+b\n"
+    normalized = extract_diff(diff)
+    assert "a/src/invoicehub/service.py" in normalized
+    assert validate_diff(normalized) == ["src/invoicehub/service.py"]
+
+
 @pytest.mark.parametrize(
     "target",
     ["tests/test_min_amount_filter.py", "specs/REQ-INV-004.md", "../outside.py"],
