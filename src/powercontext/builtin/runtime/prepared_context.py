@@ -323,7 +323,7 @@ class PreparedContextBuilder:
     ) -> PreparedContextBuild:
         """Select query-relevant literal ranges and render them inside the byte budget."""
 
-        scored: list[tuple[int, int, MemoryEntryFragment]] = []
+        scored: list[tuple[int, int, int, MemoryEntryFragment]] = []
         order = 0
         query_terms = _term_counts(request.query)
         for candidates in memory_candidates:
@@ -334,24 +334,27 @@ class PreparedContextBuilder:
                     entry_id=hit.entry_id,
                     entry_version_id=hit.entry_version_id,
                 )
-                for start, end in _sentence_spans(hit.text):
-                    text = hit.text[start:end]
-                    score = _term_overlap(query_terms, _term_counts(text))
-                    if score <= 0:
-                        continue
-                    scored.append(
-                        (
-                            score,
-                            order,
-                            MemoryEntryFragment(address=address, start=start, end=end, text=text),
-                        )
+                best = _best_window(hit.text, query_terms)
+                if best is None:
+                    continue
+                score, width, start, end, text = best
+                scored.append(
+                    (
+                        score,
+                        width,
+                        order,
+                        MemoryEntryFragment(address=address, start=start, end=end, text=text),
                     )
-                    order += 1
+                )
+                order += 1
 
-        scored.sort(key=lambda item: (-item[0], item[1]))
+        # Prefer the entry whose window covers the most query terms, and among
+        # equal scores the wider window: evidence statements usually span more
+        # than one sentence, and a wider window is what "complete coverage" needs.
+        scored.sort(key=lambda item: (-item[0], -item[1], item[2]))
         selected: list[MemoryEntryFragment] = []
         seen: set[tuple[str, str, int, int]] = set()
-        for _score, _order, fragment in scored:
+        for _score, _width, _order, fragment in scored:
             if len(selected) >= self.entry_limit:
                 break
             key = (
@@ -833,6 +836,28 @@ def _sentence_spans(text: str) -> tuple[tuple[int, int], ...]:
     return tuple(
         (match.start(), match.end()) for match in _SENTENCE.finditer(text) if match.end() > match.start()
     )
+
+
+def _best_window(text: str, query_terms: Counter[str]) -> tuple[int, int, int, int, str] | None:
+    """Return the best contiguous sentence window as ``(score, width, start, end, text)``."""
+
+    spans = _sentence_spans(text)
+    if not spans:
+        return None
+    best: tuple[int, int, int, int, str] | None = None
+    for index in range(len(spans)):
+        for width in (1, 2, 3):
+            if index + width > len(spans):
+                break
+            start = spans[index][0]
+            end = spans[index + width - 1][1]
+            candidate = text[start:end]
+            score = _term_overlap(query_terms, _term_counts(candidate))
+            if score <= 0:
+                continue
+            if best is None or (score, width) > (best[0], best[1]):
+                best = (score, width, start, end, candidate)
+    return best
 
 
 def _render_fragments(fragments: Sequence[MemoryEntryFragment]) -> str:
