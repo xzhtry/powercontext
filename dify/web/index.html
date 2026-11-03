@@ -8,6 +8,35 @@
 </head>
 <body>
   <div class="grain"></div>
+
+  <div id="guide" class="guide" hidden>
+    <div class="guide-card">
+      <div class="guide-head">
+        <span>玩法 · 三分钟上手</span>
+        <button id="closeGuide" class="guide-close" type="button" aria-label="关闭">×</button>
+      </div>
+      <h2>你是来客栈搞事的江湖人</h2>
+      <p>每轮输入一句行动，系统会先判定结果，再由说书人写成剧情。柳三娘和阿福真的会记住。</p>
+      <ol class="guide-steps">
+        <li><b>搞事</b>：藏鞋、偷账本、往茶里加辣椒 → 混乱和记仇上涨，可能被报复。</li>
+        <li><b>刷好感</b>：帮忙、道歉、夸人、送桂花糕 → 好感上涨，记仇下降。</li>
+        <li><b>花银子</b>：买桂花糕 5 两、请喝酒 8 两、赏阿福 5 两、住店 3 两；没钱就帮工赚 1 两。</li>
+        <li><b>看状态</b>：输入“看看状态”；想重开就输入“/reset”。同一个名号，跨会话也算旧账。</li>
+      </ol>
+      <div class="guide-goal">
+        <b>目标</b>：好感 80 且记仇 ≤ 20 → 成为「编外掌柜」；<br />
+        或者让记仇冲到 90 → 成为「头号祸害」。
+      </div>
+      <div class="guide-examples">
+        <span>第一次可以试：</span>
+        <button type="button" data-guide-q="买一碟桂花糕送给柳三娘">买桂花糕</button>
+        <button type="button" data-guide-q="我把阿福的鞋藏到房梁上">藏阿福的鞋</button>
+        <button type="button" data-guide-q="看看状态">看看状态</button>
+      </div>
+      <button id="startGuide" class="guide-start" type="button">知道了，推门</button>
+    </div>
+  </div>
+
   <div class="app">
     <aside class="side">
       <div class="brand">
@@ -53,7 +82,10 @@
           <span class="eyebrow">酉时 · 大堂</span>
           <h2>推门进去，说点什么。</h2>
         </div>
-        <span class="status-dot" id="statusDot">连接中</span>
+        <div class="scene-right">
+          <span class="status-dot" id="statusDot">连接中</span>
+          <button id="help" class="help" type="button">？玩法</button>
+        </div>
       </header>
 
       <div id="log" class="log">

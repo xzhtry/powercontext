@@ -7,6 +7,8 @@
   const send = $("send");
   const statusDot = $("statusDot");
   const chips = $("chips");
+  const guide = $("guide");
+  const help = $("help");
 
   let conversationId = "";
   let busy = false;
@@ -150,6 +152,16 @@
     input.focus();
   }
 
+  function openGuide() {
+    guide.hidden = false;
+  }
+
+  function closeGuide() {
+    guide.hidden = true;
+    localStorage.setItem("grudge-inn-guide-v1", "seen");
+    input.focus();
+  }
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const text = input.value;
@@ -189,7 +201,24 @@
     newSession();
   });
 
+  help.addEventListener("click", openGuide);
+  $("closeGuide").addEventListener("click", closeGuide);
+  $("startGuide").addEventListener("click", closeGuide);
+  guide.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-guide-q]");
+    if (!button) return;
+    closeGuide();
+    say(button.dataset.guideQ);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !guide.hidden) closeGuide();
+  });
+
   refreshState();
+
+  if (params.has("guide") || (!params.has("demo") && localStorage.getItem("grudge-inn-guide-v1") !== "seen")) {
+    setTimeout(openGuide, 350);
+  }
 
   if (params.has("demo")) {
     setTimeout(() => say("我把阿福的鞋藏到房梁上"), 500);

@@ -191,6 +191,7 @@ curl -s -X POST http://127.0.0.1:8787/v1/state \
 | [`../evidence/dify-run.md`](../evidence/dify-run.md) | Dify 端三回合 + 跨会话同玩家/新玩家的完整回答 |
 | [`../evidence/dify-run.json`](../evidence/dify-run.json) | 同上，机器可读；含 app_id、conversation_id、PowerContext 状态、seekdb 统计（不含 API Key） |
 | [`../evidence/live-verification.json`](../evidence/live-verification.json) | 后端验收：health / reset / 三回合 / state / cards |
+| [`../evidence/play-guide.png`](../evidence/play-guide.png) | 首次进入的玩法说明页 |
 | [`../evidence/play-ui.png`](../evidence/play-ui.png) | 可选网页入口的实际截图 |
 | `evidence/dify-model.txt` | Dify 中注册并验证的 `grudge-narrator` 模型 |
 | `scripts/dify_nodes.sql` / `scripts/dify_model.sql` | 查询 Dify 节点/模型记录的 SQL |

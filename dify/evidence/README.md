@@ -8,6 +8,7 @@
 | `dify-run.json` | 同上，机器可读；含 `app_id`、`conversation_id`、PowerContext state、seekdb stats；**不含 API Key** |
 | `dify-model.txt` | Dify 中已注册并验证的 `grudge-narrator` 自定义模型 |
 | `dify-nodes.txt` | `workflow_node_executions` 中 Start / HTTP prepare / LLM / HTTP commit / Answer 的执行状态 |
+| `play-guide.png` | 首次进入的「玩法 · 三分钟上手」说明页 |
 | `play-ui.png` | 可选网页入口的实际截图（一次“藏鞋”回合后的界面） |
 | `live-verification.json` | 后端验收：health、reset、三回合、PowerContext state、seekdb 卡片与流水 |
 
