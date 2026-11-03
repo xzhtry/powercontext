@@ -112,11 +112,13 @@ curl -s http://127.0.0.1:8787/v1/stats
     "version": "5.7.25-OceanBase seekdb-v1.4.0.0",
     "cards": 46,
     "card_kinds": {"event": 6, "npc": 6, "prop": 21, "remedy": 8, "rumor": 5},
-    "plans": 17,
-    "ledger": 13
+    "plans": 44,
+    "ledger": 40
   }
 }
 ```
+
+> `plans` / `ledger` 是累计值，会随演示次数增长；上面是本机最终一次验收时的数值，不是固定常量。
 
 每次 `prepare` 的场景简报中“【可用素材】”就是 seekdb 全文检索的结果。例如藏鞋回合会列出 `阿福的破鞋`、`后院那只不下蛋的芦花鸡`、`阿福的菜刀`；道歉回合会列出 `一封没送出的道歉信`、`阿福的跌打酒` 等。
 
