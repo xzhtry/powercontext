@@ -109,6 +109,21 @@ dify/
 
 ## 5. 快速开始（后端）
 
+### 5.0 一键启动（推荐）
+
+WSL 重启后，PostgreSQL、Dify API、客栈后端和网页入口不会自动全部起来。用下面任意一种方式一键拉起：
+
+```bash
+# 在 WSL 里
+bash scripts/start_all.sh
+```
+
+或直接双击 Windows 的 [`start-tavern.bat`](start-tavern.bat)，它会启动全部服务并打开 <http://127.0.0.1:8790>。
+
+一键脚本会依次检查：PostgreSQL/Redis → Dify API → PowerContext/客栈后端 → 网页入口。
+
+### 5.1 手动启动
+
 ```bash
 cd dify
 
@@ -139,7 +154,7 @@ curl -s http://127.0.0.1:8787/health
 - `service.log` / `powercontext.log`：日志
 - `dify-app.json`：`bootstrap_dify.py` 生成的 app_id 与 API Key（仅本地）
 
-### 5.1 可选：沉浸式网页入口
+### 5.2 可选：沉浸式网页入口
 
 如果你不想打开 Dify 控制台，本作品还带了一个零构建的客栈页面（它只是 Dify Service API 的代理，不绕过 Dify）：
 
@@ -151,17 +166,17 @@ bash scripts/start_play.sh
 
 页面里有名号、账本面板、快捷行动和对话区；API Key 只保存在后端运行态，不会进入浏览器。这个入口是**可选的**，题目要求的 Dify 应用界面/API 入口仍然可用。
 
-### 5.2 不使用 Dify，直接看后端
+### 5.3 不使用 Dify，直接看后端
 
 ```bash
-# 准备一回合（返回场景简报）
-curl -s -X POST 'http://127.0.0.1:8787/v1/turn/prepare?format=text' \
-  -H 'X-Player-Id: demo-player' -H 'Content-Type: text/plain' \
+# 准备一回合（返回场景简报；中文玩家名请放在 query，避免 HTTP header 的 ASCII 限制）
+curl -s -X POST 'http://127.0.0.1:8787/v1/turn/prepare?format=text&player_id=demo-player' \
+  -H 'Content-Type: text/plain' \
   --data-binary '我把阿福的鞋藏到房梁上'
 
 # 提交叙述（真实使用时由 Dify 的 LLM 节点产生）
-curl -s -X POST http://127.0.0.1:8787/v1/turn/commit \
-  -H 'X-Player-Id: demo-player' -H 'Content-Type: text/plain' \
+curl -s -X POST 'http://127.0.0.1:8787/v1/turn/commit?player_id=demo-player' \
+  -H 'Content-Type: text/plain' \
   --data-binary '阿福光着一只脚站在梯子下，柳三娘把算盘往柜台上一拍。'
 ```
 
