@@ -170,6 +170,7 @@ class PreparedContextBuilder:
     experience_entry_limit = 2
     max_entry_content_bytes = 2000
     _text_entry_limit: int | None = None
+    _fragment_limit = 4
 
     def empty(self) -> PreparedContext:
         return PreparedContext(status="empty", content=None, content_bytes=0)
@@ -375,7 +376,7 @@ class PreparedContextBuilder:
         selected: list[MemoryEntryFragment] = []
         seen: set[tuple[str, str, int, int]] = set()
         for _score, _width, _order, fragment in ordered:
-            if len(selected) >= self.entry_limit:
+            if len(selected) >= self._fragment_limit:
                 break
             key = (
                 fragment.address.memory.artifact.artifact_id,
@@ -387,8 +388,22 @@ class PreparedContextBuilder:
                 continue
             seen.add(key)
             trial = (*selected, fragment)
-            if len(_render_fragments(trial).encode("utf-8")) > request.max_bytes:
-                continue
+            overflow = len(_render_fragments(trial).encode("utf-8")) - request.max_bytes
+            if overflow > 0:
+                # Shrink the fragment into the space that is actually left instead of
+                # dropping it: an unused byte is evidence the caller already paid for.
+                keep = len(fragment.text) - overflow - 16
+                if keep < 40:
+                    continue
+                fragment = MemoryEntryFragment(
+                    address=fragment.address,
+                    start=fragment.start,
+                    end=fragment.start + keep,
+                    text=fragment.text[:keep],
+                )
+                trial = (*selected, fragment)
+                if len(_render_fragments(trial).encode("utf-8")) > request.max_bytes:
+                    continue
             selected.append(fragment)
 
         if not selected:
