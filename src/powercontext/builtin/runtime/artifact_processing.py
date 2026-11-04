@@ -49,7 +49,10 @@ else:
 from powercontext._logging import log_safely
 from powercontext.builtin.persistence.database import AsyncDatabase
 from powercontext.builtin.persistence.errors import ArtifactProcessingLeadershipLostError
-from powercontext.builtin.persistence.processing import SourceCursorRepository
+from powercontext.builtin.persistence.processing import (
+    ArtifactProcessingPendingRepository,
+    SourceCursorRepository,
+)
 from powercontext.builtin.persistence.processing_intents import ArtifactProcessingIntentRepository
 from powercontext.builtin.persistence.supervision import (
     ArtifactProcessingBindingStateRepository,
@@ -464,6 +467,7 @@ class ArtifactProcessingSupervisor:
         self._status = ArtifactProcessingSupervisorStatus.STANDBY
         self._wake = asyncio.Event()
         self._stop = asyncio.Event()
+        self._reconciled = False
         self._started = asyncio.Event()
         self._task: asyncio.Task[None] | None = None
         self._renew_task: asyncio.Task[None] | None = None
@@ -513,6 +517,34 @@ class ArtifactProcessingSupervisor:
         if self._task is None:
             self._task = asyncio.create_task(self._run(), name=f"artifact-supervisor-{self._supervisor_group}")
             await self._started.wait()
+
+    async def _reconcile_startup_counts(self) -> None:
+        """Request processing for Families that already met the threshold on open.
+
+        A pending journal that reached its count threshold before this process
+        started must resume without a new capture or a schedule tick.
+        """
+
+        thresholds = getattr(self, "_source_count_thresholds", None) or {}
+        active = {name: value for name, value in thresholds.items() if value is not None}
+        if not active:
+            return
+        pending = ArtifactProcessingPendingRepository()
+        requested: set[str] = set()
+        async with self._database.transaction() as connection:
+            rows = await pending.scan(connection)
+            for row in rows:
+                threshold = active.get(row.binding_name)
+                if threshold is None:
+                    continue
+                cursor = await SourceCursorRepository().load(connection, row.scope_id, row.binding_name)
+                committed = 0 if cursor is None else cursor.cursor.sequence
+                if int(row.source_through) - committed < threshold:
+                    continue
+                await ArtifactProcessingIntentRepository().request(connection, row.scope_id, row.binding_name)
+                requested.add(row.binding_name)
+        for binding_name in requested:
+            self.wake(binding_name)
 
     async def _recheck_source_count(self, scope: str, binding_name: str, /) -> None:
         """Re-judge the count threshold from the new cursor after a successful call.
@@ -567,6 +599,9 @@ class ArtifactProcessingSupervisor:
                     if self._fence is None:
                         await self._acquire()
                     if self._fence is not None:
+                        if not self._reconciled:
+                            self._reconciled = True
+                            await self._reconcile_startup_counts()
                         await self._cycle()
                 except asyncio.CancelledError:
                     raise
