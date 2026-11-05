@@ -558,6 +558,11 @@ class ArtifactProcessingSupervisor:
         threshold = thresholds.get(binding_name)
         if threshold is None:
             return
+        # Only Memory re-judges the remaining count. An accepted Topic Memory wave
+        # finishes its own windows, and re-applying the threshold there would start
+        # windows the contract says must wait for the next condition.
+        if binding_name != getattr(self, "_recheck_binding", None):
+            return
         async with self._database.transaction() as connection:
             head = await connection.scalar(
                 select(SOURCE_JOURNAL_HEADS_TABLE.c.position).where(SOURCE_JOURNAL_HEADS_TABLE.c.scope_id == scope)

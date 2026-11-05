@@ -665,6 +665,7 @@ async def open_builtin_runtime(
                 FAMILY_BINDINGS["memory"]: config.runtime.memory_source_count_threshold,
                 TOPIC_MEMORY_SOURCE_WINDOW_BINDING: config.runtime.topic_memory_source_count_threshold,
             }
+            supervisor._recheck_binding = FAMILY_BINDINGS["memory"]
         contexts.profiles.operation_context = runtime._operation
         from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleService
 
