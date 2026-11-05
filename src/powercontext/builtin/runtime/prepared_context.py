@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 from collections import Counter
 from collections.abc import Sequence
@@ -323,7 +324,7 @@ class PreparedContextBuilder:
     ) -> PreparedContextBuild:
         """Select query-relevant literal ranges and render them inside the byte budget."""
 
-        scored: list[tuple[int, int, int, MemoryEntryFragment]] = []
+        scored: list[tuple[float, int, int, MemoryEntryFragment]] = []
         order = 0
         query_terms = _term_counts(request.query)
         for candidates in memory_candidates:
@@ -334,21 +335,14 @@ class PreparedContextBuilder:
                     entry_id=hit.entry_id,
                     entry_version_id=hit.entry_version_id,
                 )
-                best = _best_window(hit.text, query_terms)
+                best = _best_fitting_window(hit.text, query_terms, address, request.max_bytes)
                 if best is None:
                     continue
-                score, width, start, end, text = best
-                scored.append(
-                    (
-                        score,
-                        width,
-                        order,
-                        MemoryEntryFragment(address=address, start=start, end=end, text=text),
-                    )
-                )
+                score, fragment = best
+                scored.append((score, fragment.end - fragment.start, order, fragment))
                 order += 1
 
-        # Prefer the entry whose window covers the most query terms, and among
+        # Prefer the entry whose window covers the most query signal, and among
         # equal scores the wider window: evidence statements usually span more
         # than one sentence, and a wider window is what "complete coverage" needs.
         scored.sort(key=lambda item: (-item[0], -item[1], item[2]))
@@ -860,10 +854,6 @@ def _term_counts(text: str) -> Counter[str]:
     return Counter(_TERM.findall(text.casefold()))
 
 
-def _term_overlap(query: Counter[str], text: Counter[str]) -> int:
-    return sum(min(count, text.get(term, 0)) for term, count in query.items())
-
-
 def _sentence_spans(text: str) -> tuple[tuple[int, int], ...]:
     """Return literal character ranges, so every fragment keeps the entry's own bytes."""
 
@@ -872,26 +862,77 @@ def _sentence_spans(text: str) -> tuple[tuple[int, int], ...]:
     )
 
 
-def _best_window(text: str, query_terms: Counter[str]) -> tuple[int, int, int, int, str] | None:
-    """Return the best contiguous sentence window as ``(score, width, start, end, text)``."""
+_WINDOW_LIMIT = 8
+_WINDOW_CANDIDATES = 24
+
+
+def _ranked_windows(text: str, query_terms: Counter[str]) -> list[tuple[float, int, int]]:
+    """Rank contiguous sentence windows by the query signal they cover.
+
+    A term that appears in every sentence of the entry cannot separate evidence from
+    boilerplate, so it counts for little; a term unique to one sentence is a strong
+    signal that this sentence is the one the query is about. Scoring each sentence
+    separately and summing lets a window bridge a dull sentence without the bridge
+    outweighing the sentence that matters.
+    """
 
     spans = _sentence_spans(text)
     if not spans:
-        return None
-    best: tuple[int, int, int, int, str] | None = None
+        return []
+    sentence_terms = [_term_counts(text[start:end]) for start, end in spans]
+    frequency: Counter[str] = Counter()
+    for terms in sentence_terms:
+        frequency.update(terms.keys())
+    weights = {
+        term: math.log1p(len(sentence_terms) / frequency[term]) for term in query_terms if frequency.get(term)
+    }
+    if not weights:
+        return []
+    values = []
+    for terms in sentence_terms:
+        value = 0.0
+        for term, count in query_terms.items():
+            weight = weights.get(term)
+            if weight is not None:
+                value += min(terms.get(term, 0), count) * weight
+        values.append(value)
+    prefix = [0.0]
+    for value in values:
+        prefix.append(prefix[-1] + value)
+    ranked: list[tuple[float, int, int]] = []
     for index in range(len(spans)):
-        for width in range(1, 9):
+        for width in range(1, _WINDOW_LIMIT + 1):
             if index + width > len(spans):
                 break
-            start = spans[index][0]
-            end = spans[index + width - 1][1]
-            candidate = text[start:end]
-            score = _term_overlap(query_terms, _term_counts(candidate))
-            if score <= 0:
+            score = prefix[index + width] - prefix[index]
+            if score <= 0.0:
                 continue
-            if best is None or (score, width) > (best[0], best[1]):
-                best = (score, width, start, end, candidate)
-    return best
+            ranked.append((score, spans[index][0], spans[index + width - 1][1]))
+    ranked.sort(key=lambda item: (-item[0], item[2] - item[1]))
+    return ranked[:_WINDOW_CANDIDATES]
+
+
+def _best_fitting_window(
+    text: str,
+    query_terms: Counter[str],
+    address: MemoryEntryAddress,
+    max_bytes: int,
+) -> tuple[float, MemoryEntryFragment] | None:
+    """Pick the highest-coverage window that still renders inside the whole budget.
+
+    Choosing the window before measuring it makes the tail of an over-long window the
+    first thing truncated, which is often exactly the second half of the evidence.
+    """
+
+    ranked = _ranked_windows(text, query_terms)
+    fallback: tuple[float, MemoryEntryFragment] | None = None
+    for score, start, end in ranked:
+        fragment = MemoryEntryFragment(address=address, start=start, end=end, text=text[start:end])
+        if fallback is None:
+            fallback = (score, fragment)
+        if len(_render_fragments([fragment]).encode("utf-8")) <= max_bytes:
+            return score, fragment
+    return fallback
 
 
 def _render_fragments(fragments: Sequence[MemoryEntryFragment]) -> str:
