@@ -36,7 +36,7 @@ python -m sddctx.cli run                   # 需要 .env 中的 MiniMax Key
 没有 Key 时可用已提交补丁离线复验：
 
 ```bash
-python -m sddctx.cli run --patch changes/min-amount.diff
+python -m sddctx.cli run --patch changes/final-minimax.diff
 ```
 
 ## 5. 上下文中必须包含的来源

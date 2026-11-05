@@ -12,7 +12,7 @@ echo "== 1. 读取/创建任务状态 =="
 "$PYTHON" -m sddctx.cli state --json evidence/state/before-restart.json > /dev/null 2>&1 || true
 if ! "$PYTHON" -c 'import json,sys; s=json.load(open("evidence/state/before-restart.json")); sys.exit(0 if s.get("run_seq") else 1)' 2>/dev/null; then
   echo "   当前为空状态，先用参考补丁执行一次任务"
-  "$PYTHON" -m sddctx.cli run --patch changes/min-amount.diff > /dev/null
+  "$PYTHON" -m sddctx.cli run --patch changes/final-minimax.diff > /dev/null
   "$PYTHON" -m sddctx.cli state --json evidence/state/before-restart.json > /dev/null
 fi
 

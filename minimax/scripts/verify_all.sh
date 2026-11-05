@@ -5,7 +5,7 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
 cd "$ROOT"
-PATCH="${1:-changes/min-amount.diff}"
+PATCH="${1:-changes/final-minimax.diff}"
 if [ ! -f "$PATCH" ]; then
   echo "补丁不存在：$PATCH" >&2
   exit 1

@@ -30,23 +30,46 @@ def _validate_pagination(page: int, page_size: int) -> None:
         raise ValueError(f"page_size 必须在 1 到 {MAX_PAGE_SIZE} 之间")
 
 
-def _coerce_min_amount(value: Decimal | str | int | None) -> Decimal | None:
-    """把金额下限规范为 ``Decimal``，并校验非负（REQ-INV-004.2）。"""
-
-    if value is None:
-        return None
-    amount = value if isinstance(value, Decimal) else Decimal(str(value))
-    if not amount.is_finite():
-        raise ValueError("min_amount 必须是有限金额")
-    if amount < 0:
-        raise ValueError("min_amount 必须大于等于 0")
-    return amount
-
-
 def _sort_key(invoice: Invoice) -> tuple[float, str]:
     """稳定排序：开票时间倒序，同一时间按发票号升序。"""
 
     return (-invoice.issued_at.timestamp(), invoice.invoice_id)
+
+
+from decimal import Decimal
+
+
+def _normalize_min_amount(min_amount: Decimal | int | str | None) -> Decimal | None:
+    """把金额下限规范化为精确的十进制金额。
+
+    ``None`` 表示不做金额过滤；负数属于非法输入，必须抛出 ``ValueError``。
+    """
+
+    if min_amount is None:
+        return None
+    amount = _to_decimal(min_amount)
+    if amount < 0:
+        raise ValueError(
+            f"min_amount 必须是非负数 (must be non-negative, >= 0)，不能为负数，收到：{min_amount!r}"
+        )
+    return amount
+
+
+def _to_decimal(value: Decimal | int | str | float) -> Decimal:
+    """把金额转换成精确的十进制值，禁止经过二进制浮点数。"""
+
+    if isinstance(value, Decimal):
+        return value
+    if isinstance(value, bool):
+        raise ValueError(f"金额必须是十进制数值，收到：{value!r}")
+    if isinstance(value, int):
+        return Decimal(value)
+    if isinstance(value, float):
+        return Decimal(str(value))
+    try:
+        return Decimal(str(value).strip())
+    except ArithmeticError as exc:
+        raise ValueError(f"金额必须是十进制数值，收到：{value!r}") from exc
 
 
 def list_invoices(
@@ -54,7 +77,7 @@ def list_invoices(
     *,
     status: InvoiceStatus | str | None = None,
     customer_id: str | None = None,
-    min_amount: Decimal | str | int | None = None,
+    min_amount: Decimal | int | str | None = None,
     page: int = 1,
     page_size: int = DEFAULT_PAGE_SIZE,
 ) -> InvoicePage:
@@ -64,7 +87,7 @@ def list_invoices(
         invoices: 待查询的发票集合。
         status: 可选状态筛选，接受枚举或字符串。
         customer_id: 可选客户号筛选。
-        min_amount: 可选金额下限，含边界；负数非法。
+        min_amount: 可选金额下限，只保留 ``total_amount >= min_amount`` 的发票（含边界）。
         page: 页码，从 1 开始。
         page_size: 每页条数，1..100。
 
@@ -74,14 +97,14 @@ def list_invoices(
 
     _validate_pagination(page, page_size)
     normalized_status = _coerce_status(status)
-    normalized_min_amount = _coerce_min_amount(min_amount)
+    threshold = _normalize_min_amount(min_amount)
 
     filtered = [
         invoice
         for invoice in invoices
         if (normalized_status is None or invoice.status is normalized_status)
         and (customer_id is None or invoice.customer_id == customer_id)
-        and (normalized_min_amount is None or invoice.total_amount >= normalized_min_amount)
+        and (threshold is None or _to_decimal(invoice.total_amount) >= threshold)
     ]
 
     ordered = sorted(filtered, key=_sort_key)

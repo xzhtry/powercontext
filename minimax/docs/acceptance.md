@@ -23,19 +23,23 @@ bash scripts/verify_all.sh
 
 ## 2. MiniMax 实际参与
 
-**状态：待真实 Key。** 接口、提示词、补丁校验与记录生成均已实现：
+**状态：已完成。** 本次通过 MiniMax 网页版完成：把 `evidence/minimax/PROMPT.md`
+（修改前代码 + 空任务状态）发给 MiniMax，将其返回的 unified diff 保存为
+`evidence/minimax/response.md`，再执行：
 
 ```bash
-cp .env.example .env    # 填 MINIMAX_API_KEY
-bash scripts/run_with_minimax.sh
+bash scripts/apply_web_response.sh evidence/minimax/response.md "MiniMax web (model not specified)"
 ```
 
-- 请求/响应全文：`evidence/minimax/<run_id>.json` 与 `.prompt.md`
-- 开发记录：`docs/minimax-dev-record.md`（由 `python -m sddctx.cli report` 生成）
-- 代码差异：`evidence/patches/<run_id>.diff`，与提交的 `demo_app/src` 对应
+- 响应全文：`evidence/minimax/response.md`
+- 请求/响应记录：`evidence/minimax/run-634988b89b.json` 与 `.prompt.md`
+- 开发记录：`docs/minimax-dev-record.md`
+- 代码差异：`evidence/patches/run-634988b89b.diff`，与提交的 `demo_app/src` 对应
+- 结果：目标 7 / 回归 17 / 全量 24 全部通过
 
-若暂无 API Key，可用网页版 MiniMax：`prompt` 导出 Prompt → 手工获取回复 →
-`run --response` 应用并记录，流程见 README。
+说明：用户未注明网页版实际使用的模型版本，记录中如实标注为
+`MiniMax web (model not specified)`，未伪造成具体版本号。若使用 API Key，
+仍可执行 `bash scripts/run_with_minimax.sh` 生成带模型名与用量的记录。
 
 ## 3. 上下文正确
 
@@ -108,7 +112,7 @@ bash scripts/verify_before_after.sh
 | 运行说明 | `minimax/README.md` |
 | 验证样例 | `minimax/samples/TASK-101.json`、`TASK-101.md` |
 | 修改前后快照 | `minimax/snapshots/before/`、`minimax/demo_app/` |
-| 代码差异 | `minimax/changes/min-amount.diff`（参考补丁）、`minimax/evidence/patches/`（每次运行补丁） |
+| 代码差异 | `minimax/changes/final-minimax.diff`（MiniMax 实际补丁）、`changes/min-amount.diff`（参考） |
 | 测试与日志 | `minimax/demo_app/tests/`、`minimax/evidence/tests/` |
 | 技术使用记录 | `minimax/docs/minimax-dev-record.md`、`evidence/context/`、`evidence/state/` |
 | 一页技术说明 | `minimax/docs/architecture.md` |

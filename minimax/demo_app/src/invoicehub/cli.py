@@ -11,6 +11,28 @@ from invoicehub.repository import InvoiceDataError, load_invoices
 from invoicehub.service import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, list_invoices
 
 
+from decimal import Decimal
+
+
+def _parse_amount(value: str) -> Decimal:
+    """把命令行传入的金额解析为精确的十进制金额。
+
+    解析必须精确到分，禁止经过 ``float`` 中间值；负数属于非法参数。
+    """
+
+    try:
+        amount = Decimal(value.strip())
+    except ArithmeticError as exc:
+        raise argparse.ArgumentTypeError(f"金额不是合法的十进制数值：{value!r}") from exc
+    if not amount.is_finite():
+        raise argparse.ArgumentTypeError(f"金额必须是有限数值：{value!r}")
+    if amount < 0:
+        raise argparse.ArgumentTypeError(
+            f"金额下限必须是非负数 (must be non-negative, >= 0)，不能为负数，收到：{value!r}"
+        )
+    return amount
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="invoicehub", description="财务发票查询工具")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -19,7 +41,12 @@ def build_parser() -> argparse.ArgumentParser:
     list_parser.add_argument("--data", default="data/invoices.json", help="发票 JSON 文件")
     list_parser.add_argument("--status", default=None, help="状态筛选：draft/issued/paid/void")
     list_parser.add_argument("--customer", default=None, help="客户号筛选")
-    list_parser.add_argument("--min-amount", default=None, help="金额下限，十进制字符串，含边界")
+    list_parser.add_argument(
+        "--min-amount",
+        type=_parse_amount,
+        default=None,
+        help="金额下限（含边界），例如 1500.00",
+    )
     list_parser.add_argument("--page", type=int, default=1, help="页码，从 1 开始")
     list_parser.add_argument(
         "--page-size", type=int, default=DEFAULT_PAGE_SIZE, help=f"每页条数（1..{MAX_PAGE_SIZE}）"
@@ -40,12 +67,11 @@ def _invoice_to_dict(invoice) -> dict[str, object]:
 
 def _run_list(args: argparse.Namespace) -> int:
     invoices = load_invoices(args.data)
-    min_amount = Decimal(args.min_amount) if args.min_amount is not None else None
     page = list_invoices(
         invoices,
         status=args.status,
         customer_id=args.customer,
-        min_amount=min_amount,
+        min_amount=args.min_amount,
         page=args.page,
         page_size=args.page_size,
     )

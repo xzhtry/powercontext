@@ -1,10 +1,10 @@
 {
-  "imported_at": "2026-11-03T12:14:02+00:00",
-  "count": 53,
+  "imported_at": "2026-11-05T11:46:07+00:00",
+  "count": 55,
   "specs": 15,
-  "code": 16,
+  "code": 18,
   "tests": 22,
-  "digest": "3106fcdcb9c46f5f510b62ff3baa4e464c1bf7ffb396bc7d189e6dbb3bfe7634",
+  "digest": "a0d6659685a61a880d1909e557e6f403ee0e899f1518e8f897b4af9785f58748",
   "db_path": "/home/xzh/.local/share/sddctx/seekdb",
   "materials": [
     {
@@ -173,12 +173,23 @@
       "status": "superseded"
     },
     {
+      "key": "code:src/invoicehub/cli.py:_parse_amount",
+      "kind": "code",
+      "path": "src/invoicehub/cli.py",
+      "lines": [
+        17,
+        33
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
       "key": "code:src/invoicehub/cli.py:build_parser",
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        14,
-        27
+        36,
+        54
       ],
       "version": 1,
       "status": "active"
@@ -188,8 +199,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        30,
-        38
+        57,
+        65
       ],
       "version": 1,
       "status": "active"
@@ -199,8 +210,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        41,
-        66
+        68,
+        92
       ],
       "version": 1,
       "status": "active"
@@ -210,8 +221,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        69,
-        78
+        95,
+        104
       ],
       "version": 1,
       "status": "active"
@@ -221,8 +232,8 @@
       "kind": "code",
       "path": "src/invoicehub/cli.py",
       "lines": [
-        81,
-        82
+        107,
+        108
       ],
       "version": 1,
       "status": "active"
@@ -316,23 +327,34 @@
       "status": "active"
     },
     {
-      "key": "code:src/invoicehub/service.py:_coerce_min_amount",
+      "key": "code:src/invoicehub/service.py:_sort_key",
       "kind": "code",
       "path": "src/invoicehub/service.py",
       "lines": [
         33,
-        43
+        36
       ],
       "version": 1,
       "status": "active"
     },
     {
-      "key": "code:src/invoicehub/service.py:_sort_key",
+      "key": "code:src/invoicehub/service.py:_normalize_min_amount",
       "kind": "code",
       "path": "src/invoicehub/service.py",
       "lines": [
-        46,
-        49
+        42,
+        55
+      ],
+      "version": 1,
+      "status": "active"
+    },
+    {
+      "key": "code:src/invoicehub/service.py:_to_decimal",
+      "kind": "code",
+      "path": "src/invoicehub/service.py",
+      "lines": [
+        58,
+        72
       ],
       "version": 1,
       "status": "active"
@@ -342,8 +364,8 @@
       "kind": "code",
       "path": "src/invoicehub/service.py",
       "lines": [
-        52,
-        91
+        75,
+        114
       ],
       "version": 1,
       "status": "active"

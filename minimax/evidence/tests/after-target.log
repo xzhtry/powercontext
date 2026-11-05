@@ -1,6 +1,6 @@
 # app=demo_app
-# code_version=src-sha256:03b7bf3a7c3fa80b
+# code_version=src-sha256:d864a19d04b619b3
 # command=/home/xzh/sdd-venv/bin/python -m pytest tests/test_min_amount_filter.py
 
 .......                                                                  [100%]
-7 passed in 0.33s
+7 passed in 0.21s

@@ -1,6 +1,0 @@
-$ /home/xzh/sdd-venv/bin/python -m pytest tests/test_min_amount_filter.py
-
-.......                                                                  [100%]
-7 passed in 0.17s
-
-[exit code: 0]

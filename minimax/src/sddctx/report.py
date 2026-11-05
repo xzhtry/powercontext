@@ -51,6 +51,7 @@ def build_record() -> str:
         "",
         f"- 生成时间：{record.get('created_at', utc_now())}",
         f"- 任务：{summary['task_id']}（上下文摘要 `{summary['context_digest']}`）",
+        f"- 调用方式：`{record.get('source', 'api')}`",
         f"- 模型：`{minimax.get('model')}`，协议：`{minimax.get('protocol')}`，端点：`{minimax.get('base_url')}`",
         f"- 用量：`{json.dumps(minimax.get('usage'), ensure_ascii=False)}`，时延：{minimax.get('latency_ms')} ms",
         f"- Prompt：`{record.get('prompt_path')}`（sha256 `{str(record.get('prompt_sha256'))[:16]}…`）",
@@ -89,6 +90,20 @@ def build_record() -> str:
         lines.append(
             f"| {item['name']} | `{item['command']}` | {item['exit_code']} | {item['passed']} | {item['failed']} | `{item['log']}` |"
         )
+    if record.get("source") == "manual-minimax-web":
+        repro = [
+            "bash scripts/make_prompt.sh",
+            "# 把 evidence/minimax/PROMPT.md 发给 MiniMax，保存回复为 evidence/minimax/response.md",
+            "bash scripts/apply_web_response.sh evidence/minimax/response.md \"MiniMax web (model not specified)\"",
+            "python -m sddctx.cli report",
+        ]
+    else:
+        repro = [
+            "cp .env.example .env   # 填 MINIMAX_API_KEY",
+            "python -m sddctx.cli run --apply-demo",
+            "python -m sddctx.cli import",
+            "python -m sddctx.cli report",
+        ]
     lines += [
         "",
         f"结论：{'全部通过' if all_ok else '存在失败'}。",
@@ -102,10 +117,7 @@ def build_record() -> str:
         "## 复现",
         "",
         "```bash",
-        "cp .env.example .env   # 填 MINIMAX_API_KEY",
-        "python -m sddctx.cli run --apply-demo",
-        "python -m sddctx.cli import",
-        "python -m sddctx.cli report",
+        *repro,
         "```",
         "",
         "> 模型响应全文保存在 `evidence/minimax/`，Prompt 全文保存在同一目录的 `.prompt.md`；"

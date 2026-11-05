@@ -1,0 +1,67 @@
+{
+  "run_id": "run-634988b89b",
+  "task_id": "TASK-101",
+  "success": true,
+  "patch": "evidence/patches/run-634988b89b.diff",
+  "patch_sha256": "9fae38b105751f711f85019a5bdb2ee00f4394c7bb3ea9d37af74d63901da5b0",
+  "context_digest": "9a65343a40d5a7e867143c9ca12544a69653bec872d7e7a8980b775cd1b854b6",
+  "targets": [
+    "src/invoicehub/cli.py",
+    "src/invoicehub/service.py"
+  ],
+  "tests": [
+    {
+      "name": "target",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_min_amount_filter.py",
+      "exit_code": 0,
+      "log": "evidence/tests/run-634988b89b-target.log",
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 9fae38b10575"
+    },
+    {
+      "name": "regression",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_list_invoices.py tests/test_pagination.py tests/test_cli.py",
+      "exit_code": 0,
+      "log": "evidence/tests/run-634988b89b-regression.log",
+      "passed": 17,
+      "failed": 0,
+      "errors": 0,
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 9fae38b10575"
+    },
+    {
+      "name": "full",
+      "command": "/home/xzh/sdd-venv/bin/python -m pytest",
+      "exit_code": 0,
+      "log": "evidence/tests/run-634988b89b-full.log",
+      "passed": 24,
+      "failed": 0,
+      "errors": 0,
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 9fae38b10575"
+    }
+  ],
+  "state": {
+    "run_seq": 1,
+    "status": "verified",
+    "entry": {
+      "family": "atomic-memory",
+      "artifact_id": "art_dd35016214ae4ed094925147bb44abf2",
+      "revision": 1
+    }
+  },
+  "minimax": {
+    "source": "manual-minimax-web",
+    "model": "MiniMax web (model not specified)",
+    "protocol": "manual",
+    "base_url": "MiniMax web chat",
+    "created_at": "2026-11-05T11:46:04+00:00",
+    "prompt_path": "evidence/minimax/run-634988b89b.prompt.md",
+    "prompt_sha256": "cc2d02228e35dea3ccdf309872cb1372344df726a151ddd83e4c50e047ed4fb9",
+    "response_text": "--- a/src/invoicehub/cli.py\n+++ b/src/invoicehub/cli.py\n@@ -14,3 +14,25 @@\n+from decimal import Decimal\n+\n+\n+def _parse_amount(value: str) -> Decimal:\n+    \"\"\"把命令行传入的金额解析为精确的十进制金额。\n+\n+    解析必须精确到分，禁止经过 ``float`` 中间值；负数属于非法参数。\n+    \"\"\"\n+\n+    try:\n+        amount = Decimal(value.strip())\n+    except ArithmeticError as exc:\n+        raise argparse.ArgumentTypeError(f\"金额不是合法的十进制数值：{value!r}\") from exc\n+    if not amount.is_finite():\n+        raise argparse.ArgumentTypeError(f\"金额必须是有限数值：{value!r}\")\n+    if amount < 0:\n+        raise argparse.ArgumentTypeError(\n+            f\"金额下限必须是非负数 (must be non-negative, >= 0)，不能为负数，收到：{value!r}\"\n+        )\n+    return amount\n+\n+\n def build_parser() -> argparse.ArgumentParser:\n     parser = argparse.ArgumentParser(prog=\"invoicehub\", description=\"财务发票查询工具\")\n     subparsers = parser.add_subparsers(dest=\"command\", required=True)\n@@ -19,6 +41,12 @@\n     list_parser.add_argument(\"--data\", default=\"data/invoices.json\", help=\"发票 JSON 文件\")\n     list_parser.add_argument(\"--status\", default=None, help=\"状态筛选：draft/issued/paid/void\")\n     list_parser.add_argument(\"--customer\", default=None, help=\"客户号筛选\")\n+    list_parser.add_argument(\n+        \"--min-amount\",\n+        type=_parse_amount,\n+        default=None,\n+        help=\"金额下限（含边界），例如 1500.00\",\n+    )\n     list_parser.add_argument(\"--page\", type=int, default=1, help=\"页码，从 1 开始\")\n     list_parser.add_argument(\n         \"--page-size\", type=int, default=DEFAULT_PAGE_SIZE, help=f\"每页条数（1..{MAX_PAGE_SIZE}）\"\n@@ -43,6 +71,7 @@\n         invoices,\n         status=args.status,\n         customer_id=args.customer,\n+        min_amount=args.min_amount,\n         page=args.page,\n         page_size=args.page_size,\n     )\n--- a/src/invoicehub/service.py\n+++ b/src/invoicehub/service.py\n@@ -39,17 +39,55 @@\n+from decimal import Decimal\n+\n+\n+def _normalize_min_amount(min_amount: Decimal | int | str | None) -> Decimal | None:\n+    \"\"\"把金额下限规范化为精确的十进制金额。\n+\n+    ``None`` 表示不做金额过滤；负数属于非法输入，必须抛出 ``ValueError``。\n+    \"\"\"\n+\n+    if min_amount is None:\n+        return None\n+    amount = _to_decimal(min_amount)\n+    if amount < 0:\n+        raise ValueError(\n+            f\"min_amount 必须是非负数 (must be non-negative, >= 0)，不能为负数，收到：{min_amount!r}\"\n+        )\n+    return amount\n+\n+\n+def _to_decimal(value: Decimal | int | str | float) -> Decimal:\n+    \"\"\"把金额转换成精确的十进制值，禁止经过二进制浮点数。\"\"\"\n+\n+    if isinstance(value, Decimal):\n+        return value\n+    if isinstance(value, bool):\n+        raise ValueError(f\"金额必须是十进制数值，收到：{value!r}\")\n+    if isinstance(value, int):\n+        return Decimal(value)\n+    if isinstance(value, float):\n+        return Decimal(str(value))\n+    try:\n+        return Decimal(str(value).strip())\n+    except ArithmeticError as exc:\n+        raise ValueError(f\"金额必须是十进制数值，收到：{value!r}\") from exc\n+\n+\n def list_invoices(\n     invoices: Iterable[Invoice],\n     *,\n     status: InvoiceStatus | str | None = None,\n     customer_id: str | None = None,\n+    min_amount: Decimal | int | str | None = None,\n     page: int = 1,\n     page_size: int = DEFAULT_PAGE_SIZE,\n ) -> InvoicePage:\n-    \"\"\"按状态与客户筛选发票，返回一页结果。\n+    \"\"\"按状态、客户与金额下限筛选发票，返回一页结果。\n \n     参数：\n         invoices: 待查询的发票集合。\n         status: 可选状态筛选，接受枚举或字符串。\n         customer_id: 可选客户号筛选。\n+        min_amount: 可选金额下限，只保留 ``total_amount >= min_amount`` 的发票（含边界）。\n         page: 页码，从 1 开始。\n         page_size: 每页条数，1..100。\n \n@@ -59,12 +97,14 @@\n \n     _validate_pagination(page, page_size)\n     normalized_status = _coerce_status(status)\n+    threshold = _normalize_min_amount(min_amount)\n \n     filtered = [\n         invoice\n         for invoice in invoices\n         if (normalized_status is None or invoice.status is normalized_status)\n         and (customer_id is None or invoice.customer_id == customer_id)\n+        and (threshold is None or _to_decimal(invoice.total_amount) >= threshold)\n     ]\n \n     ordered = sorted(filtered, key=_sort_key)\n",
+    "response_sha256": "9fae38b105751f711f85019a5bdb2ee00f4394c7bb3ea9d37af74d63901da5b0",
+    "usage": null,
+    "latency_ms": null
+  },
+  "context": "evidence/context/run-634988b89b.json"
+}

@@ -9,57 +9,57 @@
   ],
   "context_digest": "9a65343a40d5a7e867143c9ca12544a69653bec872d7e7a8980b775cd1b854b6",
   "minimax": {
-    "base_url": null,
+    "base_url": "MiniMax web chat",
     "latency_ms": null,
-    "model": null,
-    "protocol": null,
+    "model": "MiniMax web (model not specified)",
+    "protocol": "manual",
     "usage": null
   },
-  "patch_path": "evidence/patches/run-bf985313a7.diff",
-  "patch_sha256": "79644459e82c3aa86e5c8b6ba4011750bbd600a28b84b3defad6ea159f9b8ee8",
+  "patch_path": "evidence/patches/run-634988b89b.diff",
+  "patch_sha256": "9fae38b105751f711f85019a5bdb2ee00f4394c7bb3ea9d37af74d63901da5b0",
   "pending": [],
   "run_seq": 1,
   "schema": "sddctx.task_state.v1",
-  "scope_id": "scp_17k27essbtxg4tyewm2t9aht74",
+  "scope_id": "scp_62v3czat25ectep5p1zjs7b0nd",
   "source": "powercontext",
   "status": "verified",
   "task_id": "TASK-101",
-  "updated_at": "2026-11-03T12:13:35+00:00",
+  "updated_at": "2026-11-05T11:46:06+00:00",
   "verifications": [
     {
-      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c",
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 9fae38b10575",
       "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_min_amount_filter.py",
       "errors": 0,
       "exit_code": 0,
       "failed": 0,
-      "log": "evidence/tests/run-bf985313a7-target.log",
+      "log": "evidence/tests/run-634988b89b-target.log",
       "name": "target",
       "passed": 7
     },
     {
-      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c",
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 9fae38b10575",
       "command": "/home/xzh/sdd-venv/bin/python -m pytest tests/test_list_invoices.py tests/test_pagination.py tests/test_cli.py",
       "errors": 0,
       "exit_code": 0,
       "failed": 0,
-      "log": "evidence/tests/run-bf985313a7-regression.log",
+      "log": "evidence/tests/run-634988b89b-regression.log",
       "name": "regression",
       "passed": 17
     },
     {
-      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 79644459e82c",
+      "code_version": "src-sha256:60f3ceec0f0e4bbe + patch 9fae38b10575",
       "command": "/home/xzh/sdd-venv/bin/python -m pytest",
       "errors": 0,
       "exit_code": 0,
       "failed": 0,
-      "log": "evidence/tests/run-bf985313a7-full.log",
+      "log": "evidence/tests/run-634988b89b-full.log",
       "name": "full",
       "passed": 24
     }
   ],
   "entry": {
     "family": "atomic-memory",
-    "artifact_id": "art_bd66a1795c7448958f0abd9d8f8fcad0",
+    "artifact_id": "art_dd35016214ae4ed094925147bb44abf2",
     "revision": 1
   }
 }
