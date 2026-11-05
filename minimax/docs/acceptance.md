@@ -17,7 +17,7 @@ bash scripts/verify_all.sh
 | 检查 | 结果 |
 | --- | --- |
 | 按 README 安装依赖（`pip install -e .`、`powercontext[cli,server]==1.4.1`） | 通过 |
-| 初始化数据（`bash scripts/init.sh`） | 通过，导入 53 条资料（15 规格 / 16 代码 / 22 测试），见 `evidence/import/latest.json` |
+| 初始化数据（`bash scripts/init.sh`） | 通过，导入 55 条资料（15 规格 / 18 代码 / 22 测试），见 `evidence/import/latest.json` |
 | 启动上下文模块并执行验证样例（`python -m sddctx.cli context` / `run`） | 通过 |
 | 不依赖未交付的本地文件或状态 | 通过；`scripts/reset.sh` 后重新 `init.sh` 可复现 |
 
@@ -69,7 +69,7 @@ bash scripts/demo_spec_update.sh
 ## 4. 数据库实际参与
 
 - 工程资料全部存入 seekdb：`$SDDCTX_RUNTIME/seekdb`，表 `materials`，ngram 全文索引。
-- 快速核对：`python -m sddctx.cli stats` → 15 条规格 / 16 条代码 / 22 条测试，索引包含 `ft_materials`。
+- 快速核对：`python -m sddctx.cli stats` → 15 条规格 / 18 条代码 / 22 条测试，索引包含 `ft_materials`。
 - 每次 `context` 的检索 SQL 记录在 JSON 的 `db.query_trace`，示例：
   `SELECT ... MATCH(title, body, keywords) AGAINST ('...') ...`。
 - 导入清单：`evidence/import/latest.json`；检索结果中的 `material_id` 可回查该清单/数据库。

@@ -61,7 +61,7 @@ cp .env.example .env        # 填入 MINIMAX_API_KEY，按需修改协议/模型
 ## 3. 快速开始
 
 ```bash
-# 1) 启动 PowerContext（SQLite 存储任务状态）+ 导入 53 条工程资料到 seekdb
+# 1) 启动 PowerContext（SQLite 存储任务状态）+ 导入 55 条工程资料到 seekdb
 bash scripts/init.sh
 
 # 2) 为验证样例构造上下文（会读取 PowerContext 状态）
@@ -143,7 +143,7 @@ bash scripts/demo_state_reuse.sh
 | 技术 | 在本作品中的作用 | 证据 |
 | --- | --- | --- |
 | MiniMax | 读取上下文并生成代码补丁（`src/invoicehub/service.py`、`cli.py`） | `evidence/minimax/`、`docs/minimax-dev-record.md` |
-| seekdb | 存储 53 条工程资料（规格/代码/测试），建立 ngram 全文索引；`context` 的每次选择都由 SQL 检索驱动 | `evidence/context/*.json` 的 `db.query_trace`、`evidence/import/latest.json` |
+| seekdb | 存储 55 条工程资料（规格/代码/测试），建立 ngram 全文索引；`context` 的每次选择都由 SQL 检索驱动 | `evidence/context/*.json` 的 `db.query_trace`、`evidence/import/latest.json` |
 | PowerContext | 以 Memory entry（`kind=task-state`）保存任务进展/验证结果；下一次运行（含重启后）通过 `entries/list` 读取并注入上下文 | `evidence/state/*.json`、`scripts/demo_state_reuse.sh` |
 
 ## 7. 已知限制
