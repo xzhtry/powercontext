@@ -170,7 +170,6 @@ class PreparedContextBuilder:
     experience_entry_limit = 2
     max_entry_content_bytes = 2000
     _text_entry_limit: int | None = None
-    _fragment_limit = 4
 
     def empty(self) -> PreparedContext:
         return PreparedContext(status="empty", content=None, content_bytes=0)
@@ -376,7 +375,7 @@ class PreparedContextBuilder:
         selected: list[MemoryEntryFragment] = []
         seen: set[tuple[str, str, int, int]] = set()
         for _score, _width, _order, fragment in ordered:
-            if len(selected) >= self._fragment_limit:
+            if len(selected) >= self.entry_limit:
                 break
             key = (
                 fragment.address.memory.artifact.artifact_id,
@@ -881,7 +880,7 @@ def _best_window(text: str, query_terms: Counter[str]) -> tuple[int, int, int, i
         return None
     best: tuple[int, int, int, int, str] | None = None
     for index in range(len(spans)):
-        for width in (1, 2, 3):
+        for width in range(1, 9):
             if index + width > len(spans):
                 break
             start = spans[index][0]
