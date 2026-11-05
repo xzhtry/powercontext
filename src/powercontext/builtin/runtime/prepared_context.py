@@ -248,7 +248,7 @@ class PreparedContextBuilder:
         if sum(len(candidates.hits) for candidates in experience_candidates) > self.experience_candidate_limit:
             raise PreparedContextInvariantError("experience-candidate-limit")
 
-        if request.evidence_selection and request.assembly is None:
+        if request.evidence_selection:
             return self._build_fragment_result(
                 request=request,
                 current_scope_id=current_scope_id,
