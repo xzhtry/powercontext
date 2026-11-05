@@ -539,7 +539,16 @@ class ArtifactProcessingSupervisor:
                     continue
                 cursor = await SourceCursorRepository().load(connection, row.scope_id, row.binding_name)
                 committed = 0 if cursor is None else cursor.cursor.sequence
-                if int(row.source_through) - committed < threshold:
+                # Count to the journal head, exactly as a capture-time decision does.
+                # The processing watermark lags the journal, so using it here would
+                # miss a backlog that already passed the threshold.
+                head = await connection.scalar(
+                    select(SOURCE_JOURNAL_HEADS_TABLE.c.position).where(
+                        SOURCE_JOURNAL_HEADS_TABLE.c.scope_id == row.scope_id
+                    )
+                )
+                position = int(row.source_through) if head is None else int(head)
+                if position - committed < threshold:
                     continue
                 await ArtifactProcessingIntentRepository().request(connection, row.scope_id, row.binding_name)
                 requested.add(row.binding_name)
