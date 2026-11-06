@@ -162,6 +162,13 @@ _STATEMENT_CUES = (
     "income",
     "cash",
 )
+# A filing's stored page text starts with the document identity. A question
+# names its filing in its own words ("AMEX"), so the identity line is matched on
+# its own: a question word inside an identity part points at that filing, and
+# its pages then lead the ranking.
+_IDENTITY_PRIOR = 8.0
+_IDENTITY_TOKEN = re.compile(r"[A-Za-z0-9]+")
+_IDENTITY_MINIMUM = 3
 
 
 class PDFDocumentInput(BaseModel):
@@ -454,7 +461,56 @@ def _pool_bm25(
             folded = getattr(hit, "text", "").casefold()
             if any(heading in folded for heading in _STATEMENT_HEADINGS):
                 scores[key] = scores.get(key, 0.0) + _STATEMENT_PRIOR
+
+    identity_matches: dict[str, int] = {}
+    identity_of: dict[tuple[str, str, str], str] = {}
+    for key, hit in hits.items():
+        identity = _identity_line(getattr(hit, "text", ""))
+        identity_of[key] = identity
+        matched = _identity_match(terms, identity)
+        if matched > identity_matches.get(identity, 0):
+            identity_matches[identity] = matched
+    if identity_matches:
+        best = max(identity_matches.values())
+        if best > 0:
+            for key, identity in identity_of.items():
+                if identity_matches.get(identity, 0) == best:
+                    scores[key] = scores.get(key, 0.0) + _IDENTITY_PRIOR
     return scores
+
+
+def _identity_line(text: str) -> str:
+    """The document identity a stored page text starts with."""
+
+    return text.split("\n", 1)[0].strip().casefold()
+
+
+def _identity_match(terms: list[str], identity: str) -> int:
+    """How many question words point at this document identity."""
+
+    parts = _IDENTITY_TOKEN.findall(identity)
+    matched = 0
+    for term in terms:
+        if len(term) < _IDENTITY_MINIMUM:
+            continue
+        for part in parts:
+            folded = part.casefold()
+            if term in folded or _is_subsequence(term, folded):
+                matched += 1
+                break
+    return matched
+
+
+def _is_subsequence(needle: str, haystack: str) -> bool:
+    """Is ``needle`` a subsequence of ``haystack``?"""
+
+    index = 0
+    for character in needle:
+        found = haystack.find(character, index)
+        if found < 0:
+            return False
+        index = found + 1
+    return True
 
 
 class _QuestionProbes:
