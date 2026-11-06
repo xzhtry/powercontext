@@ -44,7 +44,7 @@ qoder-01-run.png
 ```text
 你是这个仓库的开发者。请先不要改代码：
 1. 阅读 README.md、docs/architecture.md、app/main.py、app/seekdb.py、app/memory.py，说明项目如何同时使用 seekdb 和 PowerContext；
-2. 按 README 启动（本机用 RT_RUNTIME=C:\ob\eco-work\qoder\runtime，RT_PORT=18890，RT_SEEKDB_PORT=18884，RT_PC_PORT=18767）；
+2. 应用已经在 http://127.0.0.1:18890 运行，先直接访问 /api/health，不要重复启动；如果需要自己启动，使用本页顶部的环境变量命令，不要用默认 8787；
 3. 访问 http://127.0.0.1:18890/api/health 和 /api/bootstrap，贴出 papers、evidence、memory 数量；
 4. 如果启动失败，定位根因（端口、路径、依赖、权限），修复后重新验证；不要用假数据绕过。
 验收：/api/health 中 seekdb=true、memory_available=true、papers>=500。
