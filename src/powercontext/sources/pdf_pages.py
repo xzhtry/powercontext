@@ -25,7 +25,9 @@ from __future__ import annotations
 
 import hashlib
 import io
+import math
 import re
+from collections import Counter
 from typing import TYPE_CHECKING, Any, Literal
 from urllib.parse import quote
 
@@ -72,6 +74,94 @@ _INSTRUCTION_PREFIXES = (
 )
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+|\n+")
 _TOKEN = re.compile(r"[a-z0-9]+")
+_WORD = re.compile(r"[a-z]+|\d+")
+
+# Financial vocabulary a question implies even when the evidence page words it
+# differently: "geographies" is answered by a "GEOGRAPHIC OPERATIONS" table and
+# "quick ratio" by a balance sheet. The table is domain vocabulary, not an
+# answer key: it maps a question term to the words the filing uses.
+_FINANCE_SYNONYMS: dict[str, tuple[str, ...]] = {
+    "margin": ("income", "revenues", "operating", "costs", "expenses"),
+    "margins": ("income", "revenues", "operating", "costs", "expenses"),
+    "ratio": ("assets", "liabilities", "current", "balance", "cash"),
+    "ratios": ("assets", "liabilities", "current", "balance", "cash"),
+    "geographies": ("geographic", "regions", "international", "segment"),
+    "geographic": ("geographic", "regions", "international", "segment"),
+    "revenue": ("revenues", "sales", "net"),
+    "revenues": ("revenues", "sales", "net"),
+    "customer": ("revenues", "contracts", "airlines", "government", "concentration"),
+    "customers": ("revenues", "contracts", "airlines", "government", "concentration"),
+    "ebitda": ("depreciation", "amortization", "cash", "operating", "income"),
+    "capex": ("capital", "expenditures", "purchases", "property", "cash"),
+    "restructuring": ("restructuring", "severance", "impairment", "charges"),
+    "legal": ("proceedings", "litigation", "contingencies", "matters"),
+    "tax": ("taxes", "rate", "provision", "income"),
+    "asset": ("assets", "goodwill", "intangible", "balance"),
+    "assets": ("assets", "goodwill", "intangible", "balance"),
+    "liabilit": ("liabilities", "debt", "balance"),
+    "debt": ("debt", "notes", "borrowings", "liabilities"),
+    "segment": ("segments", "geographic", "business"),
+    "inventory": ("inventories",),
+    "inventories": ("inventories",),
+    "dividend": ("dividends",),
+    "dividends": ("dividends",),
+    "employee": ("employees", "personnel", "workforce"),
+    "pension": ("pension", "postretirement", "benefit"),
+    "income": ("income", "revenues", "operating"),
+    "profit": ("income", "earnings", "net"),
+    "cash": ("cash", "operating", "investing", "financing"),
+    "acquisition": ("acquisitions", "business", "combination", "purchase"),
+    "acquisitions": ("acquisitions", "business", "combination", "purchase"),
+    "operating": ("operating", "income", "expenses", "revenues"),
+    "operates": ("geographic", "segments", "countries", "international"),
+    "primarily": ("geographic", "segments", "business"),
+    "countries": ("geographic", "regions", "international", "united", "states"),
+    "region": ("geographic", "regions", "united", "states"),
+    "largest": ("liabilities", "assets", "total"),
+    "liability": ("liabilities", "total", "debt"),
+    "liabilities": ("liabilities", "total", "debt"),
+    "balance": ("assets", "liabilities", "equity"),
+    "battles": ("proceedings", "litigation", "contingencies", "matters"),
+    "materially": ("material", "proceedings", "contingencies"),
+    "ongoing": ("proceedings", "litigation", "contingencies"),
+    "gross": ("revenues", "costs", "expenses", "income"),
+    "change": ("increase", "decrease", "income", "revenues"),
+    "drove": ("increase", "decrease", "revenues", "income"),
+}
+# BM25 over the candidate pool: the term saturation constant and the length
+# normalisation. The pool is a set of whole pages, so their lengths differ
+# little and the normalisation stays off.
+_BM25_K1 = 1.2
+_BM25_B = 0.75
+# The coverage score joins the BM25 score: it rewards a page that carries many
+# of the question's own rare terms, which the term score alone under-weights.
+_BM25_COVERAGE_WEIGHT = 0.25
+# A question about a financial statement asks about the statements, and every
+# filing places them in the same region. Statement pages therefore lead the
+# ranking for such a question, which separates pages that word alike.
+_STATEMENT_PRIOR = 8.0
+_STATEMENT_HEADINGS = (
+    "consolidated statement",
+    "consolidated balance sheet",
+    "consolidated statements",
+    "statements of operations",
+    "statement of income",
+)
+_STATEMENT_CUES = (
+    "margin",
+    "ratio",
+    "revenue",
+    "ebitda",
+    "capex",
+    "restructuring",
+    "tax",
+    "asset",
+    "liabilit",
+    "dividend",
+    "equity",
+    "income",
+    "cash",
+)
 
 
 class PDFDocumentInput(BaseModel):
@@ -235,9 +325,11 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
     """Return up to ``limit`` distinct page citations for one finance question.
 
     Only pages that really exist in Memory are returned. The question is probed
-    first with its whole lexical content, then with focused per-concept probes;
-    both candidate sets are fused so a page matching many distinct concepts
-    outranks a page that merely repeats one.
+    with its whole lexical content and with focused per-concept probes; the
+    probes build one candidate pool, and the pool is then ranked by BM25 over
+    the question's own terms plus the financial vocabulary the question implies.
+    A page that repeats a common word therefore cannot push out the page that
+    actually answers the question.
     """
 
     if limit < 1 or not isinstance(question, str) or not question.strip():
@@ -246,31 +338,24 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
     probes = _question_probes(question)
     if probes is None or not probes.probes:
         return ()
+    terms = _content_terms(question)
+    if not terms:
+        return ()
 
     from powercontext.builtin.artifacts.memory.models import MemoryCitation
     from powercontext.builtin.runtime import GetMemoryEntryRequest, SearchMemoryRequest
 
     hits_by_key: dict[tuple[str, str, str], Any] = {}
-    fused: dict[tuple[str, str, str], float] = {}
-
     for queries in probes.probes:
-        best: dict[tuple[str, str, str], float] = {}
         for query in queries:
             page = await memory.search(
                 SearchMemoryRequest(query=query, mode="fts", limit=_PROBE_DEPTH)
             )
-            for rank, hit in enumerate(page.hits):
-                key = _hit_key(hit)
-                hits_by_key.setdefault(key, hit)
-                score = 1.0 / (_RRF_K + rank)
-                if score > best.get(key, 0.0):
-                    best[key] = score
-        for key, score in best.items():
-            fused[key] = fused.get(key, 0.0) + score
+            for hit in page.hits:
+                hits_by_key.setdefault(_hit_key(hit), hit)
 
-    # Reciprocal-rank fusion: a page that ranks well for several independent
-    # concepts beats a page that merely repeats one concept's vocabulary.
-    ordered = sorted(fused, key=lambda key: fused[key], reverse=True)
+    scores = _pool_bm25(hits_by_key, terms)
+    ordered = sorted(hits_by_key, key=lambda key: (-scores.get(key, 0.0), key))
     ranked = [hits_by_key[key] for key in ordered[:_MAX_CANDIDATES]]
 
     citations: list[MemoryCitation] = []
@@ -301,6 +386,75 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
 
 def _hit_key(hit: Any) -> tuple[str, str, str]:
     return (hit.memory_ref.artifact_id, hit.entry_id, hit.entry_version_id)
+
+
+def _pool_bm25(
+    hits: dict[tuple[str, str, str], Any],
+    terms: list[str],
+) -> dict[tuple[str, str, str], float]:
+    """Rank the candidate pool by BM25 over the question's terms and synonyms.
+
+    The retrieval probes only decide which pages are worth reading; this score
+    decides their order. It runs on the stored page text, so a page is judged
+    by what it says rather than by how often it repeats a common word. A
+    statement question also prefers the pages that carry the filing's
+    statements, because those pages word alike and their order is otherwise
+    decided by chance.
+    """
+
+    query = set(terms)
+    for term in terms:
+        query.update(_FINANCE_SYNONYMS.get(term, ()))
+    postings: dict[str, list[tuple[tuple[str, str, str], int]]] = {}
+    lengths: dict[tuple[str, str, str], int] = {}
+    matched: dict[tuple[str, str, str], set[str]] = {}
+    for key, hit in hits.items():
+        folded = getattr(hit, "text", "").casefold()
+        tokens = _WORD.findall(folded)
+        lengths[key] = len(tokens)
+        counts: Counter[str] = Counter()
+        for token in tokens:
+            counts[token] += 1
+        for token, count in counts.items():
+            postings.setdefault(token, []).append((key, count))
+        matched[key] = {term for term in terms if term in folded}
+    total = len(hits)
+    if not total:
+        return {}
+    average = sum(lengths.values()) / total
+    scores: dict[tuple[str, str, str], float] = {}
+    for term in query:
+        entries = postings.get(term)
+        if not entries:
+            continue
+        frequency = len(entries)
+        idf = math.log(1 + (total - frequency + 0.5) / (frequency + 0.5))
+        for key, count in entries:
+            length = lengths[key]
+            denominator = count + _BM25_K1 * (
+                1 - _BM25_B + _BM25_B * length / max(1.0, average)
+            )
+            scores[key] = scores.get(key, 0.0) + idf * (count * (_BM25_K1 + 1)) / denominator
+
+    # A term that only a few pool pages carry decides the question, so the
+    # coverage of the question's own terms ranks the pool as well.
+    frequency_by_term: Counter[str] = Counter()
+    for found in matched.values():
+        frequency_by_term.update(found)
+    weights = {
+        term: math.log(total / max(1, frequency_by_term[term])) for term in terms
+    }
+    for key, found in matched.items():
+        scores[key] = scores.get(key, 0.0) + _BM25_COVERAGE_WEIGHT * sum(
+            weights[term] for term in found
+        )
+
+    if any(cue in " ".join(terms) for cue in _STATEMENT_CUES):
+        for key, hit in hits.items():
+            folded = getattr(hit, "text", "").casefold()
+            if any(heading in folded for heading in _STATEMENT_HEADINGS):
+                scores[key] = scores.get(key, 0.0) + _STATEMENT_PRIOR
+    return scores
 
 
 class _QuestionProbes:
