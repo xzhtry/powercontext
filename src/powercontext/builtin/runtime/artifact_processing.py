@@ -24,7 +24,7 @@ import sys
 import time
 import traceback as traceback_module
 from collections import deque
-from collections.abc import Awaitable, Callable, Sequence
+from collections.abc import Awaitable, Callable, Mapping, Sequence
 from contextlib import nullcontext, suppress
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
@@ -440,6 +440,8 @@ class ArtifactProcessingSupervisor:
         retry_cap_seconds: float = _RETRY_CAP_SECONDS,
         retry_jitter: Callable[[], float] | None = None,
         tracing: RuntimeTracing | None = None,
+        source_count_thresholds: Mapping[str, int | None] | None = None,
+        recheck_binding: str | None = None,
     ) -> None:
         for attribute in ("binding_name", "artifact_family", "config_prefix"):
             names = [getattr(binding, attribute) for binding in bindings]
@@ -462,6 +464,10 @@ class ArtifactProcessingSupervisor:
         self._retry_base = retry_base_seconds
         self._retry_cap = retry_cap_seconds
         self._jitter = retry_jitter or (lambda: SystemRandom().uniform(0.8, 1.2))
+        # The count thresholds must be known before the first scheduling cycle:
+        # the startup reconciliation reads them, and it runs exactly once.
+        self._source_count_thresholds = dict(source_count_thresholds or {})
+        self._recheck_binding = recheck_binding
         self._tracing = tracing
         self._fence: ArtifactProcessingFence | None = None
         self._status = ArtifactProcessingSupervisorStatus.STANDBY

@@ -661,11 +661,6 @@ async def open_builtin_runtime(
         supervisor = runtime.artifact_processing_supervisor
         if supervisor is not None:
             contexts.records._wake_binding = supervisor.wake
-            supervisor._source_count_thresholds = {
-                FAMILY_BINDINGS["memory"]: config.runtime.memory_source_count_threshold,
-                TOPIC_MEMORY_SOURCE_WINDOW_BINDING: config.runtime.topic_memory_source_count_threshold,
-            }
-            supervisor._recheck_binding = FAMILY_BINDINGS["memory"]
         contexts.profiles.operation_context = runtime._operation
         from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleService
 
@@ -860,6 +855,14 @@ async def _open_artifact_processing_supervisor(
                     leases=contexts.repositories.processing_leases,
                     binding_states=contexts.repositories.processing_binding_states,
                     tracing=tracing,
+                    # The count thresholds belong to every Supervisor instance: the
+                    # wrapper only forwards wake calls, so setting them there would
+                    # leave the running Supervisor without them.
+                    source_count_thresholds={
+                        FAMILY_BINDINGS["memory"]: config.runtime.memory_source_count_threshold,
+                        TOPIC_MEMORY_SOURCE_WINDOW_BINDING: config.runtime.topic_memory_source_count_threshold,
+                    },
+                    recheck_binding=FAMILY_BINDINGS["memory"],
                 )
             )
             supervisors.append(supervisor)
