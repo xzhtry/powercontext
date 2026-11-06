@@ -1,0 +1,62 @@
+[
+  {
+    "query": "浏览器没有 GPU 时怎么继续运行 embedding 模型？",
+    "relevant": ["wasm-fallback", "webgpu-backend"]
+  },
+  {
+    "query": "两路检索的分数不可比，数据库是怎么合并排序的？",
+    "relevant": ["rrf", "db-hybrid"]
+  },
+  {
+    "query": "新导入的文章为什么刷新后马上就能被搜到？",
+    "relevant": ["refresh-index", "session-state"]
+  },
+  {
+    "query": "把模型权重量化成 8 位以后体积能小多少？",
+    "relevant": ["int8-quantization"]
+  },
+  {
+    "query": "WebGPU 为什么适合在浏览器里跑 Transformer 推理？",
+    "relevant": ["webgpu-backend", "fp16-quantization"]
+  },
+  {
+    "query": "计算余弦相似度之前为什么要把向量归一化？",
+    "relevant": ["cosine-normalization"]
+  },
+  {
+    "query": "怎样让很短的查询获得更好的语义召回？",
+    "relevant": ["query-instruction", "bge-model"]
+  },
+  {
+    "query": "怎样提高大量文档向量化时的吞吐？",
+    "relevant": ["batching", "warmup"]
+  },
+  {
+    "query": "如何用指标验证量化后检索质量没有明显下降？",
+    "relevant": ["metrics", "int8-quantization"]
+  },
+  {
+    "query": "我的文档内容会被上传到云端吗？",
+    "relevant": ["privacy", "transformersjs-runtime"]
+  },
+  {
+    "query": "中文全文检索应该选择哪种分词分析器？",
+    "relevant": ["ik-analyzer"]
+  },
+  {
+    "query": "同时有多个知识库时怎么避免检索结果串库？",
+    "relevant": ["session-state", "architecture"]
+  },
+  {
+    "query": "HNSW 的 m 和 ef_construction 参数有什么作用？",
+    "relevant": ["hnsw"]
+  },
+  {
+    "query": "为什么第一次查询比预热之后的查询慢？",
+    "relevant": ["warmup"]
+  },
+  {
+    "query": "分块太大或者太小会对检索造成什么问题？",
+    "relevant": ["chunking"]
+  }
+]

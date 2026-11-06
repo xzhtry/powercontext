@@ -1,0 +1,51 @@
+{
+  "name": "stepkb",
+  "version": "1.0.0",
+  "private": true,
+  "description": "StepKB — end-side embedding + seekdb hybrid search mini knowledge base",
+  "type": "module",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "predev": "node scripts/prepare-assets.mjs",
+    "dev": "node scripts/dev.mjs",
+    "prebuild": "node scripts/prepare-assets.mjs",
+    "build": "tsc --noEmit && vite build",
+    "prestart": "node scripts/prepare-assets.mjs",
+    "start": "node server/index.mjs",
+    "server": "node server/index.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "prepare:assets": "node scripts/prepare-assets.mjs",
+    "typecheck": "tsc --noEmit",
+    "fetch:models": "node scripts/fetch-models.mjs",
+    "fetch:baseline": "node scripts/fetch-models.mjs --baseline",
+    "eval:quality": "node --experimental-strip-types scripts/eval-quality.mjs",
+    "bench:batch": "node scripts/bench-batch.mjs",
+    "bench:refresh": "node scripts/bench-index-refresh.mjs",
+    "bench:load": "node scripts/bench-load.mjs",
+    "bench:analyze": "node scripts/analyze-bench.mjs",
+    "docs:pdf": "node scripts/render-technical-note.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "e2e": "node scripts/e2e.mjs"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "3.8.1",
+    "@seekdb/js-bindings": "1.4.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.24.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "seekdb": "1.4.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "^1.55.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.0.0"
+  }
+}

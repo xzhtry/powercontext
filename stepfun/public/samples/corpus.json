@@ -1,0 +1,142 @@
+[
+  {
+    "id": "db-hybrid",
+    "title": "seekdb 混合检索总览",
+    "source": "seekdb-hybrid.md",
+    "tags": ["seekdb", "混合检索", "RRF"],
+    "text": "seekdb 在数据库内部提供混合检索能力。调用 collection.hybridSearch 时，seekdb-js 会把全文条件与查询向量写入会话变量，再通过 DBMS_HYBRID_SEARCH.GET_SQL 生成一条 SQL。该 SQL 使用 MATCH ... AGAINST 完成全文召回，使用 cosine_distance 完成向量召回，并在同一条语句里通过 FULL JOIN 与 RRF 公式计算最终排序。客户端只提交查询向量和文本，不接收两路独立结果，也不在应用层做融合。"
+  },
+  {
+    "id": "rrf",
+    "title": "RRF 倒数排名融合",
+    "source": "rrf-ranking.md",
+    "tags": ["RRF", "排序", "融合"],
+    "text": "RRF（Reciprocal Rank Fusion）是最常用的多路召回融合方法之一。它不依赖不同检索通道的分数量纲，而是只看每个候选在各自通道中的名次：score = Σ 1 / (rank_constant + rank_i)。rank_constant 越大，靠前名次之间的差距越平滑；seekdb 的 RRF 参数中 rank_window_size 控制窗口，rank_constant 默认 60。这样即使余弦距离和全文 BM25 分数不可比，也可以稳定合并。"
+  },
+  {
+    "id": "hnsw",
+    "title": "HNSW 近邻图索引",
+    "source": "hnsw-index.md",
+    "tags": ["HNSW", "向量索引", "ANN"],
+    "text": "HNSW 是一种分层可导航小世界图索引，适合高维向量的近似最近邻检索。建索引时参数 m 控制每个节点的连接数，ef_construction 控制构建阶段的候选队列大小；查询时 ef_search 越大召回越高但延迟也越高。本应用在 seekdb collection 中创建 HNSW 索引，维度 512，距离度量使用 cosine，m=16，ef_construction=200，以在小型个人知识库上取得较低延迟。"
+  },
+  {
+    "id": "ik-analyzer",
+    "title": "ik 中文分词全文索引",
+    "source": "fulltext-ik.md",
+    "tags": ["全文检索", "ik", "中文分词"],
+    "text": "seekdb 的全文索引支持 ik、ngram、space、beng 等分析器。中文没有天然空格，使用 ik 智能分词可以把“混合检索”拆成更细的词项，提高关键词召回的稳定性。本应用创建 FulltextIndexConfig('ik', { ik_mode: 'smart' })，并在查询前清除引号、括号等 query_string 特殊字符，避免用户输入被解释为检索运算符。"
+  },
+  {
+    "id": "refresh-index",
+    "title": "写入后的索引刷新策略",
+    "source": "refresh-index.md",
+    "tags": ["索引刷新", "增量写入", "refresh_index"],
+    "text": "向量索引写入后并不一定立刻对 ANN 查询可见，需要等待后台合并或主动刷新。seekdb-js 提供 collection.refresh_index()，内部调用 dbms_index_manager.refresh，使新增分块可以在下一次查询中命中。本应用每批文档写入完成后立即刷新一次并记录 refreshMs，然后才把文档登记为“可检索”；删除文档后也执行刷新，保证知识库与会话状态一致。"
+  },
+  {
+    "id": "bge-model",
+    "title": "BGE-small-zh-v1.5 嵌入模型",
+    "source": "bge-model.md",
+    "tags": ["BGE", "embedding", "模型"],
+    "text": "BGE-small-zh-v1.5 是北京智源研究院开源的轻量中文嵌入模型，隐藏维度 512，最大输入长度 512 token，采用 BERT 结构并使用 CLS pooling 加 L2 归一化得到句向量。它的体积和中文语义能力适合浏览器端部署。模型文件来源于 Hugging Face 的 Xenova/bge-small-zh-v1.5 ONNX 转换仓库，许可证为 MIT；本应用在本地加载 FP16 与 INT8 两个版本。"
+  },
+  {
+    "id": "int8-quantization",
+    "title": "INT8 动态量化与体积压缩",
+    "source": "int8-quantization.md",
+    "tags": ["INT8", "量化", "模型压缩"],
+    "text": "INT8 动态量化把线性层权重从 32 位浮点压缩成 8 位整数，并使用每个通道的 scale 在推理时反量化。Operators 的激活仍动态计算量化参数，因此不需要校准数据集。BGE-small-zh-v1.5 的 FP32 ONNX 约 90.5 MiB，INT8 版本约 22.9 MiB，理论压缩比接近 4 倍。体积下降会带来一定数值误差，需要用 Recall@5、nDCG@5 等指标实测检索质量变化，而不能只看文件大小。"
+  },
+  {
+    "id": "fp16-quantization",
+    "title": "FP16 半精度推理",
+    "source": "fp16-quantization.md",
+    "tags": ["FP16", "WebGPU", "半精度"],
+    "text": "FP16 使用 16 位浮点保存权重与中间结果，相对 FP32 体积减半，并且是 WebGPU 最成熟的加速格式。多数独立显卡和集成显卡都支持 shader-f16 或能以 FP32 模拟 FP16 运算。本应用在 WebGPU 后端加载 model_fp16.onnx，约 45.3 MiB；在不支持 WebGPU 时自动切换到 INT8 的 WASM 版本，并在界面明确展示当前推理后端和精度。"
+  },
+  {
+    "id": "webgpu-backend",
+    "title": "WebGPU 端侧推理后端",
+    "source": "webgpu.md",
+    "tags": ["WebGPU", "ONNX Runtime Web", "后端"],
+    "text": "WebGPU 允许网页直接访问 GPU 计算能力，适合矩阵乘法密集的 Transformer 推理。transformers.js 通过 onnxruntime-web 的 JSEP 构建启用 WebGPU，创建 pipeline 时设置 device: 'webgpu' 并显式选择 fp16 精度。应用启动时调用 navigator.gpu.requestAdapter() 检测适配器；检测成功才加载 WebGPU 模型，失败则记录原因并回退到 WASM。"
+  },
+  {
+    "id": "wasm-fallback",
+    "title": "WASM 自动降级路径",
+    "source": "wasm-fallback.md",
+    "tags": ["WASM", "降级", "兼容性"],
+    "text": "当浏览器没有 navigator.gpu、适配器请求失败，或 WebGPU 模型初始化异常时，应用必须仍然可用。降级逻辑会释放失败的 pipeline，改用 device: 'wasm' 和 INT8 模型重新初始化，并在顶部状态栏提示“WebGPU 不可用，已自动降级到 WASM”。WASM 路径使用多线程和 SIMD 时依赖 cross-origin isolation，服务端同时发送 COOP 与 COEP 响应头。"
+  },
+  {
+    "id": "transformersjs-runtime",
+    "title": "Transformers.js 端侧运行时",
+    "source": "transformersjs.md",
+    "tags": ["Transformers.js", "ONNX", "运行时"],
+    "text": "Transformers.js 是 Hugging Face 的 JavaScript 推理库，封装了 tokenizer、模型加载和 ONNX Runtime 会话。浏览器里它可以使用 WASM 或 WebGPU 后端，支持 feature-extraction pipeline。本应用设置 env.allowRemoteModels = false 与本地 model 路径，禁止运行时下载远程模型；所有文本通过 pipeline 在用户设备上编码，服务端不接触推理请求，也不会调用任何云端 embedding API。"
+  },
+  {
+    "id": "chunking",
+    "title": "文档分块与重叠窗口",
+    "source": "chunking.md",
+    "tags": ["分块", "chunk", "预处理"],
+    "text": "文档分块直接影响检索粒度。块太大时一个向量混合多个主题，块太小时上下文不完整。本应用先按 Markdown 标题和空行切段，再合并到约 360 个字符；超长段落按句号、问号、感叹号切分，并保留 60 个字符的重叠。每个分块保存标题、来源、分块序号和字符数等元数据，检索结果可以回到原文段落。"
+  },
+  {
+    "id": "cosine-normalization",
+    "title": "余弦距离与向量归一化",
+    "source": "cosine-distance.md",
+    "tags": ["余弦距离", "归一化", "向量"],
+    "text": "BGE 模型输出经过 L2 归一化后，向量长度为 1。此时余弦相似度等价于点积，余弦距离为 1 - cosine similarity，取值范围在 0 到 2 之间。应用在浏览器端完成归一化，服务端再用同样的方式校验一次，避免不同精度模型输出尺度差异影响检索。seekdb 的向量索引使用 cosine 度量，并在 SQL 中用 cosine_distance 计算语义分数。"
+  },
+  {
+    "id": "query-instruction",
+    "title": "BGE 查询指令前缀",
+    "source": "query-instruction.md",
+    "tags": ["查询前缀", "instruction", "BGE"],
+    "text": "BGE 中文模型在短查询检索时建议给查询加指令前缀：“为这个句子生成表示以用于检索相关文章：”。文档侧不加前缀。这样做可以让查询向量更接近“检索意图”的表示空间，通常能提升短 query 的召回。前缀只影响查询编码，不改变文档编码，因此应用把加前缀的 embedQuery 和不加前缀的 embedDocuments 分开实现。"
+  },
+  {
+    "id": "batching",
+    "title": "Embedding 批处理优化",
+    "source": "batching.md",
+    "tags": ["批处理", "性能", "吞吐"],
+    "text": "逐条调用模型的固定开销很大。把 16 个分块组成一个 batch 可以摊薄 tokenizer 和 GPU 命令提交成本，显著提高向量化吞吐与每秒处理的分块数。批大小并非越大越好：显存或 WASM 内存不足会导致失败，浏览器主线程也会被长时间占用。本应用默认批大小为 16，并在每批之间让出事件循环以更新进度条；基准面板分别记录首次加载与预热后的吞吐量。"
+  },
+  {
+    "id": "warmup",
+    "title": "首次加载、预热与端到端延迟",
+    "source": "warmup.md",
+    "tags": ["预热", "延迟", "性能测试"],
+    "text": "模型下载、ONNX 会话创建和内核编译都发生在首次请求，因此首次查询会比后续查询慢很多。公平的性能报告必须分开记录冷启动与热运行，并重复多次取中位数。本应用记录模型加载、预热、文档向量化、seekdb 写入与刷新、查询向量化和数据库检索的耗时，端到端延迟从用户点击搜索到结果渲染完成，首次与热态分别统计。"
+  },
+  {
+    "id": "privacy",
+    "title": "端侧推理与隐私边界",
+    "source": "privacy.md",
+    "tags": ["隐私", "端侧", "无云推理"],
+    "text": "端侧推理的核心价值是文档内容不离开用户设备。本应用的模型文件由本地静态资源服务器提供，推理在浏览器标签页中完成；文档分块、向量生成、查询编码全部发生在客户端。服务端只接收已经算好的向量和文本以写入 seekdb，不执行任何 embedding 计算，也不把内容发送到第三方。Content-Security-Policy 将 connect-src 限制为 self，进一步避免意外的外部请求。"
+  },
+  {
+    "id": "metrics",
+    "title": "检索质量评测：Recall@K 与 nDCG@K",
+    "source": "retrieval-metrics.md",
+    "tags": ["Recall", "nDCG", "评测"],
+    "text": "Recall@K 衡量前 K 个结果覆盖了多少相关文档，适合判断“有没有找到”；nDCG@K 考虑相关文档的排名位置，越靠前得分越高，适合比较排序质量。评测时需要固定语料、查询集、分块方式和模型精度，并对同一批 query 计算平均值。本项目的量化对比使用 20 篇文档、12 条带标注查询，在同一分块和同一查询前缀下比较 FP32、FP16 与 INT8。"
+  },
+  {
+    "id": "session-state",
+    "title": "多知识库与会话状态管理",
+    "source": "session-state.md",
+    "tags": ["状态", "多知识库", "集合"],
+    "text": "每个知识库对应一个独立的 seekdb collection，collection 名称使用 kb_ 加随机 ID，展示名称与描述保存在 stepkb_collections 注册表。切换知识库时，前端取消进行中的导入进度、清空旧结果、重新拉取当前集合的文档列表，并从 localStorage 恢复上次选中的知识库。导入完成后刷新当前集合，保证连续导入和切换后检索结果不会串库。"
+  },
+  {
+    "id": "architecture",
+    "title": "StepKB 整体架构",
+    "source": "architecture.md",
+    "tags": ["架构", "端侧", "seekdb"],
+    "text": "StepKB 分为三层：浏览器前端负责模型加载、分块、向量化和交互；轻量 Node 服务负责静态资源、知识库注册与 API 转发；seekdb 负责向量、原文、元数据存储和混合检索。前端永远只发送查询文本与向量，服务端调用 seekdb-js 的 hybridSearch，返回数据库排好序的结果。数据层不依赖其他数据库，也不在客户端内存中做召回或融合。"
+  }
+]

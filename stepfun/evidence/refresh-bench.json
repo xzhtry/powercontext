@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-11-06T02:24:56.668Z",
+  "environment": {
+    "seekdb": "seekdb 1.4.0 server mode",
+    "documents": 20,
+    "syntheticVectors": "512d, cosine-normalized, no model time",
+    "protocol": "3 rounds; alternating order; medians"
+  },
+  "perDocumentRefresh": {
+    "runs": [
+      {
+        "wallMs": 12611.7744,
+        "writeMs": 12235.3,
+        "refreshMs": 11858.1,
+        "refreshes": 20
+      },
+      {
+        "wallMs": 12544.916200000001,
+        "writeMs": 12307.599999999999,
+        "refreshMs": 11956.5,
+        "refreshes": 20
+      },
+      {
+        "wallMs": 12038.511600000002,
+        "writeMs": 11629.1,
+        "refreshMs": 11263.500000000004,
+        "refreshes": 20
+      }
+    ],
+    "medianWallMs": 12544.916200000001,
+    "medianRefreshMs": 11858.1
+  },
+  "coalescedBatchRefresh": {
+    "runs": [
+      {
+        "wallMs": 647.2366000000002,
+        "writeMs": 615,
+        "refreshMs": 502.7,
+        "refreshes": 1
+      },
+      {
+        "wallMs": 656.599400000001,
+        "writeMs": 618.6,
+        "refreshMs": 502.7,
+        "refreshes": 1
+      },
+      {
+        "wallMs": 792.2323000000033,
+        "writeMs": 763.2,
+        "refreshMs": 605.2,
+        "refreshes": 1
+      }
+    ],
+    "medianWallMs": 656.599400000001,
+    "medianRefreshMs": 502.7
+  },
+  "speedup": 19.11
+}

@@ -1,0 +1,63 @@
+{
+  "model": "bge-small-zh-v1.5",
+  "repo": "https://huggingface.co/Xenova/bge-small-zh-v1.5",
+  "revision": "75c43b069aac4d136ba6bc1122f995fedcfd2781",
+  "license": "MIT",
+  "downloadedAt": "2026-11-06T02:16:15.317Z",
+  "precision": [
+    "fp16",
+    "int8"
+  ],
+  "files": [
+    {
+      "file": "config.json",
+      "bytes": 716,
+      "sha256": "d4193ead3a810fd694fa8a31d7fc72fbaebc0668b603e398734bf2f6538ff42f",
+      "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/config.json"
+    },
+    {
+      "file": "tokenizer.json",
+      "bytes": 439125,
+      "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26",
+      "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/tokenizer.json"
+    },
+    {
+      "file": "tokenizer_config.json",
+      "bytes": 367,
+      "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a",
+      "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/tokenizer_config.json"
+    },
+    {
+      "file": "special_tokens_map.json",
+      "bytes": 125,
+      "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+      "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/special_tokens_map.json"
+    },
+    {
+      "file": "vocab.txt",
+      "bytes": 109540,
+      "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c",
+      "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/vocab.txt"
+    },
+    {
+      "file": "onnx/model_fp16.onnx",
+      "bytes": 47497427,
+      "sha256": "60d0fe5eb8d4e251d4b24dff010a2625c10a013503f0d09f625e8a9b0311315f",
+      "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/onnx/model_fp16.onnx"
+    },
+    {
+      "file": "onnx/model_quantized.onnx",
+      "bytes": 24010842,
+      "sha256": "15b717c382bcb518ba457b93ea6850ede7f4f1cd8937454aa06972366cd19bcc",
+      "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/onnx/model_quantized.onnx"
+    }
+  ],
+  "baseline": {
+    "file": "onnx/model.onnx",
+    "bytes": 94851877,
+    "sha256": "69a0b846f4f116b5e6aabf9546ea6754d02264f3211a13a1bd69b31b8040749a",
+    "source": "https://hf-mirror.com/Xenova/bge-small-zh-v1.5/resolve/main/onnx/model.onnx",
+    "location": "models-baseline/bge-small-zh-v1.5/onnx/model.onnx",
+    "note": "Development-only baseline for the controlled quantization evaluation; not served by the web app."
+  }
+}

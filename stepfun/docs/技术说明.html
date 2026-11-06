@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>StepKB 一页技术说明</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 210mm; height: 297mm; padding: 7mm 8mm 6mm;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    font-size: 8pt; line-height: 1.38; color: #1d2330;
+    background: #fff;
+  }
+  header { border-bottom: 1.5px solid #1d2330; padding-bottom: 2mm; margin-bottom: 2.4mm; display: flex; align-items: flex-end; gap: 4mm; }
+  h1 { font-size: 17pt; margin: 0; letter-spacing: -0.4pt; line-height: 1; }
+  .sub { font-size: 7.3pt; color: #596274; line-height: 1.35; }
+  .sub b { color: #d85026; }
+  .columns { column-count: 2; column-gap: 7mm; column-fill: balance; }
+  h2 { font-size: 9.2pt; margin: 0 0 1.2mm; padding-bottom: .6mm; border-bottom: .6px solid #cfd4de; color: #b3401d; letter-spacing: .1pt; }
+  section { break-inside: avoid; margin-bottom: 2mm; }
+  p { margin: 0 0 1.1mm; }
+  ul { margin: 0 0 .8mm; padding-left: 3.4mm; }
+  li { margin: 0 0 .4mm; }
+  b, strong { color: #111827; }
+  code { font-family: "Cascadia Code", Consolas, monospace; font-size: 6.8pt; background: #f1f2f6; padding: 0 .6mm; border-radius: .7mm; color: #4f3bb0; }
+  table { width: 100%; border-collapse: collapse; margin: .7mm 0 1mm; font-size: 7pt; }
+  th, td { border-bottom: .4px solid #dde1e8; padding: .55mm .7mm; text-align: left; vertical-align: top; }
+  th { background: #f4f5f9; color: #4d5566; font-weight: 700; }
+  td.n, th.n { text-align: right; white-space: nowrap; }
+  .kv { display: grid; grid-template-columns: 18mm 1fr; gap: .4mm 2mm; margin-bottom: 1mm; }
+  .kv span:nth-child(odd) { color: #687184; }
+  .note { background: #f8f7ff; border-left: 1.1mm solid #7c5cff; padding: 1mm 1.5mm; margin: .8mm 0; color: #3f4657; }
+  .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: .6mm; margin: 1mm 0; }
+  .metric { border: .5px solid #e1e4eb; border-radius: 1mm; padding: .8mm 1.1mm; }
+  .metric span { font-size: 6.2pt; color: #778093; display: block; }
+  .metric b { font-size: 9pt; color: #1d2330; }
+  .metric small { color: #8d95a6; }
+  footer { position: absolute; left: 8mm; right: 8mm; bottom: 3mm; border-top: .5px solid #dfe2e9; padding-top: 1mm; display: flex; justify-content: space-between; font-size: 6.2pt; color: #818999; }
+  .tag { display: inline-block; background: #eef0f7; color: #4b5364; border-radius: 1mm; padding: 0 1mm; margin-right: .7mm; font-size: 6.3pt; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; }
+</style>
+</head>
+<body>
+<header>
+  <h1>StepKB</h1>
+  <div class="sub">
+    端侧 AI 推理性能优化与 seekdb 混合检索 · 一页技术说明<br>
+    分支 <b>2026-competition-ecosystem</b> · 目录 <b>stepfun/</b> · BGE-small-zh-v1.5 + seekdb 1.4.0
+  </div>
+</header>
+
+<div class="columns">
+  <section>
+    <h2>1 · 模型与量化</h2>
+    <p>模型 BAAI <b>BGE-small-zh-v1.5</b>（MIT），浏览器 ONNX 版本来自 <code>Xenova/bge-small-zh-v1.5</code>，固定 revision <code>75c43b0</code>；BERT 4 层、hidden 512、max 512 tokens，CLS pooling + L2 normalize，查询侧加中文检索前缀。运行时 Transformers.js 3.8.1 + ONNX Runtime Web 1.22，推理全部在用户浏览器内完成。</p>
+    <table>
+      <tr><th>精度</th><th class="n">实测体积</th><th class="n">压缩比</th><th>用途</th></tr>
+      <tr><td>FP32 基线</td><td class="n">90.5 MiB</td><td class="n">1×</td><td>质量对照</td></tr>
+      <tr><td>FP16</td><td class="n">45.3 MiB</td><td class="n">2.00×</td><td>WebGPU</td></tr>
+      <tr><td>INT8</td><td class="n">22.9 MiB</td><td class="n">3.95×</td><td>WASM</td></tr>
+    </table>
+    <p>INT8 为 ONNX dynamic quantization：权重 8-bit、每通道 scale，激活运行时动态量化，无需校准集。同一 20 篇 / 20 分块 / 15 条标注查询、同一分块与查询前缀，仅替换精度的 dense 评测：</p>
+    <table>
+      <tr><th>精度</th><th class="n">Recall@5</th><th class="n">nDCG@5</th><th class="n">ΔnDCG</th></tr>
+      <tr><td>FP32</td><td class="n">0.8333</td><td class="n">0.8475</td><td class="n">—</td></tr>
+      <tr><td>FP16</td><td class="n">0.8333</td><td class="n">0.8475</td><td class="n">0.0000</td></tr>
+      <tr><td>INT8</td><td class="n">0.8333</td><td class="n">0.8504</td><td class="n">+0.0029</td></tr>
+    </table>
+    <p>Recall@5 不变，nDCG@5 变化 &lt;0.3 个百分点；INT8 相对 FP32 的向量余弦保真度为 0.9830。小样本结论，详见 <code>evidence/quality-eval.json</code>。</p>
+  </section>
+
+  <section>
+    <h2>2 · 端侧运行与自动降级</h2>
+    <p>启动时 <code>navigator.gpu.requestAdapter()</code> 探测 WebGPU；可用则显式 <code>device:'webgpu', dtype:'fp16'</code>。适配器缺失、请求失败或 pipeline 初始化异常时，释放失败会话并重建 <code>device:'wasm', dtype:'q8'</code>，顶部同时显示“WASM·INT8 降级”和原因。模型从本地静态目录加载（<code>allowRemoteModels=false</code>），ORT jsep WASM 自托管，COOP/COEP 开启多线程。</p>
+    <div class="note">验证：正常 Edge 自动选择 WebGPU·FP16；去掉 <code>navigator.gpu</code> 后自动降级，导入/检索/SQL trace 均正常。CSP <code>connect-src 'self'</code>，无任何云端推理 API。</div>
+  </section>
+
+  <section>
+    <h2>3 · seekdb 数据层与混合检索</h2>
+    <p><b>集合：</b>每个知识库一个 <code>kb_&lt;id&gt;</code> collection。实测 DDL：</p>
+    <p><code>_id varbinary(512) PK</code>、<code>document string</code>、<code>embedding VECTOR(512)</code>、<code>metadata json</code>；<code>FULLTEXT KEY idx_fts(document) WITH PARSER ik (ik_mode="smart")</code>；<code>VECTOR KEY idx_vec(embedding) WITH (DISTANCE=COSINE, TYPE=HNSW, M=16, EF_CONSTRUCTION=200, EF_SEARCH=64)</code>。</p>
+    <p><b>注册表：</b><code>stepkb_collections</code> 保存知识库名/描述/collection/计数；<code>stepkb_docs</code> 保存文档元数据与 content hash（去重）。</p>
+    <p><b>混合检索：</b>一次 <code>collection.hybridSearch()</code> 调用，seekdb 的 <code>DBMS_HYBRID_SEARCH.GET_SQL</code> 生成并执行单条 SQL：<code>MATCH(document) AGAINST(...)</code> 做全文召回、<code>cosine_distance(embedding,...)</code> 做向量召回，FULL JOIN 后按 RRF <code>1/(60+keyword_rank)+1/(60+semantic_rank)</code> 排序。Node 服务不接收两路独立列表、不自行合并；响应中的 <code>hybridTrace.generatedSql</code> 即当次数据库生成的 SQL，界面可展开查看。</p>
+    <p><b>增量与刷新：</b>单篇与批量写入 API；批量导入分块一次写入后整批只调一次 <code>refresh_index()</code>（<code>CALL dbms_index_manager.refresh()</code>），再登记为可检索。删除文档/知识库后刷新并清理注册表；切换知识库清空旧结果并按当前 collection 重新加载。</p>
+  </section>
+
+  <section>
+    <h2>4 · 状态与性能优化</h2>
+    <ul>
+      <li>active KB 存 localStorage，知识库/collection/计数以 seekdb 为准；文档 hash 去重。</li>
+      <li>约 360 字/块、重叠 60；16 条/批；批间让出主线程；模型常驻；模型/ORT wasm 强缓存。</li>
+      <li>冷/热、首次查询/后续查询、各阶段耗时全部写入可导出的性能面板。</li>
+    </ul>
+    <div class="metrics">
+      <div class="metric"><span>批处理 WebGPU ×3.21</span><b>32.3 → 103.7</b> <small>块/s</small></div>
+      <div class="metric"><span>刷新合并 ×19.1</span><b>12.5 → 0.66</b> <small>s / 20 篇</small></div>
+      <div class="metric"><span>热加载 WebGPU</span><b>1.32 → 0.88</b> <small>s</small></div>
+      <div class="metric"><span>热加载 WASM</span><b>1.00 → 0.78</b> <small>s</small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>5 · 实测性能</h2>
+    <p>Windows 11 · Edge 156.0.4314.50 · Intel Core Ultra 7 155H / Arc Graphics · 31.5 GiB · seekdb 1.4.0 server（WSL2）。20 篇 / 20 分块 / 15 查询；每后端 3 轮新浏览器 context，热态 42 条查询取中位数。</p>
+    <table>
+      <tr><th>指标</th><th class="n">WebGPU·FP16</th><th class="n">WASM·INT8</th></tr>
+      <tr><td>模型加载 / 预热</td><td class="n">1,269 / 842 ms</td><td class="n">1,032 / 65 ms</td></tr>
+      <tr><td>20 篇向量化</td><td class="n">732 ms</td><td class="n">2,197 ms</td></tr>
+      <tr><td>写入 + 刷新（刷新）</td><td class="n">881（521）ms</td><td class="n">761（516）ms</td></tr>
+      <tr><td>查询向量化</td><td class="n">34 ms</td><td class="n">31 ms</td></tr>
+      <tr><td>seekdb 检索</td><td class="n">13 ms</td><td class="n">8 ms</td></tr>
+      <tr><td>端到端（热 / 首）</td><td class="n">83 / 439 ms</td><td class="n">78 / 159 ms</td></tr>
+      <tr><td>Recall@5 / nDCG@5</td><td class="n">0.867 / 0.879</td><td class="n">0.900 / 0.895</td></tr>
+      <tr><td>Top-1 命中</td><td class="n">45/45</td><td class="n">45/45</td></tr>
+    </table>
+    <p>WebGPU 对成批文档向量化明显更快（732 vs 2,197 ms），但单条查询的 GPU 提交/回读固定开销更高；应用仍按题目要求优先 WebGPU，并允许手动切换。降级验证：Recall@5 0.900 / nDCG@5 0.895，Top-1 15/15。原始数据见 <code>evidence/benchmark-summary.md</code>、<code>batch-bench-*.json</code>、<code>refresh-bench.json</code>、<code>load-bench.json</code>。</p>
+  </section>
+
+  <section>
+    <h2>6 · 复现</h2>
+    <p><code>docker compose up -d</code>（或已有 seekdb 1.4 server）→ <code>pnpm install</code> → <code>pnpm fetch:models</code> → <code>pnpm prepare:assets</code> → <code>pnpm build &amp;&amp; pnpm start</code>，打开 <code>http://127.0.0.1:8787</code>。测试：<code>pnpm test</code>、<code>STEPKB_INTEGRATION=1 pnpm test</code>；质量：<code>pnpm fetch:baseline &amp;&amp; pnpm eval:quality</code>。模型/运行时/框架均公开可获取；模型清单与 SHA-256 见 <code>docs/model-manifest.json</code>。</p>
+    <div class="note">端侧：embedding 在浏览器；数据层：seekdb 内完成向量/全文存储与 RRF 混合检索；没有回放服务端预计算，也没有调用云端推理。</div>
+  </section>
+</div>
+
+<footer>
+  <span>StepKB · 2026 OceanBase 数据库大赛 · seekdb × 阶跃星辰</span>
+  <span>详细说明与复现：stepfun/README.md</span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-11-06T02:23:48.258Z",
+  "app": "http://127.0.0.1:8787",
+  "browser": "Microsoft Edge 156.0.4314.50",
+  "protocol": "Actual browser EmbeddingEngine; 20 corpus docs; 3 rounds per batch size; median",
+  "backend": "webgpu",
+  "status": {
+    "state": "ready",
+    "backend": "webgpu",
+    "precision": "fp16",
+    "loadMs": 2732.5,
+    "warmupMs": 852.4,
+    "modelBytes": 47497427,
+    "fallbackReason": null,
+    "accelerator": "intel · xe-lpg",
+    "progress": {
+      "file": "bge-small-zh-v1.5/onnx/model_fp16.onnx",
+      "loaded": 47497427,
+      "total": 47497427,
+      "percent": 100,
+      "status": "ready"
+    },
+    "error": null,
+    "detection": {
+      "available": true,
+      "reason": null,
+      "accelerator": "intel · xe-lpg"
+    }
+  },
+  "documents": 20,
+  "rows": [
+    {
+      "batchSize": 1,
+      "runsMs": [
+        752.5,
+        620,
+        553.3
+      ],
+      "medianMs": 620,
+      "docsPerSecond": 32.26,
+      "speedupVsBatch1": 1
+    },
+    {
+      "batchSize": 8,
+      "runsMs": [
+        229.6,
+        228.1,
+        209.1
+      ],
+      "medianMs": 228.1,
+      "docsPerSecond": 87.69,
+      "speedupVsBatch1": 2.72
+    },
+    {
+      "batchSize": 16,
+      "runsMs": [
+        250.3,
+        184,
+        192.9
+      ],
+      "medianMs": 192.9,
+      "docsPerSecond": 103.7,
+      "speedupVsBatch1": 3.21
+    }
+  ],
+  "consoleErrors": []
+}

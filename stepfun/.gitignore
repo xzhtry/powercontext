@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.data/
+.env
+.env.local
+public/models/
+public/ort/
+models-baseline/
+.playwright/
+test-results/
+*.log

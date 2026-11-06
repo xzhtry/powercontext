@@ -1,0 +1,480 @@
+{
+  "backendRequest": "webgpu",
+  "tag": "webgpu-2",
+  "generatedAt": "2026-11-06T02:20:20.163Z",
+  "badge": "WebGPU · FP16",
+  "fallbackNotice": "",
+  "load": {
+    "at": 1793931580500,
+    "backend": "webgpu",
+    "precision": "fp16",
+    "loadMs": 1007.3,
+    "warmupMs": 550.1,
+    "modelBytes": 47497427
+  },
+  "ingest": {
+    "id": "6656290d-2661-4a5b-b077-c45ee5e66c45",
+    "at": 1793931613922,
+    "kbId": "59aa1ab648529b1a",
+    "docs": 20,
+    "chunks": 20,
+    "embedMs": 806.3,
+    "writeMs": 880.6,
+    "refreshMs": 521,
+    "e2eMs": 1748.3,
+    "backend": "webgpu",
+    "precision": "fp16",
+    "batchSize": 16
+  },
+  "searches": [
+    {
+      "id": "dab32b8a-93b4-4651-9e75-41048a28077d",
+      "at": 1793931615254,
+      "kbId": "59aa1ab648529b1a",
+      "query": "浏览器没有 GPU 时怎么继续运行 embedding 模型？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 189.2,
+      "dbMs": 41,
+      "e2eMs": 257.8,
+      "count": 8,
+      "warm": false
+    },
+    {
+      "id": "77086a0d-f792-4a95-964d-1baa28ba930f",
+      "at": 1793931615727,
+      "kbId": "59aa1ab648529b1a",
+      "query": "两路检索的分数不可比，数据库是怎么合并排序的？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 41.8,
+      "dbMs": 17.4,
+      "e2eMs": 122.9,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "1a703e83-52fa-49fe-88af-7e1e99113424",
+      "at": 1793931616122,
+      "kbId": "59aa1ab648529b1a",
+      "query": "新导入的文章为什么刷新后马上就能被搜到？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 37.3,
+      "dbMs": 40.4,
+      "e2eMs": 131.6,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "28a75aae-c2a2-47fb-b4e4-020db8f57292",
+      "at": 1793931616394,
+      "kbId": "59aa1ab648529b1a",
+      "query": "把模型权重量化成 8 位以后体积能小多少？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 41.3,
+      "dbMs": 10.1,
+      "e2eMs": 91.5,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "1484ef89-6d32-4b09-94a3-4efd4c0f3f19",
+      "at": 1793931616698,
+      "kbId": "59aa1ab648529b1a",
+      "query": "WebGPU 为什么适合在浏览器里跑 Transformer 推理？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 42.1,
+      "dbMs": 12.2,
+      "e2eMs": 92.8,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "6f7ca816-bd54-4629-8d72-a3ad046663f9",
+      "at": 1793931616946,
+      "kbId": "59aa1ab648529b1a",
+      "query": "计算余弦相似度之前为什么要把向量归一化？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 31.3,
+      "dbMs": 9.6,
+      "e2eMs": 73.8,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "f7ee1005-f179-43b8-97a8-618baf99df84",
+      "at": 1793931617167,
+      "kbId": "59aa1ab648529b1a",
+      "query": "怎样让很短的查询获得更好的语义召回？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 34.2,
+      "dbMs": 14.6,
+      "e2eMs": 80.9,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "7a0ca24b-7cfd-4c35-91cf-511131d1cece",
+      "at": 1793931617413,
+      "kbId": "59aa1ab648529b1a",
+      "query": "怎样提高大量文档向量化时的吞吐？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 28.3,
+      "dbMs": 31.5,
+      "e2eMs": 94.3,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "2bbc584c-6710-4e4b-ad98-45ce8014afed",
+      "at": 1793931617796,
+      "kbId": "59aa1ab648529b1a",
+      "query": "如何用指标验证量化后检索质量没有明显下降？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 130.7,
+      "dbMs": 11.5,
+      "e2eMs": 178.9,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "a6cff360-0daa-43de-94e9-9938e70b2f27",
+      "at": 1793931618216,
+      "kbId": "59aa1ab648529b1a",
+      "query": "我的文档内容会被上传到云端吗？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 36.5,
+      "dbMs": 23.3,
+      "e2eMs": 99.1,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "ca658158-c01d-4879-a065-19224a85e60e",
+      "at": 1793931618463,
+      "kbId": "59aa1ab648529b1a",
+      "query": "中文全文检索应该选择哪种分词分析器？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 31.4,
+      "dbMs": 14.1,
+      "e2eMs": 78.3,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "cf840e2c-a026-467f-8739-ffca21698a80",
+      "at": 1793931618693,
+      "kbId": "59aa1ab648529b1a",
+      "query": "同时有多个知识库时怎么避免检索结果串库？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 30.9,
+      "dbMs": 11.8,
+      "e2eMs": 72.6,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "0fe42dc6-54f2-492f-8d6e-643f5ca7a97b",
+      "at": 1793931618944,
+      "kbId": "59aa1ab648529b1a",
+      "query": "HNSW 的 m 和 ef_construction 参数有什么作用？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 36.8,
+      "dbMs": 10.1,
+      "e2eMs": 77.7,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "113624a3-efd7-4b30-a5c6-9b2f17e4d51e",
+      "at": 1793931619180,
+      "kbId": "59aa1ab648529b1a",
+      "query": "为什么第一次查询比预热之后的查询慢？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 33.6,
+      "dbMs": 14,
+      "e2eMs": 77.6,
+      "count": 8,
+      "warm": true
+    },
+    {
+      "id": "6c20a6ba-b40f-4de3-bd23-374ff9307e6a",
+      "at": 1793931619400,
+      "kbId": "59aa1ab648529b1a",
+      "query": "分块太大或者太小会对检索造成什么问题？",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "queryEmbedMs": 32,
+      "dbMs": 15.1,
+      "e2eMs": 80.5,
+      "count": 8,
+      "warm": true
+    }
+  ],
+  "observed": [
+    {
+      "query": "浏览器没有 GPU 时怎么继续运行 embedding 模型？",
+      "relevant": [
+        "wasm-fallback",
+        "webgpu-backend"
+      ],
+      "wallMs": 463,
+      "timingText": "189 ms | 41 ms | 258 ms | 首次",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "WASM 自动降级路径",
+        "WebGPU 端侧推理后端",
+        "Transformers.js 端侧运行时",
+        "首次加载、预热与端到端延迟",
+        "端侧推理与隐私边界"
+      ]
+    },
+    {
+      "query": "两路检索的分数不可比，数据库是怎么合并排序的？",
+      "relevant": [
+        "rrf",
+        "db-hybrid"
+      ],
+      "wallMs": 270,
+      "timingText": "42 ms | 17 ms | 123 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "RRF 倒数排名融合",
+        "写入后的索引刷新策略",
+        "检索质量评测：Recall@K 与 nDCG@K",
+        "StepKB 整体架构",
+        "余弦距离与向量归一化"
+      ]
+    },
+    {
+      "query": "新导入的文章为什么刷新后马上就能被搜到？",
+      "relevant": [
+        "refresh-index",
+        "session-state"
+      ],
+      "wallMs": 333,
+      "timingText": "37 ms | 40 ms | 132 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "写入后的索引刷新策略",
+        "多知识库与会话状态管理",
+        "ik 中文分词全文索引",
+        "BGE 查询指令前缀",
+        "首次加载、预热与端到端延迟"
+      ]
+    },
+    {
+      "query": "把模型权重量化成 8 位以后体积能小多少？",
+      "relevant": [
+        "int8-quantization"
+      ],
+      "wallMs": 184,
+      "timingText": "41 ms | 10 ms | 92 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "INT8 动态量化与体积压缩",
+        "BGE-small-zh-v1.5 嵌入模型",
+        "FP16 半精度推理",
+        "检索质量评测：Recall@K 与 nDCG@K",
+        "BGE 查询指令前缀"
+      ]
+    },
+    {
+      "query": "WebGPU 为什么适合在浏览器里跑 Transformer 推理？",
+      "relevant": [
+        "webgpu-backend",
+        "fp16-quantization"
+      ],
+      "wallMs": 241,
+      "timingText": "42 ms | 12 ms | 93 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "WebGPU 端侧推理后端",
+        "Transformers.js 端侧运行时",
+        "端侧推理与隐私边界",
+        "WASM 自动降级路径",
+        "seekdb 混合检索总览"
+      ]
+    },
+    {
+      "query": "计算余弦相似度之前为什么要把向量归一化？",
+      "relevant": [
+        "cosine-normalization"
+      ],
+      "wallMs": 164,
+      "timingText": "31 ms | 10 ms | 74 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "余弦距离与向量归一化",
+        "RRF 倒数排名融合",
+        "seekdb 混合检索总览",
+        "检索质量评测：Recall@K 与 nDCG@K",
+        "INT8 动态量化与体积压缩"
+      ]
+    },
+    {
+      "query": "怎样让很短的查询获得更好的语义召回？",
+      "relevant": [
+        "query-instruction",
+        "bge-model"
+      ],
+      "wallMs": 149,
+      "timingText": "34 ms | 15 ms | 81 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "BGE 查询指令前缀",
+        "ik 中文分词全文索引",
+        "seekdb 混合检索总览",
+        "首次加载、预热与端到端延迟",
+        "RRF 倒数排名融合"
+      ]
+    },
+    {
+      "query": "怎样提高大量文档向量化时的吞吐？",
+      "relevant": [
+        "batching",
+        "warmup"
+      ],
+      "wallMs": 190,
+      "timingText": "28 ms | 32 ms | 94 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "Embedding 批处理优化",
+        "文档分块与重叠窗口",
+        "写入后的索引刷新策略",
+        "端侧推理与隐私边界",
+        "检索质量评测：Recall@K 与 nDCG@K"
+      ]
+    },
+    {
+      "query": "如何用指标验证量化后检索质量没有明显下降？",
+      "relevant": [
+        "metrics",
+        "int8-quantization"
+      ],
+      "wallMs": 330,
+      "timingText": "131 ms | 12 ms | 179 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "INT8 动态量化与体积压缩",
+        "检索质量评测：Recall@K 与 nDCG@K",
+        "写入后的索引刷新策略",
+        "ik 中文分词全文索引",
+        "首次加载、预热与端到端延迟"
+      ]
+    },
+    {
+      "query": "我的文档内容会被上传到云端吗？",
+      "relevant": [
+        "privacy",
+        "transformersjs-runtime"
+      ],
+      "wallMs": 363,
+      "timingText": "36 ms | 23 ms | 99 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "端侧推理与隐私边界",
+        "BGE 查询指令前缀",
+        "写入后的索引刷新策略",
+        "Transformers.js 端侧运行时",
+        "文档分块与重叠窗口"
+      ]
+    },
+    {
+      "query": "中文全文检索应该选择哪种分词分析器？",
+      "relevant": [
+        "ik-analyzer"
+      ],
+      "wallMs": 187,
+      "timingText": "31 ms | 14 ms | 78 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "ik 中文分词全文索引",
+        "BGE 查询指令前缀",
+        "文档分块与重叠窗口",
+        "RRF 倒数排名融合",
+        "BGE-small-zh-v1.5 嵌入模型"
+      ]
+    },
+    {
+      "query": "同时有多个知识库时怎么避免检索结果串库？",
+      "relevant": [
+        "session-state",
+        "architecture"
+      ],
+      "wallMs": 172,
+      "timingText": "31 ms | 12 ms | 73 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "多知识库与会话状态管理",
+        "文档分块与重叠窗口",
+        "ik 中文分词全文索引",
+        "写入后的索引刷新策略",
+        "StepKB 整体架构"
+      ]
+    },
+    {
+      "query": "HNSW 的 m 和 ef_construction 参数有什么作用？",
+      "relevant": [
+        "hnsw"
+      ],
+      "wallMs": 177,
+      "timingText": "37 ms | 10 ms | 78 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "HNSW 近邻图索引",
+        "RRF 倒数排名融合",
+        "INT8 动态量化与体积压缩",
+        "seekdb 混合检索总览",
+        "余弦距离与向量归一化"
+      ]
+    },
+    {
+      "query": "为什么第一次查询比预热之后的查询慢？",
+      "relevant": [
+        "warmup"
+      ],
+      "wallMs": 166,
+      "timingText": "34 ms | 14 ms | 78 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "首次加载、预热与端到端延迟",
+        "Embedding 批处理优化",
+        "BGE 查询指令前缀",
+        "检索质量评测：Recall@K 与 nDCG@K",
+        "ik 中文分词全文索引"
+      ]
+    },
+    {
+      "query": "分块太大或者太小会对检索造成什么问题？",
+      "relevant": [
+        "chunking"
+      ],
+      "wallMs": 152,
+      "timingText": "32 ms | 15 ms | 80 ms | 热态",
+      "mode": "seekdb RRF 混合",
+      "top5": [
+        "文档分块与重叠窗口",
+        "Embedding 批处理优化",
+        "BGE 查询指令前缀",
+        "写入后的索引刷新策略",
+        "ik 中文分词全文索引"
+      ]
+    }
+  ],
+  "errors": [
+    "\u001b[0;93m2026-11-06 10:19:39.851033 [W:onnxruntime:, session_state.cc:1282 VerifyEachNodeIsAssignedToAnEp] Rerunning with verbose output on a non-minimal build will show node assignments.\u001b[m"
+  ]
+}

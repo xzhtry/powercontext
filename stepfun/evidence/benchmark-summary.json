@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-11-06T02:25:38.401Z",
+  "environment": {
+    "os": "Windows 11 26300",
+    "browser": "Microsoft Edge 156.0.4314.50",
+    "cpu": "Intel Core Ultra 7 155H (16C/22T)",
+    "gpu": "Intel Arc Graphics",
+    "ram": "31.5 GiB",
+    "seekdb": "seekdb 1.4.0 (server mode, v1.4.0.0)",
+    "corpus": "20 docs / 20 chunks / 15 labelled queries",
+    "protocol": "fresh browser context per run; 3 runs per backend; 15 queries per run"
+  },
+  "backends": {
+    "webgpu": {
+      "runs": 3,
+      "loadMedianMs": 1268.6,
+      "warmupMedianMs": 841.6,
+      "modelBytes": 47497427,
+      "importEmbedMedianMs": 731.5,
+      "importWriteMedianMs": 880.6,
+      "importRefreshMedianMs": 521,
+      "importE2eMedianMs": 1748.3,
+      "queryEmbedMedianMs": 33.8,
+      "seekdbMedianMs": 13.2,
+      "e2eMedianMs": 83,
+      "e2eP95Ms": 145.1,
+      "coldE2eMedianMs": 439.3,
+      "queries": 45,
+      "recallAt5": 0.8667,
+      "ndcgAt5": 0.8787,
+      "top1": "45/45"
+    },
+    "wasm": {
+      "runs": 3,
+      "loadMedianMs": 1032.3,
+      "warmupMedianMs": 64.5,
+      "modelBytes": 24010842,
+      "importEmbedMedianMs": 2196.6,
+      "importWriteMedianMs": 760.7,
+      "importRefreshMedianMs": 515.7,
+      "importE2eMedianMs": 3019.5,
+      "queryEmbedMedianMs": 30.6,
+      "seekdbMedianMs": 8.3,
+      "e2eMedianMs": 77.9,
+      "e2eP95Ms": 118.9,
+      "coldE2eMedianMs": 159,
+      "queries": 45,
+      "recallAt5": 0.9,
+      "ndcgAt5": 0.8945,
+      "top1": "45/45"
+    }
+  },
+  "fallback": {
+    "badge": "WASM · INT8 降级",
+    "notice": "已自动降级到 WASM · INT8 当前浏览器没有暴露 navigator.gpu",
+    "queries": 15,
+    "recallAt5": 0.9,
+    "ndcgAt5": 0.8945,
+    "top1": "15/15"
+  }
+}

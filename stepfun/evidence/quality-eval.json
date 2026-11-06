@@ -1,0 +1,1701 @@
+{
+  "generatedAt": "2026-11-06T02:25:33.801Z",
+  "environment": {
+    "runtime": "Node v24.21.0 / onnxruntime-node (CPU)",
+    "platform": "win32-x64",
+    "model": "Xenova/bge-small-zh-v1.5 @ 75c43b0",
+    "pooling": "cls + L2 normalize",
+    "queryInstruction": "为这个句子生成表示以用于检索相关文章：",
+    "corpusDocs": 20,
+    "chunks": 20,
+    "queries": 15,
+    "topK": 5
+  },
+  "results": [
+    {
+      "precision": "FP32",
+      "dtype": "fp32",
+      "modelBytes": 94851877,
+      "loadMs": 411,
+      "docEmbedMs": 1864,
+      "queryEmbedMs": 2674,
+      "docsPerSecond": 10.73,
+      "queriesPerSecond": 5.61,
+      "vectorFidelityVsFp32": 1,
+      "recallAt5": 0.8333333333333334,
+      "ndcgAt5": 0.8475344649232189,
+      "mrr": 1,
+      "rows": [
+        {
+          "query": "浏览器没有 GPU 时怎么继续运行 embedding 模型？",
+          "relevant": [
+            "wasm-fallback",
+            "webgpu-backend"
+          ],
+          "top5": [
+            {
+              "docId": "wasm-fallback",
+              "title": "WASM 自动降级路径",
+              "score": 0.661318
+            },
+            {
+              "docId": "webgpu-backend",
+              "title": "WebGPU 端侧推理后端",
+              "score": 0.598123
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.57555
+            },
+            {
+              "docId": "transformersjs-runtime",
+              "title": "Transformers.js 端侧运行时",
+              "score": 0.570102
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.561682
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "两路检索的分数不可比，数据库是怎么合并排序的？",
+          "relevant": [
+            "rrf",
+            "db-hybrid"
+          ],
+          "top5": [
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.605156
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.5809
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.558816
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.542996
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.5219
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "新导入的文章为什么刷新后马上就能被搜到？",
+          "relevant": [
+            "refresh-index",
+            "session-state"
+          ],
+          "top5": [
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.602901
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.508359
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.485531
+            },
+            {
+              "docId": "session-state",
+              "title": "多知识库与会话状态管理",
+              "score": 0.485467
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.471666
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.8772153153380493
+        },
+        {
+          "query": "把模型权重量化成 8 位以后体积能小多少？",
+          "relevant": [
+            "int8-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.607633
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.5506
+            },
+            {
+              "docId": "bge-model",
+              "title": "BGE-small-zh-v1.5 嵌入模型",
+              "score": 0.506712
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.494349
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.485317
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "WebGPU 为什么适合在浏览器里跑 Transformer 推理？",
+          "relevant": [
+            "webgpu-backend",
+            "fp16-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "webgpu-backend",
+              "title": "WebGPU 端侧推理后端",
+              "score": 0.545329
+            },
+            {
+              "docId": "transformersjs-runtime",
+              "title": "Transformers.js 端侧运行时",
+              "score": 0.539436
+            },
+            {
+              "docId": "privacy",
+              "title": "端侧推理与隐私边界",
+              "score": 0.529542
+            },
+            {
+              "docId": "wasm-fallback",
+              "title": "WASM 自动降级路径",
+              "score": 0.487647
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.476501
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "计算余弦相似度之前为什么要把向量归一化？",
+          "relevant": [
+            "cosine-normalization"
+          ],
+          "top5": [
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.70963
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.530498
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.495967
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.47506
+            },
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.464421
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "怎样让很短的查询获得更好的语义召回？",
+          "relevant": [
+            "query-instruction",
+            "bge-model"
+          ],
+          "top5": [
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.621726
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.563749
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.548394
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.503156
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.476168
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "怎样提高大量文档向量化时的吞吐？",
+          "relevant": [
+            "batching",
+            "warmup"
+          ],
+          "top5": [
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.570371
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.550959
+            },
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.540713
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.53172
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.525383
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.8503449055347546
+        },
+        {
+          "query": "如何用指标验证量化后检索质量没有明显下降？",
+          "relevant": [
+            "metrics",
+            "int8-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.599152
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.568675
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.548843
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.517107
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.516166
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.9197207891481876
+        },
+        {
+          "query": "我的文档内容会被上传到云端吗？",
+          "relevant": [
+            "privacy",
+            "transformersjs-runtime"
+          ],
+          "top5": [
+            {
+              "docId": "privacy",
+              "title": "端侧推理与隐私边界",
+              "score": 0.573644
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.503582
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.497583
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.496818
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.495018
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "中文全文检索应该选择哪种分词分析器？",
+          "relevant": [
+            "ik-analyzer"
+          ],
+          "top5": [
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.59355
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.523835
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.498338
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.485225
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.449857
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "同时有多个知识库时怎么避免检索结果串库？",
+          "relevant": [
+            "session-state",
+            "architecture"
+          ],
+          "top5": [
+            {
+              "docId": "session-state",
+              "title": "多知识库与会话状态管理",
+              "score": 0.629014
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.590509
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.554581
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.553956
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.540931
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "HNSW 的 m 和 ef_construction 参数有什么作用？",
+          "relevant": [
+            "hnsw"
+          ],
+          "top5": [
+            {
+              "docId": "hnsw",
+              "title": "HNSW 近邻图索引",
+              "score": 0.585994
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.543096
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.524681
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.522072
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.512301
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "为什么第一次查询比预热之后的查询慢？",
+          "relevant": [
+            "warmup"
+          ],
+          "top5": [
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.688035
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.490657
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.472417
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.467542
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.460391
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "分块太大或者太小会对检索造成什么问题？",
+          "relevant": [
+            "chunking"
+          ],
+          "top5": [
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.641827
+            },
+            {
+              "docId": "hnsw",
+              "title": "HNSW 近邻图索引",
+              "score": 0.501731
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.491603
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.489127
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.465307
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        }
+      ]
+    },
+    {
+      "precision": "FP16",
+      "dtype": "fp16",
+      "modelBytes": 47497427,
+      "loadMs": 790,
+      "docEmbedMs": 2576,
+      "queryEmbedMs": 1393,
+      "docsPerSecond": 7.76,
+      "queriesPerSecond": 10.77,
+      "vectorFidelityVsFp32": 1,
+      "recallAt5": 0.8333333333333334,
+      "ndcgAt5": 0.8475344649232189,
+      "mrr": 1,
+      "rows": [
+        {
+          "query": "浏览器没有 GPU 时怎么继续运行 embedding 模型？",
+          "relevant": [
+            "wasm-fallback",
+            "webgpu-backend"
+          ],
+          "top5": [
+            {
+              "docId": "wasm-fallback",
+              "title": "WASM 自动降级路径",
+              "score": 0.661276
+            },
+            {
+              "docId": "webgpu-backend",
+              "title": "WebGPU 端侧推理后端",
+              "score": 0.598051
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.575501
+            },
+            {
+              "docId": "transformersjs-runtime",
+              "title": "Transformers.js 端侧运行时",
+              "score": 0.570068
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.561636
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "两路检索的分数不可比，数据库是怎么合并排序的？",
+          "relevant": [
+            "rrf",
+            "db-hybrid"
+          ],
+          "top5": [
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.605103
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.580855
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.558824
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.542928
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.521816
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "新导入的文章为什么刷新后马上就能被搜到？",
+          "relevant": [
+            "refresh-index",
+            "session-state"
+          ],
+          "top5": [
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.602874
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.50832
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.485451
+            },
+            {
+              "docId": "session-state",
+              "title": "多知识库与会话状态管理",
+              "score": 0.4854
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.471628
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.8772153153380493
+        },
+        {
+          "query": "把模型权重量化成 8 位以后体积能小多少？",
+          "relevant": [
+            "int8-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.607552
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.550563
+            },
+            {
+              "docId": "bge-model",
+              "title": "BGE-small-zh-v1.5 嵌入模型",
+              "score": 0.506701
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.494303
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.48529
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "WebGPU 为什么适合在浏览器里跑 Transformer 推理？",
+          "relevant": [
+            "webgpu-backend",
+            "fp16-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "webgpu-backend",
+              "title": "WebGPU 端侧推理后端",
+              "score": 0.545271
+            },
+            {
+              "docId": "transformersjs-runtime",
+              "title": "Transformers.js 端侧运行时",
+              "score": 0.539436
+            },
+            {
+              "docId": "privacy",
+              "title": "端侧推理与隐私边界",
+              "score": 0.529481
+            },
+            {
+              "docId": "wasm-fallback",
+              "title": "WASM 自动降级路径",
+              "score": 0.48763
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.47648
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "计算余弦相似度之前为什么要把向量归一化？",
+          "relevant": [
+            "cosine-normalization"
+          ],
+          "top5": [
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.7096
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.530454
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.49596
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.475022
+            },
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.464401
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "怎样让很短的查询获得更好的语义召回？",
+          "relevant": [
+            "query-instruction",
+            "bge-model"
+          ],
+          "top5": [
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.6217
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.56372
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.54836
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.503137
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.476127
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "怎样提高大量文档向量化时的吞吐？",
+          "relevant": [
+            "batching",
+            "warmup"
+          ],
+          "top5": [
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.570345
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.55091
+            },
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.540639
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.531674
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.525333
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.8503449055347546
+        },
+        {
+          "query": "如何用指标验证量化后检索质量没有明显下降？",
+          "relevant": [
+            "metrics",
+            "int8-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.599094
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.568672
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.548794
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.517063
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.516142
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.9197207891481876
+        },
+        {
+          "query": "我的文档内容会被上传到云端吗？",
+          "relevant": [
+            "privacy",
+            "transformersjs-runtime"
+          ],
+          "top5": [
+            {
+              "docId": "privacy",
+              "title": "端侧推理与隐私边界",
+              "score": 0.573649
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.503556
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.497565
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.496783
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.495014
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "中文全文检索应该选择哪种分词分析器？",
+          "relevant": [
+            "ik-analyzer"
+          ],
+          "top5": [
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.593452
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.523762
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.49826
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.485183
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.44976
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "同时有多个知识库时怎么避免检索结果串库？",
+          "relevant": [
+            "session-state",
+            "architecture"
+          ],
+          "top5": [
+            {
+              "docId": "session-state",
+              "title": "多知识库与会话状态管理",
+              "score": 0.629028
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.590477
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.554465
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.553876
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.540846
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "HNSW 的 m 和 ef_construction 参数有什么作用？",
+          "relevant": [
+            "hnsw"
+          ],
+          "top5": [
+            {
+              "docId": "hnsw",
+              "title": "HNSW 近邻图索引",
+              "score": 0.586005
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.543041
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.524629
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.522011
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.512266
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "为什么第一次查询比预热之后的查询慢？",
+          "relevant": [
+            "warmup"
+          ],
+          "top5": [
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.688081
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.490659
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.472423
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.467509
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.460403
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "分块太大或者太小会对检索造成什么问题？",
+          "relevant": [
+            "chunking"
+          ],
+          "top5": [
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.641815
+            },
+            {
+              "docId": "hnsw",
+              "title": "HNSW 近邻图索引",
+              "score": 0.501696
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.491573
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.489097
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.465252
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        }
+      ]
+    },
+    {
+      "precision": "INT8",
+      "dtype": "q8",
+      "modelBytes": 24010842,
+      "loadMs": 244,
+      "docEmbedMs": 907,
+      "queryEmbedMs": 567,
+      "docsPerSecond": 22.04,
+      "queriesPerSecond": 26.45,
+      "vectorFidelityVsFp32": 0.982982,
+      "recallAt5": 0.8333333333333334,
+      "ndcgAt5": 0.8503681631772281,
+      "mrr": 1,
+      "rows": [
+        {
+          "query": "浏览器没有 GPU 时怎么继续运行 embedding 模型？",
+          "relevant": [
+            "wasm-fallback",
+            "webgpu-backend"
+          ],
+          "top5": [
+            {
+              "docId": "wasm-fallback",
+              "title": "WASM 自动降级路径",
+              "score": 0.671499
+            },
+            {
+              "docId": "webgpu-backend",
+              "title": "WebGPU 端侧推理后端",
+              "score": 0.603656
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.58876
+            },
+            {
+              "docId": "bge-model",
+              "title": "BGE-small-zh-v1.5 嵌入模型",
+              "score": 0.586801
+            },
+            {
+              "docId": "transformersjs-runtime",
+              "title": "Transformers.js 端侧运行时",
+              "score": 0.584079
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "两路检索的分数不可比，数据库是怎么合并排序的？",
+          "relevant": [
+            "rrf",
+            "db-hybrid"
+          ],
+          "top5": [
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.626016
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.602595
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.583164
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.559752
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.556387
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "新导入的文章为什么刷新后马上就能被搜到？",
+          "relevant": [
+            "refresh-index",
+            "session-state"
+          ],
+          "top5": [
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.596652
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.499334
+            },
+            {
+              "docId": "session-state",
+              "title": "多知识库与会话状态管理",
+              "score": 0.497065
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.486134
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.465995
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.9197207891481876
+        },
+        {
+          "query": "把模型权重量化成 8 位以后体积能小多少？",
+          "relevant": [
+            "int8-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.625547
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.581689
+            },
+            {
+              "docId": "bge-model",
+              "title": "BGE-small-zh-v1.5 嵌入模型",
+              "score": 0.527319
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.521922
+            },
+            {
+              "docId": "fp16-quantization",
+              "title": "FP16 半精度推理",
+              "score": 0.509091
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "WebGPU 为什么适合在浏览器里跑 Transformer 推理？",
+          "relevant": [
+            "webgpu-backend",
+            "fp16-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "webgpu-backend",
+              "title": "WebGPU 端侧推理后端",
+              "score": 0.56641
+            },
+            {
+              "docId": "transformersjs-runtime",
+              "title": "Transformers.js 端侧运行时",
+              "score": 0.555484
+            },
+            {
+              "docId": "privacy",
+              "title": "端侧推理与隐私边界",
+              "score": 0.55123
+            },
+            {
+              "docId": "wasm-fallback",
+              "title": "WASM 自动降级路径",
+              "score": 0.49532
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.489127
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "计算余弦相似度之前为什么要把向量归一化？",
+          "relevant": [
+            "cosine-normalization"
+          ],
+          "top5": [
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.730058
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.546501
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.50866
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.490251
+            },
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.485299
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "怎样让很短的查询获得更好的语义召回？",
+          "relevant": [
+            "query-instruction",
+            "bge-model"
+          ],
+          "top5": [
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.636585
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.564133
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.547331
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.510863
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.491829
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "怎样提高大量文档向量化时的吞吐？",
+          "relevant": [
+            "batching",
+            "warmup"
+          ],
+          "top5": [
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.589735
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.568705
+            },
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.556068
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.548616
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.544629
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.8503449055347546
+        },
+        {
+          "query": "如何用指标验证量化后检索质量没有明显下降？",
+          "relevant": [
+            "metrics",
+            "int8-quantization"
+          ],
+          "top5": [
+            {
+              "docId": "int8-quantization",
+              "title": "INT8 动态量化与体积压缩",
+              "score": 0.62129
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.599468
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.567869
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.541901
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.530103
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 0.9197207891481876
+        },
+        {
+          "query": "我的文档内容会被上传到云端吗？",
+          "relevant": [
+            "privacy",
+            "transformersjs-runtime"
+          ],
+          "top5": [
+            {
+              "docId": "privacy",
+              "title": "端侧推理与隐私边界",
+              "score": 0.57507
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.528551
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.510458
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.507237
+            },
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.505425
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "中文全文检索应该选择哪种分词分析器？",
+          "relevant": [
+            "ik-analyzer"
+          ],
+          "top5": [
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.613648
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.539259
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.512811
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.511365
+            },
+            {
+              "docId": "bge-model",
+              "title": "BGE-small-zh-v1.5 嵌入模型",
+              "score": 0.473955
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "同时有多个知识库时怎么避免检索结果串库？",
+          "relevant": [
+            "session-state",
+            "architecture"
+          ],
+          "top5": [
+            {
+              "docId": "session-state",
+              "title": "多知识库与会话状态管理",
+              "score": 0.653473
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.613598
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.572811
+            },
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.565588
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.563975
+            }
+          ],
+          "recallAt5": 0.5,
+          "ndcgAt5": 0.6131471927654584
+        },
+        {
+          "query": "HNSW 的 m 和 ef_construction 参数有什么作用？",
+          "relevant": [
+            "hnsw"
+          ],
+          "top5": [
+            {
+              "docId": "hnsw",
+              "title": "HNSW 近邻图索引",
+              "score": 0.604326
+            },
+            {
+              "docId": "rrf",
+              "title": "RRF 倒数排名融合",
+              "score": 0.562772
+            },
+            {
+              "docId": "db-hybrid",
+              "title": "seekdb 混合检索总览",
+              "score": 0.546766
+            },
+            {
+              "docId": "cosine-normalization",
+              "title": "余弦距离与向量归一化",
+              "score": 0.538117
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.534987
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "为什么第一次查询比预热之后的查询慢？",
+          "relevant": [
+            "warmup"
+          ],
+          "top5": [
+            {
+              "docId": "warmup",
+              "title": "首次加载、预热与端到端延迟",
+              "score": 0.685475
+            },
+            {
+              "docId": "refresh-index",
+              "title": "写入后的索引刷新策略",
+              "score": 0.506837
+            },
+            {
+              "docId": "metrics",
+              "title": "检索质量评测：Recall@K 与 nDCG@K",
+              "score": 0.476195
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.466833
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.465438
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        },
+        {
+          "query": "分块太大或者太小会对检索造成什么问题？",
+          "relevant": [
+            "chunking"
+          ],
+          "top5": [
+            {
+              "docId": "chunking",
+              "title": "文档分块与重叠窗口",
+              "score": 0.648351
+            },
+            {
+              "docId": "hnsw",
+              "title": "HNSW 近邻图索引",
+              "score": 0.526758
+            },
+            {
+              "docId": "query-instruction",
+              "title": "BGE 查询指令前缀",
+              "score": 0.507266
+            },
+            {
+              "docId": "batching",
+              "title": "Embedding 批处理优化",
+              "score": 0.50506
+            },
+            {
+              "docId": "ik-analyzer",
+              "title": "ik 中文分词全文索引",
+              "score": 0.486383
+            }
+          ],
+          "recallAt5": 1,
+          "ndcgAt5": 1
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "precision": "FP32",
+      "modelBytes": 94851877,
+      "compressionVsFp32": 1,
+      "recallAt5": 0.8333,
+      "ndcgAt5": 0.8475,
+      "mrr": 1,
+      "deltaRecall": 0,
+      "deltaNdcg": 0,
+      "docsPerSecond": 10.73
+    },
+    {
+      "precision": "FP16",
+      "modelBytes": 47497427,
+      "compressionVsFp32": 2,
+      "recallAt5": 0.8333,
+      "ndcgAt5": 0.8475,
+      "mrr": 1,
+      "deltaRecall": 0,
+      "deltaNdcg": 0,
+      "docsPerSecond": 7.76
+    },
+    {
+      "precision": "INT8",
+      "modelBytes": 24010842,
+      "compressionVsFp32": 3.95,
+      "recallAt5": 0.8333,
+      "ndcgAt5": 0.8504,
+      "mrr": 1,
+      "deltaRecall": 0,
+      "deltaNdcg": 0.0028,
+      "docsPerSecond": 22.04
+    }
+  ]
+}

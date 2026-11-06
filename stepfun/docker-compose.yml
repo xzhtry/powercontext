@@ -1,0 +1,16 @@
+services:
+  seekdb:
+    image: oceanbase/seekdb:latest
+    container_name: stepkb-seekdb
+    ports:
+      - "2881:2881"
+    environment:
+      CPU_COUNT: "2"
+      MEMORY_LIMIT: "2G"
+      LOG_DISK_SIZE: "2G"
+      DATAFILE_SIZE: "2G"
+      DATAFILE_NEXT: "2G"
+      DATAFILE_MAXSIZE: "10G"
+    volumes:
+      - ./.data/seekdb-docker:/var/lib/oceanbase
+    restart: unless-stopped

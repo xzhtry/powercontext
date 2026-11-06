@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-11-06T02:24:15.881Z",
+  "app": "http://127.0.0.1:8787",
+  "browser": "Microsoft Edge 156.0.4314.50",
+  "protocol": "Actual browser EmbeddingEngine; 20 corpus docs; 3 rounds per batch size; median",
+  "backend": "wasm",
+  "status": {
+    "state": "ready",
+    "backend": "wasm",
+    "precision": "int8",
+    "loadMs": 1112.5,
+    "warmupMs": 108.4,
+    "modelBytes": 24010842,
+    "fallbackReason": null,
+    "accelerator": "intel · xe-lpg",
+    "progress": {
+      "file": "bge-small-zh-v1.5/onnx/model_quantized.onnx",
+      "loaded": 24010842,
+      "total": 24010842,
+      "percent": 100,
+      "status": "ready"
+    },
+    "error": null,
+    "detection": {
+      "available": true,
+      "reason": null,
+      "accelerator": "intel · xe-lpg"
+    }
+  },
+  "documents": 20,
+  "rows": [
+    {
+      "batchSize": 1,
+      "runsMs": [
+        4596.3,
+        2181.5,
+        1511.9
+      ],
+      "medianMs": 2181.5,
+      "docsPerSecond": 9.17,
+      "speedupVsBatch1": 1
+    },
+    {
+      "batchSize": 8,
+      "runsMs": [
+        2396.2,
+        1527.6,
+        1647.8
+      ],
+      "medianMs": 1647.8,
+      "docsPerSecond": 12.14,
+      "speedupVsBatch1": 1.32
+    },
+    {
+      "batchSize": 16,
+      "runsMs": [
+        2089.7,
+        1553.7,
+        1645.9
+      ],
+      "medianMs": 1645.9,
+      "docsPerSecond": 12.15,
+      "speedupVsBatch1": 1.33
+    }
+  ],
+  "consoleErrors": []
+}

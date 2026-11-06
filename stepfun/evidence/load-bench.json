@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-11-06T02:24:57.659Z",
+  "browser": "Microsoft Edge 156.0.4314.50",
+  "backends": {
+    "webgpu": [
+      {
+        "label": "cold-context",
+        "loadMs": 1323.9,
+        "warmupMs": 1011.8,
+        "at": 1793931901752
+      },
+      {
+        "label": "warm-reload-1",
+        "loadMs": 953.2,
+        "warmupMs": 750.3,
+        "at": 1793931905498
+      },
+      {
+        "label": "warm-reload-2",
+        "loadMs": 807.3,
+        "warmupMs": 786,
+        "at": 1793931909108
+      }
+    ],
+    "wasm": [
+      {
+        "label": "cold-context",
+        "loadMs": 999.2,
+        "warmupMs": 103.3,
+        "at": 1793931912785
+      },
+      {
+        "label": "warm-reload-1",
+        "loadMs": 713,
+        "warmupMs": 61.2,
+        "at": 1793931915669
+      },
+      {
+        "label": "warm-reload-2",
+        "loadMs": 838.2,
+        "warmupMs": 71.4,
+        "at": 1793931918959
+      }
+    ]
+  }
+}
