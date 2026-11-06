@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "researchthread"
+version = "0.1.0"
+description = "研脉 ResearchThread — 把散落的论文，接成可复用的研究脉络。"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.162.0",
+  "uvicorn==0.54.0",
+  "httpx==0.28.1",
+  "pylibseekdb==1.4.0.post2",
+  "powercontext[cli,server]==1.4.1",
+  "PyMySQL==1.2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.2.0"]
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

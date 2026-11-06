@@ -1,0 +1,67 @@
+{
+  "brief": {
+    "question": "检索增强生成（RAG）真的能让大模型更可靠吗？",
+    "scope": "聚焦 2020–2026 年 RAG、幻觉评估与事实性研究；优先有实验或系统评测的论文。",
+    "criteria": [
+      "有可核对的实验、基准或系统评测",
+      "直接讨论事实性、幻觉或引用可靠性",
+      "英文同行评议或 arXiv 预印本"
+    ],
+    "stage": "证据筛选",
+    "owner": "示例研究者",
+    "next_action": "补一条关于检索噪声的反方证据"
+  },
+  "evidence": [
+    {
+      "arxiv_id": "2005.11401",
+      "stance": "support",
+      "note": "RAG 把检索到的段落作为非参数记忆，在开放域问答上取得当时 SOTA，生成更具体、更多样且更符合事实。说明外部证据能实质提升知识密集型任务。"
+    },
+    {
+      "arxiv_id": "2104.07567",
+      "stance": "support",
+      "note": "在知识 grounded 对话中，检索增强模型取得两项任务 SOTA，并比纯生成更少产生知识幻觉。对话场景也支持 RAG 降低幻觉。"
+    },
+    {
+      "arxiv_id": "2310.11511",
+      "stance": "support",
+      "note": "按需检索 + 自反思 critique 提升事实性；论文同时指出，不加区分地固定检索会降低效果，检索策略是关键变量。"
+    },
+    {
+      "arxiv_id": "2309.01431",
+      "stance": "challenge",
+      "note": "系统评测噪声鲁棒、拒答、信息整合、反事实鲁棒四项能力，不同模型均有明显短板；RAG 不是均匀增益。"
+    },
+    {
+      "arxiv_id": "2307.03172",
+      "stance": "challenge",
+      "note": "相关信息位于长上下文中间时性能显著下降，即使长上下文模型也如此；证据在提示中的位置会影响可靠性。"
+    },
+    {
+      "arxiv_id": "2401.00396",
+      "stance": "challenge",
+      "note": "近 18,000 条真实 RAG 输出中仍有大量无支持或自相矛盾内容；RAG 之后幻觉仍可测量地存在。"
+    },
+    {
+      "arxiv_id": "2401.11817",
+      "stance": "challenge",
+      "note": "从学习理论形式化论证 LLM 无法学习所有可计算函数，作为通用求解器时幻觉不可完全消除；RAG 只能缓解。"
+    },
+    {
+      "arxiv_id": "2406.04744",
+      "stance": "challenge",
+      "note": "4,409 个事实问答上，先进 LLM 准确率 ≤34%；简单加 RAG 有提升，但距离可信 QA 仍有明显差距。"
+    },
+    {
+      "arxiv_id": "2312.10997",
+      "stance": "mixed",
+      "note": "将 RAG 分为 Naive / Advanced / Modular，指出检索、生成、增强三部分共同决定可靠性；是框架性综述，不是单一实验。"
+    }
+  ],
+  "expected": {
+    "query": "RAG hallucination",
+    "min_results": 5,
+    "top_title_contains": "RAGTruth",
+    "synthesis_contains": ["支持", "挑战", "参考"]
+  }
+}
