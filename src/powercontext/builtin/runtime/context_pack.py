@@ -143,6 +143,21 @@ class ContextPackDelta:
         })
 
 
+def base_chunk_bytes(base: ContextPack) -> int:
+    """The chunk size a base pack was built with.
+
+    A delta names a prefix of the base pack's own chunks, so the target pack
+    has to use the same boundaries. Deriving the size from the base keeps the
+    two aligned whatever the receiver kept.
+    """
+
+    if len(base.items) < 2:
+        # One chunk carries no boundary information, so the incremental size is
+        # the only guess that keeps the two pack series comparable.
+        return INCREMENTAL_CHUNK_BYTES
+    return len(base.items[0])
+
+
 def apply_context_pack_delta(base: ContextPack, delta: ContextPackDelta) -> ContextPack:
     """Rebuild and verify the target pack from one base pack and one delta."""
 
@@ -273,4 +288,5 @@ __all__ = [
     "ContextPackDelta",
     "ContextPackError",
     "apply_context_pack_delta",
+    "base_chunk_bytes",
 ]

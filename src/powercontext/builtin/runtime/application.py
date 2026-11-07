@@ -170,6 +170,7 @@ from powercontext.builtin.runtime.context_pack import (
     INCREMENTAL_CHUNK_BYTES,
     ContextPack,
     ContextPackDelta,
+    base_chunk_bytes,
 )
 from powercontext.builtin.runtime.decision_model import DecisionModel
 from powercontext.builtin.runtime.errors import InvalidRuntimeRequestError, TopicMemoryProcessingUnavailableError
@@ -857,16 +858,19 @@ class ScopedContextApplication:
     async def prepare_incremental(
         self,
         request: PrepareContextRequest,
-        /,
-        *,
         base_pack: ContextPack | None = None,
     ) -> ContextPack | ContextPackDelta:
         """Send one full Context Pack, or a delta against the pack the receiver keeps."""
 
         prepared = await self.prepare(request)
-        target = ContextPack.from_content(prepared.content or "", chunk_bytes=INCREMENTAL_CHUNK_BYTES)
         if base_pack is None:
-            return target
+            return ContextPack.from_content(prepared.content or "", chunk_bytes=INCREMENTAL_CHUNK_BYTES)
+        # The base pack's own chunking decides the boundaries, so the reused
+        # prefix and the carried suffix describe one target pack.
+        target = ContextPack.from_content(
+            prepared.content or "",
+            chunk_bytes=base_chunk_bytes(base_pack),
+        )
         return ContextPackDelta.between(base_pack, target)
 
     async def _prepare(self, request: PrepareContextRequest, scope: ScopeDescriptor, /) -> PreparedContext:

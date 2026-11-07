@@ -46,8 +46,9 @@ _MAX_CONCEPTS = 14
 _MAX_CANDIDATES = 128
 # Each probe is read deeper than the citation budget on purpose: a page that
 # ranks just outside one probe's top-20 still deserves a vote when several other
-# concepts also point at it.
-_PROBE_DEPTH = 100
+# concepts also point at it. A scope that holds several filings needs the extra
+# depth, because every filing competes for the same probe results.
+_PROBE_DEPTH = 300
 _RRF_K = 60
 _QUERY_WORDS = frozenset({
     "a", "about", "above", "after", "all", "also", "an", "and", "any", "are", "as", "at", "be", "been",
@@ -135,7 +136,7 @@ _BM25_K1 = 1.2
 _BM25_B = 0.75
 # The coverage score joins the BM25 score: it rewards a page that carries many
 # of the question's own rare terms, which the term score alone under-weights.
-_BM25_COVERAGE_WEIGHT = 0.25
+_BM25_COVERAGE_WEIGHT = 0.5
 # A question about a financial statement asks about the statements, and every
 # filing places them in the same region. Statement pages therefore lead the
 # ranking for such a question, which separates pages that word alike.
@@ -169,6 +170,22 @@ _STATEMENT_CUES = (
 _IDENTITY_PRIOR = 8.0
 _IDENTITY_TOKEN = re.compile(r"[A-Za-z0-9]+")
 _IDENTITY_MINIMUM = 3
+# The titles a filing uses for its statements. A question asks about a
+# statement's numbers, and the statement page is titled, not worded like the
+# question.
+_STATEMENT_PROBES = (
+    "consolidated statements of income",
+    "consolidated balance sheets",
+    "consolidated statements of cash flows",
+    "statements of operations",
+    "consolidated statements",
+    "balance sheet",
+    "income statement",
+    "cash flow statement",
+    "segment data",
+    "geographic operations",
+    "total revenues",
+)
 
 
 class PDFDocumentInput(BaseModel):
@@ -360,6 +377,16 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
             )
             for hit in page.hits:
                 hits_by_key.setdefault(_hit_key(hit), hit)
+    # A question about a financial statement is answered by the statement
+    # pages, whose wording is the statement's own title. Those titles are
+    # searched as well, because the question rarely names them.
+    if any(cue in " ".join(terms) for cue in _STATEMENT_CUES):
+        for query in _STATEMENT_PROBES:
+            page = await memory.search(
+                SearchMemoryRequest(query=query, mode="fts", limit=_PROBE_DEPTH)
+            )
+            for hit in page.hits:
+                hits_by_key.setdefault(_hit_key(hit), hit)
 
     scores = _pool_bm25(hits_by_key, terms)
     ordered = sorted(hits_by_key, key=lambda key: (-scores.get(key, 0.0), key))
@@ -456,26 +483,28 @@ def _pool_bm25(
             weights[term] for term in found
         )
 
-    if any(cue in " ".join(terms) for cue in _STATEMENT_CUES):
-        for key, hit in hits.items():
-            folded = getattr(hit, "text", "").casefold()
-            if any(heading in folded for heading in _STATEMENT_HEADINGS):
-                scores[key] = scores.get(key, 0.0) + _STATEMENT_PRIOR
-
+    wants_statement = any(cue in " ".join(terms) for cue in _STATEMENT_CUES)
     identity_matches: dict[str, int] = {}
     identity_of: dict[tuple[str, str, str], str] = {}
+    statement_pages: set[tuple[str, str, str]] = set()
     for key, hit in hits.items():
-        identity = _identity_line(getattr(hit, "text", ""))
+        text = getattr(hit, "text", "")
+        identity = _identity_line(text)
         identity_of[key] = identity
         matched = _identity_match(terms, identity)
         if matched > identity_matches.get(identity, 0):
             identity_matches[identity] = matched
-    if identity_matches:
-        best = max(identity_matches.values())
-        if best > 0:
-            for key, identity in identity_of.items():
-                if identity_matches.get(identity, 0) == best:
-                    scores[key] = scores.get(key, 0.0) + _IDENTITY_PRIOR
+        if wants_statement:
+            folded = text.casefold()
+            if any(heading in folded for heading in _STATEMENT_HEADINGS):
+                statement_pages.add(key)
+    best = max(identity_matches.values(), default=0)
+    named = {identity for identity, count in identity_matches.items() if count == best} if best else set()
+    for key, identity in identity_of.items():
+        if identity in named:
+            scores[key] = scores.get(key, 0.0) + _IDENTITY_PRIOR
+        if key in statement_pages:
+            scores[key] = scores.get(key, 0.0) + _STATEMENT_PRIOR
     return scores
 
 
