@@ -12,10 +12,12 @@ to return to the pristine seed.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
+import urllib.error
+import urllib.parse
+import urllib.request
 from typing import Any
-
-import httpx
 
 
 class Failure(RuntimeError):
@@ -29,13 +31,64 @@ def check(name: str, condition: bool, detail: str = "") -> None:
         raise Failure(name)
 
 
+class _Client:
+    """Minimal httpx.Client replacement backed by urllib."""
+
+    def __init__(self, base_url: str, timeout: int = 40) -> None:
+        self.base = base_url
+        self.timeout = timeout
+
+    def __enter__(self) -> "_Client":
+        return self
+
+    def __exit__(self, *args: Any) -> None:
+        pass
+
+    def _request(self, method: str, path: str, **kwargs: Any) -> "_Response":
+        url = self.base + path
+        if "params" in kwargs and kwargs["params"]:
+            url += "?" + urllib.parse.urlencode(kwargs["params"])
+        data = None
+        headers = {"Accept": "application/json"}
+        if "json" in kwargs:
+            data = json.dumps(kwargs["json"]).encode("utf-8")
+            headers["Content-Type"] = "application/json"
+        req = urllib.request.Request(url, data=data, headers=headers, method=method)
+        try:
+            resp = urllib.request.urlopen(req, timeout=self.timeout)
+            body = resp.read().decode("utf-8")
+            return _Response(resp.status, body)
+        except urllib.error.HTTPError as error:
+            body = error.read().decode("utf-8", errors="replace")
+            return _Response(error.code, body)
+
+    def get(self, path: str, **kwargs: Any) -> "_Response":
+        return self._request("GET", path, **kwargs)
+
+    def post(self, path: str, **kwargs: Any) -> "_Response":
+        return self._request("POST", path, **kwargs)
+
+
+class _Response:
+    def __init__(self, status_code: int, text: str) -> None:
+        self.status_code = status_code
+        self.text = text
+
+    def json(self) -> Any:
+        return json.loads(self.text)
+
+    def raise_for_status(self) -> None:
+        if self.status_code >= 400:
+            raise RuntimeError(f"HTTP {self.status_code}: {self.text[:200]}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="http://127.0.0.1:8787")
     args = parser.parse_args()
     base = args.base_url.rstrip("/")
 
-    with httpx.Client(base_url=base, timeout=40) as client:
+    with _Client(base_url=base, timeout=40) as client:
         try:
             health = client.get("/api/health").json()
         except Exception as error:  # noqa: BLE001

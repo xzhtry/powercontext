@@ -12,7 +12,11 @@ from collections import Counter
 from typing import Any
 
 STANCE_LABELS = {"support": "支持", "challenge": "挑战", "mixed": "混合"}
-TEMPLATE_LABELS = {"review": "文献综述提纲", "weekly": "组会周报"}
+TEMPLATE_LABELS = {
+    "review": "文献综述提纲",
+    "weekly": "组会周报",
+    "review_v2": "综述 v2（背景-方法-结果-局限-空白）",
+}
 
 
 def _cite(evidence: list[dict[str, Any]]) -> dict[int, int]:
@@ -169,6 +173,188 @@ def _review(brief: dict[str, Any], evidence: list[dict[str, Any]]) -> tuple[str,
     return title, "\n".join(lines)
 
 
+def _review_v2(brief: dict[str, Any], evidence: list[dict[str, Any]]) -> tuple[str, str]:
+    """Structured review: 背景 / 方法 / 结果 / 局限 / 研究空白.
+
+    Every citation number [n] maps to exactly one reference-list entry.
+    When the evidence table is empty, the function returns a clear notice
+    instead of producing empty sections with dangling citation markers.
+    """
+    counts = Counter(item["stance"] for item in evidence)
+    citations = _cite(evidence)
+    question = brief.get("question", "未命名研究问题")
+    title = f"结构化综述：{question}"
+
+    if not evidence:
+        markdown = "\n".join(
+            [
+                f"# {title}",
+                "",
+                f"> 研究问题：{question}",
+                "> 证据规模：0 条",
+                "",
+                "## 1. 背景",
+                "",
+                f"当前研究问题为「{question}」，但证据表尚为空，无法生成有引用的综述。",
+                "",
+                "## 2. 方法",
+                "",
+                "请先在证据表中纳入论文判断，再重新生成。",
+                "",
+                "## 3. 结果",
+                "",
+                "（无证据，暂无结果可报告。）",
+                "",
+                "## 4. 局限",
+                "",
+                "- 没有证据支撑，任何结论都只是假设。",
+                "",
+                "## 5. 研究空白",
+                "",
+                "- 证据表为空——首先需要建立基础文献覆盖。",
+                "",
+                "## 参考",
+                "",
+                "（无引用条目。）",
+                "",
+                "---",
+                "生成说明：本稿由研脉的规则模板根据证据表生成，未调用外部大模型。",
+            ]
+        )
+        return title, markdown
+
+    support_items = [item for item in evidence if item["stance"] == "support"]
+    challenge_items = [item for item in evidence if item["stance"] == "challenge"]
+    mixed_items = [item for item in evidence if item["stance"] == "mixed"]
+
+    years = [item.get("year") for item in evidence if item.get("year")]
+    year_text = f"{min(years)}–{max(years)}" if years else "年份缺失"
+    topics = Counter(item.get("topic", "未分类") for item in evidence)
+
+    lines: list[str] = [
+        f"# {title}",
+        "",
+        f"> 研究问题：{question}",
+        f"> 证据规模：{len(evidence)} 条（支持 {counts.get('support', 0)} · "
+        f"挑战 {counts.get('challenge', 0)} · 混合 {counts.get('mixed', 0)}）",
+        f"> 时间跨度：{year_text} · 生成方式：规则模板（未调用外部模型）",
+        "",
+        "## 1. 背景",
+        "",
+        f"本综述围绕「{question}」展开。",
+        "",
+    ]
+    scope = brief.get("scope", "")
+    if scope:
+        lines.append(f"研究范围：{scope}")
+        lines.append("")
+    lines.extend(["纳入标准："])
+    for criterion in brief.get("criteria", []) or ["尚未填写"]:
+        lines.append(f"- {criterion}")
+    lines.extend(
+        [
+            "",
+            f"时间跨度 {year_text}，主题覆盖："
+            + "、".join(f"{t}({c})" for t, c in topics.most_common()),
+            "",
+            "## 2. 方法",
+            "",
+            "证据来源为 seekdb 文献库中经人工判断后纳入的论文。",
+            "每条证据记录 stance（支持 / 挑战 / 混合）与一句话判断（note），",
+            "引用编号按「支持→挑战→混合→年份倒序」排列，与参考列表一一对应。",
+            "",
+            "判断分布：",
+            f"- 支持 {counts.get('support', 0)} 条",
+            f"- 挑战 {counts.get('challenge', 0)} 条",
+            f"- 混合 {counts.get('mixed', 0)} 条",
+            "",
+            "## 3. 结果",
+            "",
+        ]
+    )
+
+    if support_items:
+        lines.append("### 3.1 支持证据")
+        lines.append("")
+        for item in support_items:
+            number = citations[int(item["evidence_id"])]
+            lines.append(
+                f"- [{number}] {item['title']}（{item.get('year', 'n.d.')}）："
+                f"{item.get('note', '（未填写判断）')}"
+            )
+        lines.append("")
+
+    if challenge_items:
+        lines.append("### 3.2 挑战证据")
+        lines.append("")
+        for item in challenge_items:
+            number = citations[int(item["evidence_id"])]
+            lines.append(
+                f"- [{number}] {item['title']}（{item.get('year', 'n.d.')}）："
+                f"{item.get('note', '（未填写判断）')}"
+            )
+        lines.append("")
+
+    if mixed_items:
+        lines.append("### 3.3 混合 / 框架性证据")
+        lines.append("")
+        for item in mixed_items:
+            number = citations[int(item["evidence_id"])]
+            lines.append(
+                f"- [{number}] {item['title']}（{item.get('year', 'n.d.')}）："
+                f"{item.get('note', '（未填写判断）')}"
+            )
+        lines.append("")
+
+    if not support_items and not challenge_items and not mixed_items:
+        lines.append("（证据表有记录但无有效 stance 条目。）")
+        lines.append("")
+
+    lines.extend(
+        [
+            "## 4. 局限",
+            "",
+        ]
+    )
+    if counts.get("support", 0) > 0 and counts.get("challenge", 0) > 0:
+        lines.append(
+            "- 支持与挑战证据使用的任务、数据集和指标可能不同，"
+            "当前证据表适合做方向判断，不适合做效应量合并。"
+        )
+    if len(evidence) < 5:
+        lines.append(f"- 证据仅 {len(evidence)} 条，样本量偏小，结论稳定性待验证。")
+    topics_list = list(topics.keys())
+    if len(topics_list) <= 1:
+        lines.append("- 主题覆盖单一，跨领域泛化性尚未得到证据支撑。")
+    lines.append(
+        "- 所有判断来自人工标注的 note，未使用外部模型润色，"
+        "表述可能受研究者主观视角影响。"
+    )
+    lines.append("")
+
+    lines.extend(["## 5. 研究空白", ""])
+    for gap in _gaps(evidence, counts):
+        lines.append(f"- {gap}")
+    next_action = brief.get("next_action")
+    if next_action:
+        lines.append(f"- 下一步计划：{next_action}")
+    lines.append("")
+
+    lines.extend(["## 参考", ""])
+    for item in evidence:
+        number = citations[int(item["evidence_id"])]
+        lines.append(f"[{number}] {_paper_line(item)} {item.get('url', '')}")
+    lines.extend(
+        [
+            "",
+            "---",
+            "生成说明：本稿由研脉的规则模板根据证据表生成，未调用外部大模型；"
+            "引用编号与参考列表一一对应，请在提交前逐条核对摘要原文。",
+        ]
+    )
+    return title, "\n".join(lines)
+
+
 def _weekly(brief: dict[str, Any], evidence: list[dict[str, Any]]) -> tuple[str, str]:
     counts = Counter(item["stance"] for item in evidence)
     citations = _cite(evidence)
@@ -240,6 +426,8 @@ def generate(
     )
     if template == "weekly":
         title, markdown = _weekly(brief, evidence)
+    elif template == "review_v2":
+        title, markdown = _review_v2(brief, evidence)
     else:
         title, markdown = _review(brief, evidence)
     return {

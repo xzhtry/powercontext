@@ -570,6 +570,7 @@
         <div class="view-head-actions">
           <a class="btn btn-secondary" href="/api/export/evidence.md">${ICONS.download} Markdown</a>
           <a class="btn btn-secondary" href="/api/export/evidence.csv">CSV</a>
+          <a class="btn btn-secondary" href="/api/export/evidence.bib">BibTeX</a>
           <button class="btn btn-primary" type="button" data-action="open-synthesis">生成综述 ${ICONS.arrow}</button>
         </div>
       </div>
@@ -667,6 +668,7 @@
             <div class="template-options">
               <label class="template-option ${state.synthesis.template === "review" ? "is-active" : ""}"><input type="radio" name="synthesis-template" value="review" ${state.synthesis.template === "review" ? "checked" : ""}><span><b>文献综述提纲</b><span>研究问题、证据分布、支持/挑战、空白与下一步</span></span></label>
               <label class="template-option ${state.synthesis.template === "weekly" ? "is-active" : ""}"><input type="radio" name="synthesis-template" value="weekly" ${state.synthesis.template === "weekly" ? "checked" : ""}><span><b>组会周报</b><span>本周判断、需要讨论的分歧、下周计划</span></span></label>
+              <label class="template-option ${state.synthesis.template === "review_v2" ? "is-active" : ""}"><input type="radio" name="synthesis-template" value="review_v2" ${state.synthesis.template === "review_v2" ? "checked" : ""}><span><b>综述 v2（背景-方法-结果-局限-空白）</b><span>结构化五段式综述，适合投稿或组会汇报</span></span></label>
             </div>
             <div class="synthesis-actions" style="flex-direction:row;margin-top:10px">
               <button class="btn btn-secondary" type="button" data-action="select-all-evidence" style="flex:1">全选</button>
@@ -677,7 +679,7 @@
             <h3>引用证据 <span class="pill" style="margin-left:6px">${selected.length} / ${evidence.length}</span></h3>
             <p>只选你愿意在初稿里为之负责的判断。</p>
             <div class="check-list">${checks}</div>
-            <div class="synthesis-actions"><button class="btn btn-primary" type="button" data-action="generate-synthesis" ${state.synthesis.loading ? "disabled" : ""}>${state.synthesis.loading ? "正在生成…" : ICONS.spark + " 生成" + (state.synthesis.template === "weekly" ? "周报" : "综述提纲")}</button></div>
+            <div class="synthesis-actions"><button class="btn btn-primary" type="button" data-action="generate-synthesis" ${state.synthesis.loading ? "disabled" : ""}>${state.synthesis.loading ? "正在生成…" : ICONS.spark + " 生成" + (state.synthesis.template === "weekly" ? "周报" : state.synthesis.template === "review_v2" ? "综述 v2" : "综述提纲")}</button></div>
           </section>
         </div>
         <section class="panel synthesis-main">

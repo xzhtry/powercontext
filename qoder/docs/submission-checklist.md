@@ -6,12 +6,12 @@
 
 | 材料 | 位置 / 值 | 状态 |
 | --- | --- | --- |
-| 项目网站网址 | `待填写`（Qoder Sites，任何人都可访问） | [ ] |
+| 项目网站网址 | `https://researchthread-h1wllzi3wl6.qoder.zone/`（已确认 HTTP 200、无需登录） | [ ] |
 | 代码仓库 | `https://github.com/xzhtry/powercontext/tree/2026-competition-ecosystem/qoder`（按实际改） | [ ] |
 | 运行说明 | `README.md` 第 3 节 / `docs/validation.md` | [ ] |
 | 验证样例 | `scripts/verify.py` + 本文第 2 节手工路径 | [ ] |
 | Qoder 开发记录 | `docs/qoder-development-log.md` + `docs/screenshots/` | [ ] |
-| Qoder 账号 UID | `待填写` | [ ] |
+| Qoder 账号 UID | `01a1ae9f-8582-7830-820d-5c3a81b453d9` | [ ] |
 | 使用效果材料（鼓励） | 真实用户数据；没有就如实写“尚未开展”，不要编造 | [ ] |
 
 ## 2. 提交前 30 分钟检查

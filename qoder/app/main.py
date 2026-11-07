@@ -254,7 +254,7 @@ class EvidenceIn(BaseModel):
 
 
 class SynthesisIn(BaseModel):
-    template: Literal["review", "weekly"] = "review"
+    template: Literal["review", "weekly", "review_v2"] = "review"
     evidence_ids: list[int] | None = None
 
 
@@ -596,6 +596,73 @@ def export_evidence_csv(request: Request) -> Response:
         buffer.getvalue(),
         media_type="text/csv; charset=utf-8",
         headers={"Content-Disposition": "attachment; filename=researchthread-evidence.csv"},
+    )
+
+
+def _latex_escape(text: str) -> str:
+    """Escape LaTeX special characters in a single pass to avoid double-escaping."""
+    if not text:
+        return ""
+    _LATEX_MAP = {
+        "\\": "\\textbackslash{}",
+        "&": "\\&",
+        "%": "\\%",
+        "_": "\\_",
+        "#": "\\#",
+        "{": "\\{",
+        "}": "\\}",
+        "~": "\\textasciitilde{}",
+        "^": "\\textasciicircum{}",
+    }
+    return "".join(_LATEX_MAP.get(ch, ch) for ch in text)
+
+
+def _make_bibtex_key(item: dict[str, Any]) -> str:
+    """Generate a unique BibTeX key from arxiv_id or authors+year."""
+    arxiv_id = item.get("arxiv_id", "")
+    if arxiv_id:
+        return arxiv_id.replace("/", "_").replace(".", "_")
+    authors = item.get("authors", "unknown")
+    year = item.get("year", "nd")
+    first_author = authors.split(",")[0].split(" and ")[0].split()[0] if authors else "unknown"
+    return f"{first_author.lower()}{year}"
+
+
+@app.get("/api/export/evidence.bib")
+def export_evidence_bib(request: Request) -> Response:
+    ctx = get_ctx(request)
+    items = ctx.runtime.list_evidence()
+    entries = []
+    for item in items:
+        key = _make_bibtex_key(item)
+        title = _latex_escape(item.get("title", ""))
+        author = _latex_escape(item.get("authors", ""))
+        year = str(item.get("year", ""))
+        journal = _latex_escape(item.get("venue", ""))
+        url = item.get("url", "")
+        note = _latex_escape(item.get("note", ""))
+        stance_label = _latex_escape(item.get("stance_label", ""))
+
+        entry_lines = [f"@article{{{key},"]
+        entry_lines.append(f"  title = {{{title}}},")
+        entry_lines.append(f"  author = {{{author}}},")
+        if year:
+            entry_lines.append(f"  year = {{{year}}},")
+        if journal:
+            entry_lines.append(f"  journal = {{{journal}}},")
+        if url:
+            entry_lines.append(f"  url = {{{url}}},")
+        if note:
+            full_note = f"[{stance_label}] {note}" if stance_label else note
+            entry_lines.append(f"  note = {{{full_note}}},")
+        entry_lines.append("}")
+        entries.append("\n".join(entry_lines))
+
+    content = "\n\n".join(entries) + "\n" if entries else ""
+    return Response(
+        content,
+        media_type="application/x-bibtex; charset=utf-8",
+        headers={"Content-Disposition": "attachment; filename=researchthread-evidence.bib"},
     )
 
 

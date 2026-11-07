@@ -104,6 +104,54 @@ def test_weekly_template_has_discussion_section() -> None:
     assert "## 4. 下周计划" in draft["markdown"]
 
 
+def test_review_v2_has_five_sections_and_matching_references() -> None:
+    evidence = sample_evidence() + [
+        {
+            "evidence_id": 3,
+            "paper_id": 30,
+            "stance": "mixed",
+            "note": "框架性综述，讨论 RAG 评测方法论。",
+            "title": "A Survey on Evaluation of Large Language Models",
+            "authors": "Chang et al.",
+            "year": 2024,
+            "venue": "arXiv",
+            "url": "https://arxiv.org/abs/2307.03172",
+            "topic": "人工智能",
+        },
+    ]
+    draft = synthesis.generate(sample_brief(), evidence, "review_v2")
+    markdown = draft["markdown"]
+    assert draft["template"] == "review_v2"
+    assert draft["template_label"] == "综述 v2（背景-方法-结果-局限-空白）"
+
+    required_sections = [
+        "## 1. 背景",
+        "## 2. 方法",
+        "## 3. 结果",
+        "## 4. 局限",
+        "## 5. 研究空白",
+    ]
+    for section in required_sections:
+        assert section in markdown, f"missing section: {section}"
+
+    ref_lines = [line for line in markdown.split("\n") if line.startswith("[") and "] " in line[:8]]
+    assert len(ref_lines) == len(evidence), (
+        f"expected {len(evidence)} reference lines, got {len(ref_lines)}"
+    )
+
+    assert "未调用外部大模型" in markdown
+
+
+def test_review_v2_empty_evidence_returns_notice() -> None:
+    draft = synthesis.generate(sample_brief(), [], "review_v2")
+    markdown = draft["markdown"]
+    assert "## 1. 背景" in markdown
+    assert "## 3. 结果" in markdown
+    assert "（无证据，暂无结果可报告。）" in markdown
+    assert "（无引用条目。）" in markdown
+    assert draft["evidence_count"] == 0
+
+
 def test_dataset_shape() -> None:
     payload = json.loads((ROOT / "data" / "papers.json").read_text(encoding="utf-8"))
     assert payload["count"] == 508
@@ -132,3 +180,30 @@ def test_fastapi_routes_are_registered() -> None:
     assert "/api/evidence" in paths
     assert "/api/synthesis" in paths
     assert "/api/session/new" in paths
+    assert "/api/export/evidence.bib" in paths
+
+
+def test_bibtex_export_escapes_special_characters() -> None:
+    from app.main import _latex_escape, _make_bibtex_key
+
+    assert _latex_escape("RAG & LLM") == "RAG \\& LLM"
+    assert _latex_escape("100% accuracy") == "100\\% accuracy"
+    assert _latex_escape("long_context") == "long\\_context"
+    assert _latex_escape("C# programming") == "C\\# programming"
+    assert _latex_escape("a\\b") == "a\\textbackslash{}b"
+    assert _latex_escape("x{y}z") == "x\\{y\\}z"
+    assert _latex_escape("a~b") == "a\\textasciitilde{}b"
+    assert _latex_escape("a^b") == "a\\textasciicircum{}b"
+    assert _latex_escape("中文测试") == "中文测试"
+    assert _latex_escape("") == ""
+    assert _latex_escape("& % _ # \\ { }") == "\\& \\% \\_ \\# \\textbackslash{} \\{ \\}"
+
+
+def test_bibtex_key_generation() -> None:
+    from app.main import _make_bibtex_key
+
+    item_with_arxiv = {"arxiv_id": "2310.11511", "authors": "Asai et al.", "year": 2023}
+    assert _make_bibtex_key(item_with_arxiv) == "2310_11511"
+
+    item_without_arxiv = {"arxiv_id": "", "authors": "Lewis, Patrick", "year": 2020}
+    assert _make_bibtex_key(item_without_arxiv) == "lewis2020"

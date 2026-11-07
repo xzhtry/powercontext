@@ -8,11 +8,11 @@
 
 | 字段 | 填写 |
 | --- | --- |
-| Qoder 账号 UID | `待填写` |
+| Qoder 账号 UID | `01a1ae9f-8582-7830-820d-5c3a81b453d9` |
 | 使用的 Qoder 形态 | `Desktop / IDE / JetBrains 插件 / CLI`（保留实际使用的一种或多种） |
 | 代码仓库 | `https://github.com/xzhtry/powercontext/tree/2026-competition-ecosystem/qoder`（如实际仓库不同请改） |
 | 分支 / commit | `2026-competition-ecosystem` / `待填写` |
-| Qoder Sites 网址 | `待填写（必须是任何人都可访问）` |
+| Qoder Sites 网址 | `https://researchthread-h1wllzi3wl6.qoder.zone/` |
 | 本地验证日期 | `待填写` |
 | 验证环境 | `Windows 11 + Python 3.12 + seekdb 1.4.0 + PowerContext 1.4.1` |
 
