@@ -7,7 +7,7 @@
 | Qoder 账号 UID | `01a1ae9f-8582-7830-820d-5c3a81b453d9` |
 | 使用的 Qoder 形态 | Qoder CN 桌面端（Desktop） |
 | 代码仓库 | `https://github.com/xzhtry/powercontext/tree/2026-competition-ecosystem/qoder` |
-| 分支 / commit | `2026-competition-ecosystem` / `80afba26` |
+| 分支 / commit | `2026-competition-ecosystem` / `9ef8cce3` |
 | Qoder Sites 网址 | `https://researchthread-h1wllzi3wl6.qoder.zone/` |
 | 本地验证日期 | 2026-11-06 — 2026-11-07 |
 | 验证环境 | Windows 11 + Python 3.12 + seekdb 1.4.0 + PowerContext 1.4.1 |
