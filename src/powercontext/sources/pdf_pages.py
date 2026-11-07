@@ -86,8 +86,16 @@ _FINANCE_SYNONYMS: dict[str, tuple[str, ...]] = {
     "margins": ("income", "revenues", "operating", "costs", "expenses"),
     "ratio": ("assets", "liabilities", "current", "balance", "cash"),
     "ratios": ("assets", "liabilities", "current", "balance", "cash"),
-    "geographies": ("geographic", "regions", "international", "segment"),
-    "geographic": ("geographic", "regions", "international", "segment"),
+    "geographies": ("geographic", "region", "regions", "international", "segment",
+                    "america", "asia", "europe", "africa", "china", "japan", "pacific"),
+    "geographic": ("geographic", "region", "regions", "international", "segment",
+                   "america", "asia", "europe", "africa", "china", "japan", "pacific"),
+    "geography": ("geographic", "region", "regions", "international", "segment",
+                  "america", "asia", "europe", "africa", "china", "japan", "pacific"),
+    "region": ("geographic", "region", "regions", "international", "segment",
+               "america", "asia", "europe", "africa", "china", "japan", "pacific"),
+    "regions": ("geographic", "region", "regions", "international", "segment",
+                "america", "asia", "europe", "africa", "china", "japan", "pacific"),
     "revenue": ("revenues", "sales", "net"),
     "revenues": ("revenues", "sales", "net"),
     "customer": ("revenues", "contracts", "airlines", "government", "concentration"),
@@ -147,6 +155,13 @@ _STATEMENT_HEADINGS = (
     "consolidated statements",
     "statements of operations",
     "statement of income",
+    "income statement",
+    "geographic operations",
+    "geographic information",
+    "segment data",
+    "summary of business segment",
+    "disaggregation of revenue",
+    "financial highlights",
 )
 _STATEMENT_CUES = (
     "margin",
@@ -162,12 +177,20 @@ _STATEMENT_CUES = (
     "equity",
     "income",
     "cash",
+    "capital",
+    "intensive",
+    "geographic",
+    "geographies",
+    "geography",
+    "segment",
 )
 # A filing's stored page text starts with the document identity. A question
 # names its filing in its own words ("AMEX"), so the identity line is matched on
 # its own: a question word inside an identity part points at that filing, and
-# its pages then lead the ranking.
-_IDENTITY_PRIOR = 8.0
+# its pages then lead the ranking. The prior is strong enough to separate one
+# filing from another when the question names it, because a scope can hold
+# several filings at once.
+_IDENTITY_PRIOR = 16.0
 _IDENTITY_TOKEN = re.compile(r"[A-Za-z0-9]+")
 _IDENTITY_MINIMUM = 3
 # The titles a filing uses for its statements. A question asks about a
@@ -517,14 +540,16 @@ def _identity_line(text: str) -> str:
 def _identity_match(terms: list[str], identity: str) -> int:
     """How many question words point at this document identity."""
 
-    parts = _IDENTITY_TOKEN.findall(identity)
+    parts = [part.casefold() for part in _IDENTITY_TOKEN.findall(identity)]
     matched = 0
     for term in terms:
         if len(term) < _IDENTITY_MINIMUM:
+            # A short name still names a filing when it is the whole part ("3M").
+            if term in parts:
+                matched += 1
             continue
         for part in parts:
-            folded = part.casefold()
-            if term in folded or _is_subsequence(term, folded):
+            if term in part or _is_subsequence(term, part):
                 matched += 1
                 break
     return matched
